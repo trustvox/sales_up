@@ -8,7 +8,7 @@ development:
   database: salesup_dev
   host: localhost
   username: pedro_dev
-  password: 
+  password: senha123
   pool: 5
   timeout: 5000
 
