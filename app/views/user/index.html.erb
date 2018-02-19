@@ -1,59 +1,33 @@
-<!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8" />
   <title>Sales Up - Login</title>
-  <meta name="description" content="app, web app, responsive, responsive layout, admin, admin panel, admin dashboard, flat, flat ui, ui kit, AngularJS, ui route, charts, widgets, components" />
-
-  <link rel="stylesheet" href="/assets/animate.css" type="text/css" />
-  <link rel="stylesheet" href="/assets/font-awesome.min.css" type="text/css" />
-  <link rel="stylesheet" href="/assets/simple-line-icons.css" type="text/css" />
-  <link rel="stylesheet" href="/assets/bootstrap.css" type="text/css" />
-
-  <link rel="stylesheet" href="/assets/font.css" type="text/css" />
-  <link rel="stylesheet" href="/assets/app.css" type="text/css" />
-
 </head>
 <body>
-<div class="app app-header-fixed ">
-  
 
-<div class="container w-xxl w-auto-xs" ng-controller="SigninFormController" ng-init="app.settings.container = false;">
-  <div class="m-b-lg">
-    <div class="text-center">
-      <a href="http://site.trustvox.com.br/" ><img src="/assets/img/trustvox-maior.png"/></a>
-      <h1>Sales Up</h1>
-      <h4>Gerenciador de Desempenho Comercial</h4>
+<div class="app app-header-fixed ">
+  <div class="container w-xxl w-auto-xs" ng-controller="SigninFormController" ng-init="app.settings.container = false;">
+    <div class="m-b-lg">
+      <%= render 'resources' %>
+      <form name="form" class="form-validation">
+        <div class="wrapper text-center">
+            <strong>Por favor, preencha todos os dados abaixo</strong>
+        </div>
+        <div class="list-group list-group-sm">
+          <div class="list-group-item">
+            <input type="email" placeholder="Email" class="form-control no-border" ng-model="user.email" required>
+          </div>
+          <div class="list-group-item">
+             <input type="password" placeholder="Senha" class="form-control no-border" ng-model="user.password" required>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-lg btn-primary btn-block" ng-click="login()" ng-disabled='form.$invalid'>Log in</button>
+        <div class="text-center m-t m-b"><a href="/forgot_password">Esqueceu sua senha?</a></div>
+        <div class="line line-dashed"></div>
+      </form>
     </div>
-    <form name="form" class="form-validation">
-      <div class="wrapper text-center">
-          <strong>Por favor, preencha todos os dados abaixo</strong>
-      </div>
-      <div class="list-group list-group-sm">
-        <div class="list-group-item">
-          <input type="email" placeholder="Email" class="form-control no-border" ng-model="user.email" required>
-        </div>
-        <div class="list-group-item">
-           <input type="password" placeholder="Senha" class="form-control no-border" ng-model="user.password" required>
-        </div>
-      </div>
-      <button type="submit" class="btn btn-lg btn-primary btn-block" ng-click="login()" ng-disabled='form.$invalid'>Log in</button>
-      <div class="text-center m-t m-b">Esqueceu sua senha?</div>
-      <div class="line line-dashed"></div>
-    </form>
   </div>
 </div>
-
-</div>
-
-<script src="/assets/jquery.js"></script>
-<script src="/assets/bootstrap.js"></script>
-<script src="/assets/ui-load.js"></script>
-<script src="/assets/ui-jp.config.js"></script>
-<script src="/assets/ui-jp.js"></script>
-<script src="/assets/ui-nav.js"></script>
-<script src="/assets/ui-toggle.js"></script>
-<script src="/assets/ui-client.js"></script>
 
 </body>
 </html>
