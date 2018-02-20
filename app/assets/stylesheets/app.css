@@ -2212,13 +2212,23 @@ fieldset[disabled] .btn-black.active {
   margin-right: -10px;
   margin-left: 10px;
 }
-
+/*
 .btn-addon.btn-lg i {
   width: 45px;
   height: 45px;
   margin: -11px -16px;
   margin-right: 16px;
   line-height: 45px;
+}
+*/
+.btn-addon.btn-lg i {
+  width: 45px;
+  height: 38px;
+  margin: -11px -16px;
+  margin-right: 16px;
+  line-height: 40px;
+  top: 4px;
+  left: 3px;
 }
 
 .btn-addon.btn-lg i.pull-right {
