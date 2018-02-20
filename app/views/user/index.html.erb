@@ -11,18 +11,18 @@
       <%= render 'resources' %>
       <form name="form" class="form-validation">
         <div class="wrapper text-center">
-            <strong>Por favor, preencha todos os dados abaixo</strong>
+            <strong>Please, fill in all the data below</strong>
         </div>
         <div class="list-group list-group-sm">
           <div class="list-group-item">
             <input type="email" placeholder="Email" class="form-control no-border" ng-model="user.email" required>
           </div>
           <div class="list-group-item">
-             <input type="password" placeholder="Senha" class="form-control no-border" ng-model="user.password" required>
+             <input type="password" placeholder="Password" class="form-control no-border" ng-model="user.password" required>
           </div>
         </div>
         <button type="submit" class="btn btn-lg btn-primary btn-block" ng-click="login()" ng-disabled='form.$invalid'>Log in</button>
-        <div class="text-center m-t m-b"><a href="/forgot_password">Esqueceu sua senha?</a></div>
+        <div class="text-center m-t m-b"><a href="/forgot_password">Forgot your password?</a></div>
         <div class="line line-dashed"></div>
       </form>
     </div>
