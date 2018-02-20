@@ -6,5 +6,6 @@ Rails.application.routes.draw do
   get "/forgot_password" => "user#forgot_password"
 
   get "/spreadsheet" => "logged#spreadsheet"
+  get "/graphic" => "logged#graphic"
  
 end

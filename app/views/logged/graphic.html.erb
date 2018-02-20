@@ -1,0 +1,67 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Sales Up - Graphic</title>
+  <meta name="description" content="app, web app, responsive, responsive layout, admin, admin panel, admin dashboard, flat, flat ui, ui kit, AngularJS, ui route, charts, widgets, components" />
+
+  <link rel="stylesheet" href="/assets/animate.css" type="text/css" />
+  <link rel="stylesheet" href="/assets/font-awesome.min.css" type="text/css" />
+  <link rel="stylesheet" href="/assets/simple-line-icons.css" type="text/css" />
+  <link rel="stylesheet" href="/assets/bootstrap.css" type="text/css" />
+
+  <link rel="stylesheet" href="/assets/font.css" type="text/css" />
+  <link rel="stylesheet" href="/assets/app.css" type="text/css" />
+
+</head>
+<body>
+<div class="app">
+  
+  <div id="content" role="main">
+  	<div class="app-content-body ">
+
+  <div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">Graphic</h1>
+  </div>
+  <div class="wrapper-md">
+    <div ng-controller="FlotChartDemoCtrl">
+      <div class="row">
+          <div class="panel panel-default">
+            <div class="panel-heading font-bold">Fev/2018 - Desempenho comercial (Meta=R$10,000.00)</div>
+            <div class="panel-body">
+              <div ui-jq="plot" ui-options="
+                [
+                  { data: [ [0,7],[1,6.5],[2,12.5],[3,7],[4,9],[5,6],[6,11],[7,6.5],[8,8],[9,7] ], label: 'A', points: { show: true }, lines: { show: true, fill: true, fillColor: { colors: [{ opacity: 0.1 }, { opacity: 0.1}] } } }, 
+                  { data: [ [0,4],[1,4.5],[2,7],[3,4.5],[4,3],[5,3.5],[6,6],[7,3],[8,4],[9,3] ], label: 'B', points: { show: true, radius: 4 } }
+                ],
+                {
+                  colors: [ '#23b7e5','#fad733' ],
+                  series: { shadowSize: 2 },
+                  xaxis:{ font: { color: '#ccc' } },
+                  yaxis:{ font: { color: '#ccc' } },
+                  grid: { hoverable: true, clickable: true, borderWidth: 0, color: '#ccc' },
+                  tooltip: true,
+                  tooltipOpts: { content: '%s of %x.1 is %y.4',  defaultTheme: false, shifts: { x: 0, y: 20 } }
+                }
+              " style="height:450px"></div>
+            </div>   
+        </div>
+      </div>
+    </div>
+  </div>
+
+	</div>
+  </div>
+
+</div>
+
+<script src="/assets/jquery.js"></script>
+<script src="/assets/bootstrap.js"></script>
+<script src="/assets/ui-load.js"></script>
+<script src="/assets/ui-jp.config.js"></script>
+<script src="/assets/ui-jp.js"></script>
+<script src="/assets/ui-nav.js"></script>
+<script src="/assets/ui-toggle.js"></script>
+<script src="/assets/ui-client.js"></script>
+
+</body>
+</html>

@@ -1,8 +1,7 @@
-<!DOCTYPE html>
-<html lang="en" class="">
+<html>
 <head>
   <meta charset="utf-8" />
-  <title>Html version | Angulr</title>
+  <title>Sales Up - Spreadsheet</title>
   <meta name="description" content="app, web app, responsive, responsive layout, admin, admin panel, admin dashboard, flat, flat ui, ui kit, AngularJS, ui route, charts, widgets, components" />
 
   <link rel="stylesheet" href="/assets/animate.css" type="text/css" />
@@ -16,51 +15,49 @@
 </head>
 <body>
 <div class="app">
-  <!-- content -->
   <div id="content" role="main">
   	<div class="app-content-body ">
 	    
 
-<div class="bg-light lter b-b wrapper-md">
-  <h1 class="m-n font-thin h3">Spreadsheet</h1>
-</div>
-<div class="wrapper-md">
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      Fev/2018 - Desempenho comercial (Meta=R$10,000.00)
-    </div>
-    <div>
-      <table class="table" ui-jq="footable" >
-        <thead>
-          <tr>
-            <th data-breakpoints="xs">Day</th>
-            <th>Daily Goal</th>
-            <th>Contract Sum</th>
-            <th data-breakpoints="xs">Contracts Value</th>
-            <th data-breakpoints="xs sm">Store Name</th>
-            <th data-breakpoints="xs sm md" data-title="DOB">Salesman Name</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% for i in 1..10 %>
+  <div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">Spreadsheet</h1>
+  </div>
+  <div class="wrapper-md">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        Fev/2018 - Desempenho comercial (Meta=R$10,000.00)
+      </div>
+      <div>
+        <table class="table" ui-jq="footable" >
+          <thead>
             <tr>
-              <td><%= i %></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <th data-breakpoints="xs">Day</th>
+              <th>Daily Goal</th>
+              <th>Contract Sum</th>
+              <th data-breakpoints="xs">Contracts Value</th>
+              <th data-breakpoints="xs sm">Store Name</th>
+              <th data-breakpoints="xs sm md" data-title="DOB">Salesman Name</th>
             </tr>
-          <% end %>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            <% for i in 1..10 %>
+              <tr>
+                <td><%= i %></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
-</div>
 
 	</div>
   </div>
-  <!-- /content -->
 
 </div>
 
