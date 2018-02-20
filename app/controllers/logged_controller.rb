@@ -1,0 +1,2 @@
+class LoggedController < ApplicationController
+end
