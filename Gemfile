@@ -18,6 +18,8 @@ gem 'jbuilder', '~> 2.5'
 gem 'rspec'
 gem 'pg'
 gem 'jquery-rails'
+gem 'devise'
+gem 'cancancan'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

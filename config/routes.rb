@@ -1,10 +1,9 @@
 Rails.application.routes.draw do
-  resources :user 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   
-  root "user#index"
-  get "/forgot_password" => "user#forgot_password"
-  get "/spreadsheet" => "logged#spreadsheet"
-  get "/graphic" => "logged#graphic"
+  root to: "user#index"
+  get "/forgot_password", to: "user#forgot_password", as: "forgot_password"
+  get "/spreadsheet", to: "home#spreadsheet", as: "spreadsheet"
+  get "/graphic", to: "home#graphic", as: "graphic"
  
 end
