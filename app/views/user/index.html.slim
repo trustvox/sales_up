@@ -1,0 +1,31 @@
+html
+  head
+    meta charset="utf-8" /
+    title Sales Up - Login
+
+    meta content="app, web app, responsive, responsive layout, admin, admin panel, admin dashboard, flat, flat ui, ui kit, AngularJS, ui route, charts, widgets, components" name="description" /
+
+    = stylesheet_link_tag 'animate', 'font-awesome.min', 'simple-line-icons', 'bootstrap', 'font', 'app'
+  body
+    .app.app-header-fixed
+      .container.w-xxl.w-auto-xs ng-controller="SigninFormController" ng-init=("app.settings.container = false;") 
+
+        .m-b-lg
+        .text-center
+		  a href="http://site.trustvox.com.br/" 
+		    img src="/assets/img/trustvox-login-logo.png" /
+		  h1 Sales Up
+		  h4 Business Performance Manager
+
+          form.form-validation name="form" action="/graphic"
+            .wrapper.text-center
+              strong Please, fill in all the data below
+            .list-group.list-group-sm
+              .list-group-item
+                input.form-control.no-border ng-model="user.email" placeholder="Email" required="" type="email" /
+              .list-group-item
+                input.form-control.no-border ng-model="user.password" placeholder="Password" required="" type="password" /
+
+            button.btn.btn-lg.btn-primary.btn-block ng-click="login()" ng-disabled="form.$invalid" type="submit"  Log in
+            .text-center.m-t.m-b
+              = link_to 'Forgot your password?', forgot_password_path

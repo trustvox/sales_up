@@ -1,0 +1,63 @@
+html
+  head
+    meta charset="utf-8" /
+    title Sales Up - Spreadsheet
+    meta content="app, web app, responsive, responsive layout, admin, admin panel, admin dashboard, flat, flat ui, ui kit, AngularJS, ui route, charts, widgets, components" name="description" /
+    = stylesheet_link_tag 'animate', 'font-awesome.min', 'simple-line-icons', 'bootstrap', 'font', 'app'
+  body
+    .app
+      #content role="main" 
+        .app-content-body
+          .form-inline.row.menu.panel.panel-default
+            .form-group.col-lg-3
+              .form-group
+                img src="/assets/img/trustvox-menu-logo.png" /
+              .form-group
+                h2.m-n.font-thin.h2
+                  | Welcome
+                  br>/
+                  | Pedro Luiz
+            .form-group.col-lg-3
+              select#monthBox.form-control.m-b name="months" 
+                option February/2018
+                option option 1
+                option option 2
+                option option 3
+                option option 4
+              button.btn.btn-primary.btn-addon.btn-lg Search
+            .form-group.col-lg-5
+              button.btn.btn-primary.btn-addon.btn-lg
+                i.fa.fa-plus
+                | Spreadsheet
+              button.btn.btn-primary.btn-addon.btn-lg
+                i.fa.fa-plus
+                | Sale
+              button.btn.btn-primary.btn-addon.btn-lg.disabled Spreadsheet
+              = link_to graphic_path
+                button.btn.btn-primary.btn-addon.btn-lg Graphic
+            .form-group.col-lg-1
+              = link_to root_path
+                button.btn.btn-primary.btn-addon.btn-lg.btn-dark.btn-size Logout
+          .wrapper-md
+            .panel.panel-default
+              .panel-heading
+                | Fev/2018 - Desempenho comercial (Meta=R$10,000.00)
+              div
+                table.table ui-jq="footable" 
+                  thead
+                    tr
+                      th data-breakpoints="xs"  Day
+                      th Daily Goal
+                      th Contract Sum
+                      th data-breakpoints="xs"  Contracts Value
+                      th data-breakpoints=("xs sm")  Store Name
+                      th data-breakpoints=("xs sm md") Salesman Name
+                  tbody
+                    - for i in 1..10
+                      tr
+                        td = i
+                        td
+                        td
+                        td
+                        td
+                        td

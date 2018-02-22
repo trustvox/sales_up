@@ -1,0 +1,61 @@
+html
+  head
+    meta charset="utf-8" /
+    title Sales Up - Graphic
+    meta content="app, web app, responsive, responsive layout, admin, admin panel, admin dashboard, flat, flat ui, ui kit, AngularJS, ui route, charts, widgets, components" name="description" /
+    = stylesheet_link_tag 'animate', 'font-awesome.min', 'simple-line-icons', 'bootstrap', 'font', 'app'
+  body
+    .app
+      #content role="main" 
+        .app-content-body
+          .form-inline.row.menu.panel.panel-default
+            .form-group.col-lg-3
+              .form-group
+                img src="/assets/img/trustvox-menu-logo.png" /
+              .form-group
+                h2.m-n.font-thin.h2
+                  | Welcome
+                  br>/
+                  | Pedro Luiz
+            .form-group.col-lg-3
+              select#monthBox.form-control.m-b name="months" 
+                option February/2018
+                option option 1
+                option option 2
+                option option 3
+                option option 4
+              button.btn.btn-primary.btn-addon.btn-lg Search
+            .form-group.col-lg-5
+              button.btn.btn-primary.btn-addon.btn-lg
+                i.fa.fa-plus
+                | Spreadsheet
+              button.btn.btn-primary.btn-addon.btn-lg
+                i.fa.fa-plus
+                | Sale
+              = link_to spreadsheet_path
+                button.btn.btn-primary.btn-addon.btn-lg Spreadsheet
+              button.btn.btn-primary.btn-addon.btn-lg.disabled Graphic
+            .form-group.col-lg-1
+              = link_to root_path
+                button.btn.btn-primary.btn-addon.btn-lg.btn-dark.btn-size Logout
+          .wrapper-md
+            div ng-controller="FlotChartDemoCtrl" 
+              .row
+                .panel.panel-default
+                  .panel-heading.font-bold Fev/2018 - Desempenho comercial (Meta=R$10,000.00)
+                  .panel-body
+                    div style="height:450px" ui-jq="plot" ui-options="
+                    [
+                  { data: [ [0,7],[1,6.5],[2,12.5],[3,7],[4,9],[5,6],[6,11],[7,6.5],[8,8],[9,7] ], label: 'A', points: { show: true }, lines: { show: true, fill: true, fillColor: { colors: [{ opacity: 0.1 }, { opacity: 0.1}] } } }, 
+                  { data: [ [0,4],[1,4.5],[2,7],[3,4.5],[4,3],[5,3.5],[6,6],[7,3],[8,4],[9,3] ], label: 'B', points: { show: true, radius: 4 } }
+                ],
+                {
+                  colors: [ '#23b7e5','#fad733' ],
+                  series: { shadowSize: 2 },
+                  xaxis:{ font: { color: '#ccc' } },
+                  yaxis:{ font: { color: '#ccc' } },
+                  grid: { hoverable: true, clickable: true, borderWidth: 0, color: '#ccc' },
+                  tooltip: true,
+                  tooltipOpts: { content: '%s of %x.1 is %y.4',  defaultTheme: false, shifts: { x: 0, y: 20 } }
+                }" 
+
