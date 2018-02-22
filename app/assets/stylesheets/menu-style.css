@@ -1,14 +1,29 @@
 .menu{
 	padding: 5px;
-	background-color: white;
+}
+
+.menu-part-l{
+	width: 23%;
+	position: relative;
+	left: 15px;
+}
+
+.margin{
+	margin-left: 5px; 
+	margin-right: 5px; 
+}
+
+.menu-part-r{
+	position: relative;
+	left: 30px;
+}
+
+#btn-logout{
+	position: relative;
+	left: 50px;
 }
 
 #monthBox{
 	font-size: 18px;
 	height: auto;
-}
-
-.size{
-	width: 40px;
-	height: 40px;
 }

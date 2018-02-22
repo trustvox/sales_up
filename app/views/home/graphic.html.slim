@@ -9,35 +9,35 @@ html
       #content role="main" 
         .app-content-body
           .form-inline.row.menu.panel.panel-default
-            .form-group.col-lg-3
+            .form-group.menu-part-l
               .form-group
                 img src="/assets/img/trustvox-menu-logo.png" /
-              .form-group
-                h2.m-n.font-thin.h2
+              .form-group.margin
+                h2.font-thin.h2
                   | Welcome
                   br>/
                   | Pedro Luiz
-            .form-group.col-lg-3
-              select#monthBox.form-control.m-b name="months" 
+            .form-group.menu-part-l
+              select#monthBox.form-control name="months" 
                 option February/2018
                 option option 1
                 option option 2
                 option option 3
                 option option 4
-              button.btn.btn-primary.btn-addon.btn-lg Search
-            .form-group.col-lg-5
-              button.btn.btn-primary.btn-addon.btn-lg
+              button.btn.btn-primary.btn-addon.btn-lg.margin Search
+            .form-group.menu-part-r
+              button.btn.btn-primary.btn-addon.btn-lg.margin
                 i.fa.fa-plus
                 | Spreadsheet
-              button.btn.btn-primary.btn-addon.btn-lg
+              button.btn.btn-primary.btn-addon.btn-lg.margin
                 i.fa.fa-plus
                 | Sale
-              = link_to spreadsheet_path
-                button.btn.btn-primary.btn-addon.btn-lg Spreadsheet
-              button.btn.btn-primary.btn-addon.btn-lg.disabled Graphic
-            .form-group.col-lg-1
+              form.form-group name="form" action="/spreadsheet"
+                button.btn.btn-primary.btn-addon.btn-lg.margin Spreadsheet
+              button.btn.btn-primary.btn-addon.btn-lg.disabled.margin Graphic
+            .form-group.menu-part-r
               = link_to root_path
-                button.btn.btn-primary.btn-addon.btn-lg.btn-dark.btn-size Logout
+                button.btn.btn-primary.btn-addon.btn-lg.btn-dark.btn-size#btn-logout Logout
           .wrapper-md
             div ng-controller="FlotChartDemoCtrl" 
               .row
