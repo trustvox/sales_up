@@ -17,15 +17,17 @@ html
 		  h1 Sales Up
 		  h4 Business Performance Manager
 
-          form.form-validation name="form" action="/graphic"
+          = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
             .wrapper.text-center
               strong Please, fill in all the data below
+              h4.text-danger = alert
             .list-group.list-group-sm
               .list-group-item
-                input.form-control.no-border ng-model="user.email" placeholder="Email" required="" type="email" /
+                = f.email_field :email, autocomplete: "email", placeholder:"Email", required:"", :class => "form-control no-border"
               .list-group-item
-                input.form-control.no-border ng-model="user.password" placeholder="Password" required="" type="password" /
-
-            button.btn.btn-lg.btn-primary.btn-block ng-click="login()" ng-disabled="form.$invalid" type="submit"  Log in
+                = f.password_field :password, placeholder:"Password", required:"", :class => "form-control no-border"
+            = f.submit "Log in", :class => "btn btn-lg btn-primary btn-block"
             .text-center.m-t.m-b
               = link_to 'Forgot your password?', forgot_password_path
+      h1 = @teste
+ 
