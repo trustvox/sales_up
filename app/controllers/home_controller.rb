@@ -1,21 +1,38 @@
 class HomeController < ApplicationController
 	before_action :authenticate_user!
+	skip_before_action :verify_authenticity_token
+
+	$report_list = []
+	Report.find_each do |report|
+		$report_list << report
+	end
+	
+	$current_report = Report.first
 
 	def graphic
-		@report = Report.first
+		
 	end
 
 	def spreadsheet
-		@report = Report.last
-		@month_days = Time.days_in_month(@report.month)
-		@business_days = business_days Date.strptime(@report.month.to_s+"/1/2018", '%m/%d/%Y'), 
-		                               Date.strptime(@report.month.to_s+"/"+@month_days.to_s+"/2018", '%m/%d/%Y')
-		@weekdays = weekdays(@month_days)
+		@month_days = Time.days_in_month $current_report.month_numb
+		@business_days = find_business_days Date.strptime($current_report.month_numb.to_s + "/1/2018", '%m/%d/%Y'), 
+		                               Date.strptime($current_report.month_numb.to_s + "/" + @month_days.to_s + "/2018", '%m/%d/%Y')
+		@weekdays = find_weekdays(@month_days)
+	end
+
+	def searchS
+		$current_report = Report.find_by_month(params[:months])
+		redirect_to spreadsheet_path
+	end
+
+	def searchG
+		$current_report = Report.find_by_month(params[:months])
+		redirect_to graphic_path
 	end
 
 	private
 
-	def business_days(date1, date2)
+	def find_business_days(date1, date2)
 	  business_days = 0
 	  date = date2
 	  while date > date1
@@ -25,15 +42,15 @@ class HomeController < ApplicationController
 	  business_days
 	end
 
-	def weekdays(finalDay)
+	def find_weekdays(finalDay)
 		list = []
 		for i in 1..finalDay
-			list << weekday(Date.strptime(@report.month.to_s+"/"+i.to_s+"/2018", '%m/%d/%Y'))
+			list << which_weekday(Date.strptime($current_report.month_numb.to_s + "/" + i.to_s + "/2018", '%m/%d/%Y'))
 		end
 		list
 	end
 
-	def weekday(date)
+	def which_weekday(date)
 		if date.sunday?
 			"Sunday"
 		elsif date.monday?

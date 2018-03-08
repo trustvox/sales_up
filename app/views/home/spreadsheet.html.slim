@@ -18,13 +18,11 @@ html
                   br>/
                   = current_user.full_name
             .form-group.menu-part-l
-              select#monthBox.form-control name="months" 
-                option February/2018
-                option option 1
-                option option 2
-                option option 3
-                option option 4
-              button.btn.btn-primary.btn-addon.btn-lg.margin Search
+              form.form-group method="post" action="/searchS"
+                select#monthBox.form-control name="months" 
+                  -for report in $report_list
+                    option value="#{report.month}" = report.month + "/" + report.year.to_s
+                button.btn.btn-primary.btn-addon.btn-lg.margin type="submit" Search
             .form-group.menu-part-r
               button.btn.btn-primary.btn-addon.btn-lg.margin
                 i.fa.fa-plus
@@ -40,8 +38,8 @@ html
                 button.btn.btn-primary.btn-addon.btn-lg.btn-dark.btn-size#btn-logout Logout
           .wrapper-md
             .panel.panel-default
-              .panel-heading
-                = @report.report_name + " (Meta=R$" + @report.goal.to_s + ")"
+              h2.h2.font-thin.panel-heading
+                = $current_report.report_name + " (Meta=R$" + $current_report.goal.to_s + ")"
               div
                 table.table ui-jq="footable" 
                   thead
@@ -54,9 +52,10 @@ html
                       th data-breakpoints=("xs sm")  Store Name
                       th data-breakpoints=("xs sm md") Salesman Name
                   tbody
-                    - value = (@report.goal/@business_days).round 2
+                    - value = ($current_report.goal/@business_days).round 2
+                    - factor = 2
                     - for i in 1..@month_days
-                      -date = Date.strptime(@report.month.to_s+"/"+i.to_s+"/2018", '%m/%d/%Y')
+                      -date = Date.strptime($current_report.month_numb.to_s + "/" + i.to_s + "/2018", '%m/%d/%Y')
                       tr
                         td = i
                         td = @weekdays[i-1]
@@ -66,7 +65,8 @@ html
                         -elsif date.on_weekend?
                           td -
                         -else
-                          td = "R$" + (value * i).to_s
+                          td = "R$" + (value * factor).to_s
+                          -factor += 1
 
                         td = "R$ 0.0"
                         td -

@@ -18,13 +18,11 @@ html
                   br>/
                   = current_user.full_name
             .form-group.menu-part-l
-              select#monthBox.form-control name="months" 
-                option February/2018
-                option option 1
-                option option 2
-                option option 3
-                option option 4
-              button.btn.btn-primary.btn-addon.btn-lg.margin Search
+              form.form-group method="post" action="/searchG"
+                select#monthBox.form-control name="months" 
+                  -for report in $report_list
+                    option value="#{report.month}" = report.month + "/" + report.year.to_s
+                button.btn.btn-primary.btn-addon.btn-lg.margin type="submit" Search
             .form-group.menu-part-r
               button.btn.btn-primary.btn-addon.btn-lg.margin
                 i.fa.fa-plus
@@ -32,7 +30,7 @@ html
               button.btn.btn-primary.btn-addon.btn-lg.margin
                 i.fa.fa-plus
                 | Sale
-              form.form-group name="form" action="/spreadsheet"
+              form.form-group name="form" method="put" action="/spreadsheet"
                 button.btn.btn-primary.btn-addon.btn-lg.margin Spreadsheet
               button.btn.btn-primary.btn-addon.btn-lg.disabled.margin Graphic
             .form-group.menu-part-r
@@ -42,7 +40,8 @@ html
             div ng-controller="FlotChartDemoCtrl" 
               .row
                 .panel.panel-default
-                  .panel-heading.font-bold Fev/2018 - Desempenho comercial (Meta=R$10,000.00)
+                  h2.h2.font-thin.panel-heading
+                    = $current_report.report_name + " (Meta=R$" + $current_report.goal.to_s + ")"
                   .panel-body
                     div style="height:450px" ui-jq="plot" ui-options="
                     [
