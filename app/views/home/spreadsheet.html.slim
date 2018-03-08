@@ -41,23 +41,34 @@ html
           .wrapper-md
             .panel.panel-default
               .panel-heading
-                | Fev/2018 - Desempenho comercial (Meta=R$10,000.00)
+                = @report.report_name + " (Meta=R$" + @report.goal.to_s + ")"
               div
                 table.table ui-jq="footable" 
                   thead
                     tr
                       th data-breakpoints="xs"  Day
+                      th Weekdays
                       th Daily Goal
                       th Contract Sum
                       th data-breakpoints="xs"  Contracts Value
                       th data-breakpoints=("xs sm")  Store Name
                       th data-breakpoints=("xs sm md") Salesman Name
                   tbody
-                    - for i in 1..10
+                    - value = (@report.goal/@business_days).round 2
+                    - for i in 1..@month_days
+                      -date = Date.strptime(@report.month.to_s+"/"+i.to_s+"/2018", '%m/%d/%Y')
                       tr
                         td = i
-                        td
-                        td
-                        td
-                        td
-                        td
+                        td = @weekdays[i-1]
+
+                        -if i == 1.to_i  
+                          td = "R$" + value.to_s
+                        -elsif date.on_weekend?
+                          td -
+                        -else
+                          td = "R$" + (value * i).to_s
+
+                        td = "R$ 0.0"
+                        td -
+                        td -
+                        td -

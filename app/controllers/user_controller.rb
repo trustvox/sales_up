@@ -1,6 +1,6 @@
 class UserController < ApplicationController
 
-	def home
+	def user_home
 		if user_signed_in?
       redirect_to graphic_path
     end
