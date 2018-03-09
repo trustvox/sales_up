@@ -39,7 +39,7 @@ html
           .wrapper-md
             .panel.panel-default
               h2.h2.font-thin.panel-heading
-                = $current_report.report_name + " (Meta=R$" + $current_report.goal.to_s + ")"
+                = $current_report.report_name + " --- Goal value: R$" + $current_report.goal.to_s + ")"
               div
                 table.table ui-jq="footable" 
                   thead
@@ -52,22 +52,11 @@ html
                       th data-breakpoints=("xs sm")  Store Name
                       th data-breakpoints=("xs sm md") Salesman Name
                   tbody
-                    - value = ($current_report.goal/@business_days).round 2
-                    - factor = 2
-                    - for i in 1..@month_days
-                      -date = Date.strptime($current_report.month_numb.to_s + "/" + i.to_s + "/2018", '%m/%d/%Y')
+                    - for data in $current_report_data
                       tr
-                        td = i
-                        td = @weekdays[i-1]
-
-                        -if i == 1.to_i  
-                          td = "R$" + value.to_s
-                        -elsif date.on_weekend?
-                          td -
-                        -else
-                          td = "R$" + (value * factor).to_s
-                          -factor += 1
-
+                        td = data[0]
+                        td = data[1]
+                        td = "R$" + data[2]
                         td = "R$ 0.0"
                         td -
                         td -
