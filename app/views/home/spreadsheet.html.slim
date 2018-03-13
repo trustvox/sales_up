@@ -48,8 +48,8 @@ html
                       th Weekdays
                       th Daily Goal
                       th Contract Sum
-                      th data-breakpoints="xs"  Contracts Value
-                      th data-breakpoints=("xs sm")  Store Name
+                      th data-breakpoints="xs"  Store Name 
+                      th data-breakpoints=("xs sm")  Contract Values
                       th data-breakpoints=("xs sm md") Salesman Name
                   tbody
                     - for data in $current_report_data
@@ -57,7 +57,7 @@ html
                         td = data[0]
                         td = data[1]
                         td = "R$" + data[2]
-                        td = "R$ 0.0"
-                        td -
-                        td -
-                        td -
+                        td = "R$" + data[3].to_s
+                        td = data[4]
+                        td = "R$" + data[5].to_s
+                        td = data[6]
