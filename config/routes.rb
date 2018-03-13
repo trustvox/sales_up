@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   
   root to: "user#user_home"
   get "/forgot_password", to: "user#forgot_password", as: "forgot_password"
+  get "/login", to: "home#login"
   get "/graphic", to: "home#graphic", as: "graphic"
   get "/spreadsheet", to: "home#spreadsheet", as: "spreadsheet"
   post "/searchG", to: "home#searchG"

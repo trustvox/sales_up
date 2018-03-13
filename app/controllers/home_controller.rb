@@ -7,11 +7,18 @@ class HomeController < ApplicationController
 		$report_list << report
 	end
 	
-	$current_report = Report.first
+	$current_report = nil
 	$current_report_data = []
+	$current_report_data_points = ""
+
+  def login
+  	$current_report = Report.first
+		calculate_data
+		redirect_to graphic_path
+  end
 
 	def graphic
-		calculate_report_data unless $current_report_data.any?
+		
 	end
 
 	def spreadsheet
@@ -20,48 +27,56 @@ class HomeController < ApplicationController
 
 	def searchS
 		$current_report = Report.find_by_month(params[:months])
-		calculate_report_data
+		calculate_data
 		redirect_to spreadsheet_path
 	end
 
 	def searchG
 		$current_report = Report.find_by_month(params[:months])
-		calculate_report_data
+		calculate_data
 		redirect_to graphic_path
 	end
 
 	private
 
-	def find_business_days(date1, date2)
+	def calculate_data
+		$current_report_data.clear
+		$current_report_data_points = "[ "
+
+		calculate_report_data
+		calculate_report_points
+	end
+
+	def find_business_days(_first_day, _last_day)
 	  business_days = 0
-	  date = date2
-	  while date > date1
-	    business_days = business_days + 1 unless date.saturday? or date.sunday?
-	    date = date - 1.day
+	  current_date = _last_day
+	  while current_date > _first_day
+	    business_days = business_days + 1 unless current_date.saturday? or current_date.sunday?
+	    current_date = current_date - 1.day
 	  end
 	  business_days
 	end
 
-	def find_weekdays(finalDay)
+	def find_weekdays(_last_day)
 		list = []
-		for i in 1..finalDay
+		for i in 1.._last_day
 			list << which_weekday(Date.strptime($current_report.month_numb.to_s + "/" + i.to_s + "/" + $current_report.year.to_s, '%m/%d/%Y'))
 		end
 		list
 	end
 
-	def which_weekday(date)
-		if date.sunday?
+	def which_weekday(_current_date)
+		if _current_date.sunday?
 			"Sunday"
-		elsif date.monday?
+		elsif _current_date.monday?
 			"Monday"
-		elsif date.tuesday?
+		elsif _current_date.tuesday?
 			"Tuesday"
-		elsif date.wednesday?
+		elsif _current_date.wednesday?
 			"Wednesday"
-		elsif date.thursday?
+		elsif _current_date.thursday?
 			"Thursday"
-		elsif date.friday?
+		elsif _current_date.friday?
 			"Friday"
 		else
 			"Saturday"
@@ -69,62 +84,57 @@ class HomeController < ApplicationController
 	end
 
 	def calculate_report_data
-		$current_report_data.clear
-
 		month_days = Time.days_in_month $current_report.month_numb
 		weekdays = find_weekdays month_days
 
 		first_date = Date.strptime($current_report.month_numb.to_s + "/1/" + $current_report.year.to_s, '%m/%d/%Y')
 		last_date = Date.strptime($current_report.month_numb.to_s + "/" + month_days.to_s + "/" + $current_report.year.to_s, '%m/%d/%Y')
 
-		value = ($current_report.goal / find_business_days(first_date, last_date)).round 2
+		const = ($current_report.goal / find_business_days(first_date, last_date)).round 2
+		value = const
 		factor = 2
 
-    for i in 1..month_days
-    	data = [] # data[0] = day - data[1] = weekday - data[2] = daily goal
-      date = Date.strptime($current_report.month_numb.to_s + "/" + i.to_s + "/" + $current_report.year.to_s, '%m/%d/%Y')
-      data << i.to_s
-      data << weekdays[i-1]
-    
-	    if i == 1.to_i  
-	      data << value.to_s
-	    elsif date.on_weekend?
-	      data << "-"
-	    else
-	      data << (value * factor).to_s
-	      factor += 1
+    for day in 1..month_days
+    	day_data = [] # day_data[0] = day - day_data[1] = weekday - day_data[2] = daily goal
+    	
+    	date = Date.strptime($current_report.month_numb.to_s + "/" + day.to_s + "/" + $current_report.year.to_s, '%m/%d/%Y')
+      day_data << day.to_s
+      day_data << weekdays[day-1]
+
+	    if day != 1 && date.on_weekday?
+	      value = const * factor
+	    	factor += 1
 	    end
 
-	    $current_report_data << data
-	  end
+	    day_data << value.to_s
+      $current_report_data << day_data
+    end
 	end
 
 	def calculate_report_points
-		point_list = []
+    wait_for_sunday = false
+    last_save = []
 
-		# coordinate x is the day, coordinate y is the daily goal value
-    first_point = [] 
-    last_point = [] 
-
-    wait = false
-    first_time = true
-
-    for data in $current_report_data
-    	if first_time
-    		first_point << data[0]      #<-this is coordinate x
-    		first_point << data[2].to_f #<-this is coordinate y
-
-    		wait = true if data[1] == "Friday" || data[1] == "Saturday" || data[1] == "Sunday"
-
-    		first_time = false
-    	elsif data[1] == "Friday"
-    		last_point << data[0]
-    		last_point << data[2]
-    		wait = true
-    	elsif data[1] == "Monday"
-
-    		
-
-    end
+    for day_data in $current_report_data
+    	if not wait_for_sunday
+	    	if day_data[0] == "1"
+	    		$current_report_data_points += "[" + day_data[0] + "," + day_data[2] + "]"
+	    	  wait_for_sunday = true if day_data[1] == "Friday" || day_data[1] == "Saturday"
+	    	elsif day_data[1] == "Friday"
+	    		$current_report_data_points += ", [" + day_data[0] + "," + day_data[2] + "]"
+	    	  wait_for_sunday = true
+	    	  last_save = day_data
+	    	end
+    	elsif day_data[1] == "Sunday"
+  			$current_report_data_points += ", [" + day_data[0] + "," + day_data[2] + "]"
+  			wait_for_sunday = false
+  			last_save = day_data
+  		end
+  	end
+    
+  	if $current_report_data[-1][0] != last_save[0]
+  		$current_report_data_points += ", [" + $current_report_data[-1][0] + "," + $current_report_data[-1][2] + "]"
+		end
+		$current_report_data_points += "]"
 	end
 end
