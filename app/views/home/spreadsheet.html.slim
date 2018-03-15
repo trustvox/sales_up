@@ -20,7 +20,7 @@ html
             .form-group.menu-part-l
               form.form-group method="post" action="/searchS"
                 select#monthBox.form-control name="months" 
-                  -for report in $report_list
+                  -for report in Report.all
                     option value="#{report.month}" = report.month + "/" + report.year.to_s
                 button.btn.btn-primary.btn-addon.btn-lg.margin type="submit" Search
             .form-group.menu-part-r

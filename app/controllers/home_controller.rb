@@ -1,66 +1,65 @@
 class HomeController < ApplicationController
 	before_action :authenticate_user!
 	skip_before_action :verify_authenticity_token
-
-	$report_list = []
-	Report.find_each do |report|
-		$report_list << report
-	end
 	
 	$current_report = nil
 	$current_report_data = []
-	$current_report_data_points = ""
+	$current_report_points = ""
+
+	$current_contracts_data = []
+	$current_contract_points = ""
 
   def login
-  	$current_report = Report.first
-		calculate_data
+		calculate_data Report.first
 		redirect_to graphic_path
   end
 
 	def graphic
-		if $current_report == nil
-			$current_report = Report.first
-			calculate_data
-		end
+		verify_current_report
 	end
 
 	def spreadsheet
-		if $current_report == nil
-			$current_report = Report.first
-			calculate_data
-		end
+		verify_current_report
 	end
 
 	def searchS
-		$current_report = Report.find_by_month(params[:months])
-		calculate_data
+		calculate_data Report.find_by_month(params[:months])
 		redirect_to spreadsheet_path
 	end
 
 	def searchG
-		$current_report = Report.find_by_month(params[:months])
-		calculate_data
+		calculate_data Report.find_by_month(params[:months])
 		redirect_to graphic_path
 	end
 
 	private
 
-	def calculate_data
-		$current_report_data.clear
-		$current_report_data_points = "[ "
+	def verify_current_report
+		calculate_data Report.first if $current_report == nil
+	end
 
+	def calculate_data(_new_report)
+		$current_report = _new_report
+
+		$current_report_data.clear
+		$current_report_points = "[ "
+
+		$current_contracts_data.clear
+		$current_contract_points = "[ "
+
+		calculate_contract_data
 		calculate_report_data
 		calculate_report_points
 	end
 
 	def find_business_days(_first_day, _last_day)
-	  business_days = 0
+	  business_days = 1
 	  current_date = _last_day
 	  while current_date > _first_day
 	    business_days = business_days + 1 unless current_date.saturday? or current_date.sunday?
 	    current_date = current_date - 1.day
 	  end
-	  business_days
+		business_days
 	end
 
 	def find_weekdays(_last_day)
@@ -89,21 +88,56 @@ class HomeController < ApplicationController
 		end
 	end
 
-	def search_contracts(_contract_list, _index, _current_day)
-		partial_sum = 0
-		partial_vendor_names = ""
-		partial_store_names = ""
-		value = 1
-		while _contract_list[_index] != nil && _contract_list[_index].day == _current_day
-      partial_sum += _contract_list[_index].value
-			partial_vendor_names += value.to_s + "-" + User.find_by_id(_contract_list[_index].user_id).full_name + ", "
-			partial_store_names += value.to_s + "-" + _contract_list[_index].store_name + ", "
-			_index += 1
-			value += 1
-		end
+	def calculate_contract_data
+		contract_search = Contract.where(:report_id => $current_report.id).order('day')
+		
+		unless contract_search.empty? 
+			contract_data = [] # contract_data[0] = day - contract_data[1] = contracts sum - contract_data[2] = store name
+			                   # contract_data[3] = partial contract sum - contract_data[4] = salesman name
+			contracts_sum = 0
+			partial_contract_sum = 0
+			partial_vendor_name = ""
+			partial_store_name = ""
+			value = 1
+			wait = false
+		
+			for i in 0..contract_search.length-1
+				if i+1 < contract_search.length && contract_search[i].day == contract_search[i+1].day
+					contracts_sum += contract_search[i].value
+					partial_contract_sum += contract_search[i].value
+					partial_store_name += value.to_s + "-" + contract_search[i].store_name + "; "
+					partial_vendor_name += value.to_s + "-" + User.find_by_id(contract_search[i].user_id).full_name + "; "
 
-		list = [_index, partial_sum, partial_store_names, partial_vendor_names]
-		list
+					value += 1
+					wait = true
+				elsif wait
+					contract_data << contract_search[i-1].day
+					contract_data << contracts_sum
+					contract_data << partial_store_name[0, partial_store_name.length-3]
+					contract_data << partial_contract_sum
+					contract_data << partial_vendor_name[0, partial_vendor_name.length-3]
+
+					partial_contract_sum = 0
+					partial_vendor_name = ""
+					partial_store_name = ""
+					value = 1
+					wait = false
+
+					$current_contracts_data << contract_data
+					contract_data = []
+				else
+					contracts_sum += contract_search[i].value
+					contract_data << contract_search[i].day
+					contract_data << contracts_sum
+					contract_data << contract_search[i].store_name
+					contract_data << contract_search[i].value
+					contract_data << User.find_by_id(contract_search[i].user_id).full_name
+
+					$current_contracts_data << contract_data
+					contract_data = []
+				end
+			end
+		end
 	end
 
 	def calculate_report_data
@@ -116,10 +150,7 @@ class HomeController < ApplicationController
 		const = ($current_report.goal / find_business_days(first_date, last_date)).round 2
 		value = const
 		factor = 2
-
-		contract_sum = 0
-		contracts_data_index = 0
-		contracts_data = Contract.where(:report_id => $current_report.id).order('day')
+		data_index = 0
 
     for day in 1..month_days
     	day_data = [] # day_data[0] = day - day_data[1] = weekday - day_data[2] = daily goal - day_data[3] = contract sum
@@ -135,34 +166,28 @@ class HomeController < ApplicationController
 	    end
 	    day_data << value.to_s
 
-			if not contracts_data.empty?
-		    if contracts_data[contracts_data_index].day == day
-		    	if contracts_data[contracts_data_index+1].day == day
-		    		partial_list = search_contracts contracts_data, contracts_data_index, day
-
-		    		contracts_data_index = partial_list[0]
-		    		contract_sum += partial_list[1]
-
-		    		day_data[3] = contract_sum
-		    		day_data[4] = partial_list[2]
-		    		day_data[5] = partial_list[1]
-		    		day_data[6] = partial_list[3]
-
-		    	else
-		    		contracts_data_index += 1
-		    		contract_sum += contracts_data[contracts_data_index].value
-
-		    		day_data[3] = contract_sum
-		    		day_data[4] = contracts_data[contracts_data_index].store_name
-		    		day_data[5] = contracts_data[contracts_data_index].value
-		    		day_data[6] = User.find_by_id(contracts_data[contracts_data_index].user_id).full_name
-		    	end
-				end
+			unless $current_contracts_data.empty? 
+				if $current_contracts_data[data_index][0] == day
+					day_data << $current_contracts_data[data_index][1]
+		  		day_data << $current_contracts_data[data_index][2]
+		  		day_data << $current_contracts_data[data_index][3]
+		  		day_data << $current_contracts_data[data_index][4]
+		  		data_index += 1 unless data_index >= $current_contracts_data.length
+		  	else
+		  		if data_index != 0
+		  			day_data << $current_contracts_data[data_index][1]
+		  		else
+		  			day_data << 0
+		  		end
+		  		day_data << "-"
+		  		day_data << 0
+		  		day_data << "-"
+		  	end
 	    else
-		    day_data[3] = 0
-	  		day_data[4] = "-"
-	  		day_data[5] = 0
-	  		day_data[6] = "-"
+		    day_data << 0
+	  		day_data << "-"
+		  	day_data << 0
+		  	day_data << "-"
 	  	end
 
       $current_report_data << day_data
@@ -176,23 +201,24 @@ class HomeController < ApplicationController
     for day_data in $current_report_data
     	if not wait_for_sunday
 	    	if day_data[0] == "1"
-	    		$current_report_data_points += "[" + day_data[0] + "," + day_data[2] + "]"
+	    		$current_report_points += "[" + day_data[0] + "," + day_data[2] + "]"
 	    	  wait_for_sunday = true if day_data[1] == "Friday" || day_data[1] == "Saturday"
 	    	elsif day_data[1] == "Friday"
-	    		$current_report_data_points += ", [" + day_data[0] + "," + day_data[2] + "]"
+	    		$current_report_points += ", [" + day_data[0] + "," + day_data[2] + "]"
 	    	  wait_for_sunday = true
 	    	  last_save = day_data
 	    	end
     	elsif day_data[1] == "Sunday"
-  			$current_report_data_points += ", [" + day_data[0] + "," + day_data[2] + "]"
+  			$current_report_points += ", [" + day_data[0] + "," + day_data[2] + "]"
   			wait_for_sunday = false
   			last_save = day_data
   		end
   	end
     
   	if $current_report_data[-1][0] != last_save[0]
-  		$current_report_data_points += ", [" + $current_report_data[-1][0] + "," + $current_report_data[-1][2] + "]"
+  		$current_report_points += ", [" + $current_report_data[-1][0] + "," + $current_report_data[-1][2] + "]"
 		end
-		$current_report_data_points += "]"
+
+		$current_report_points += "]"
 	end
 end
