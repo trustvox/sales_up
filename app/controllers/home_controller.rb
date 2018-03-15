@@ -8,6 +8,7 @@ class HomeController < ApplicationController
 
 	$current_contracts_data = []
 	$current_contract_points = ""
+	$test = ""
 
   def login
 		calculate_data Report.first
@@ -47,7 +48,12 @@ class HomeController < ApplicationController
 		$current_contracts_data.clear
 		$current_contract_points = "[ "
 
-		calculate_contract_data
+		unless (Contract.where(:report_id => $current_report.id).order('day')).empty?
+			calculate_contract_data 
+			calculate_contract_points
+		end
+
+		$current_contract_points += "]"
 		calculate_report_data
 		calculate_report_points
 	end
@@ -91,51 +97,49 @@ class HomeController < ApplicationController
 	def calculate_contract_data
 		contract_search = Contract.where(:report_id => $current_report.id).order('day')
 		
-		unless contract_search.empty? 
-			contract_data = [] # contract_data[0] = day - contract_data[1] = contracts sum - contract_data[2] = store name
-			                   # contract_data[3] = partial contract sum - contract_data[4] = salesman name
-			contracts_sum = 0
-			partial_contract_sum = 0
-			partial_vendor_name = ""
-			partial_store_name = ""
-			value = 1
-			wait = false
-		
-			for i in 0..contract_search.length-1
-				if i+1 < contract_search.length && contract_search[i].day == contract_search[i+1].day
-					contracts_sum += contract_search[i].value
-					partial_contract_sum += contract_search[i].value
-					partial_store_name += value.to_s + "-" + contract_search[i].store_name + "; "
-					partial_vendor_name += value.to_s + "-" + User.find_by_id(contract_search[i].user_id).full_name + "; "
+		contract_data = [] # contract_data[0] = day - contract_data[1] = contracts sum - contract_data[2] = store name
+		                   # contract_data[3] = partial contract sum - contract_data[4] = salesman name
+		contracts_sum = 0
+		partial_contract_sum = 0
+		partial_vendor_name = ""
+		partial_store_name = ""
+		value = 1
+		wait = false
+	
+		for i in 0..contract_search.length-1
+			if i+1 < contract_search.length && contract_search[i].day == contract_search[i+1].day
+				contracts_sum += contract_search[i].value
+				partial_contract_sum += contract_search[i].value
+				partial_store_name += value.to_s + "-" + contract_search[i].store_name + "; "
+				partial_vendor_name += value.to_s + "-" + User.find_by_id(contract_search[i].user_id).full_name + "; "
 
-					value += 1
-					wait = true
-				elsif wait
-					contract_data << contract_search[i-1].day
-					contract_data << contracts_sum
-					contract_data << partial_store_name[0, partial_store_name.length-3]
-					contract_data << partial_contract_sum
-					contract_data << partial_vendor_name[0, partial_vendor_name.length-3]
+				value += 1
+				wait = true
+			elsif wait
+				contract_data << contract_search[i-1].day
+				contract_data << contracts_sum
+				contract_data << partial_store_name[0, partial_store_name.length-3]
+				contract_data << partial_contract_sum
+				contract_data << partial_vendor_name[0, partial_vendor_name.length-3]
 
-					partial_contract_sum = 0
-					partial_vendor_name = ""
-					partial_store_name = ""
-					value = 1
-					wait = false
+				partial_contract_sum = 0
+				partial_vendor_name = ""
+				partial_store_name = ""
+				value = 1
+				wait = false
 
-					$current_contracts_data << contract_data
-					contract_data = []
-				else
-					contracts_sum += contract_search[i].value
-					contract_data << contract_search[i].day
-					contract_data << contracts_sum
-					contract_data << contract_search[i].store_name
-					contract_data << contract_search[i].value
-					contract_data << User.find_by_id(contract_search[i].user_id).full_name
+				$current_contracts_data << contract_data
+				contract_data = []
+			else
+				contracts_sum += contract_search[i].value
+				contract_data << contract_search[i].day
+				contract_data << contracts_sum
+				contract_data << contract_search[i].store_name
+				contract_data << contract_search[i].value
+				contract_data << User.find_by_id(contract_search[i].user_id).full_name
 
-					$current_contracts_data << contract_data
-					contract_data = []
-				end
+				$current_contracts_data << contract_data
+				contract_data = []
 			end
 		end
 	end
@@ -220,5 +224,13 @@ class HomeController < ApplicationController
 		end
 
 		$current_report_points += "]"
+	end
+
+	def calculate_contract_points
+		$current_contract_points += "[1,0]"
+
+    for contract_data in $current_contracts_data
+	    $current_contract_points += ", [" + contract_data[0].to_s + "," + contract_data[1].to_s + "]"
+  	end
 	end
 end
