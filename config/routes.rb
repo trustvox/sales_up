@@ -7,7 +7,6 @@ Rails.application.routes.draw do
   get "/login", to: "home#login"
   get "/graphic", to: "home#graphic", as: "graphic"
   get "/spreadsheet", to: "home#spreadsheet", as: "spreadsheet"
-  post "/searchG", to: "home#searchG"
-  post "/searchS", to: "home#searchS"
+  post "/search", to: "home#search"
  
 end

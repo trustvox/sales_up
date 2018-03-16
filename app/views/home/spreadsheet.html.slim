@@ -17,25 +17,25 @@ html
                   | Welcome
                   br>/
                   = current_user.full_name
+
             .form-group.menu-part-l
-              form.form-group method="post" action="/searchS"
-                select#monthBox.form-control name="months" 
-                  -for report in Report.all
-                    option value="#{report.month}" = report.month + "/" + report.year.to_s
-                button.btn.btn-primary.btn-addon.btn-lg.margin type="submit" Search
+              form.form-group method="post" action="/search"
+                select#monthBox.form-control name="month" 
+                  -for report in Report.all.order('month_numb', 'year').reverse
+                    option value="#{report.month}/#{report.year}" = report.month + "/" + report.year.to_s
+                button.btn.btn-primary.btn-addon.btn-lg.margin name="where" value="spreadsheet" type="submit" Search
+
             .form-group.menu-part-r
-              button.btn.btn-primary.btn-addon.btn-lg.margin
-                i.fa.fa-plus
-                | Spreadsheet
-              button.btn.btn-primary.btn-addon.btn-lg.margin
-                i.fa.fa-plus
-                | Sale
+              form.form-group name="form" action="/view"
+                button.btn.btn-primary.btn-addon.btn-lg.margin Management
               button.btn.btn-primary.btn-addon.btn-lg.disabled.margin Spreadsheet
               form.form-group name="form" action="/graphic"
                 button.btn.btn-primary.btn-addon.btn-lg.margin Graphic
+
             .form-group.menu-part-r
               = link_to destroy_user_session_path, :method => 'delete'
                 button.btn.btn-primary.btn-addon.btn-lg.btn-dark.btn-size#btn-logout Logout
+
           .wrapper-md
             .panel.panel-default
               h2.h2.font-thin.panel-heading

@@ -23,14 +23,14 @@ class HomeController < ApplicationController
 		verify_current_report
 	end
 
-	def searchS
-		calculate_data Report.find_by_month(params[:months])
-		redirect_to spreadsheet_path
-	end
-
-	def searchG
-		calculate_data Report.find_by_month(params[:months])
-		redirect_to graphic_path
+	def search
+		request = params[:month].split "/"
+		calculate_data Report.where(:month => request[0], :year => request[1])[0]
+		if params[:where] == "spreadsheet"
+			redirect_to spreadsheet_path
+		else
+			redirect_to graphic_path
+		end
 	end
 
 	private
@@ -58,10 +58,10 @@ class HomeController < ApplicationController
 		calculate_report_points
 	end
 
-	def find_business_days(_first_day, _last_day)
+	def find_business_days(_first_date, _last_date)
 	  business_days = 1
-	  current_date = _last_day
-	  while current_date > _first_day
+	  current_date = _last_date
+	  while current_date > _first_date
 	    business_days = business_days + 1 unless current_date.saturday? or current_date.sunday?
 	    current_date = current_date - 1.day
 	  end

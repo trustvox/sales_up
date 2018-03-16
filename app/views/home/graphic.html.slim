@@ -17,26 +17,25 @@ html
                   | Welcome
                   br>/
                   = current_user.full_name
+
             .form-group.menu-part-l
-              form.form-group method="post" action="/searchG"
-                label name="label" value="graphic"
-                select#monthBox.form-control name="months" 
-                  -for report in Report.all
-                    option value="#{report.month}" = report.month + "/" + report.year.to_s
-                button.btn.btn-primary.btn-addon.btn-lg.margin type="submit" Search
+              form.form-group method="post" action="/search"
+                select#monthBox.form-control name="month" 
+                  -for report in Report.all.order('month_numb', 'year').reverse
+                    option value="#{report.month}/#{report.year}" = report.month + "/" + report.year.to_s
+                button.btn.btn-primary.btn-addon.btn-lg.margin name="where" value="graphic" type="submit" Search
+
             .form-group.menu-part-r
-              button.btn.btn-primary.btn-addon.btn-lg.margin
-                i.fa.fa-plus
-                | Spreadsheet
-              button.btn.btn-primary.btn-addon.btn-lg.margin
-                i.fa.fa-plus
-                | Sale
+              form.form-group name="form" action="/view"
+                button.btn.btn-primary.btn-addon.btn-lg.margin Management
               form.form-group name="form" action="/spreadsheet"
                 button.btn.btn-primary.btn-addon.btn-lg.margin Spreadsheet
               button.btn.btn-primary.btn-addon.btn-lg.disabled.margin Graphic
+
             .form-group.menu-part-r
               = link_to destroy_user_session_path, :method => 'delete'
                 button.btn.btn-primary.btn-addon.btn-lg.btn-dark.btn-size#btn-logout Logout
+                
           .wrapper-md
             div ng-controller="FlotChartDemoCtrl" 
               .row
@@ -58,6 +57,4 @@ html
                   tooltip: true,
                   tooltipOpts: { content: '%s of %x.1 is %y.4',  defaultTheme: false, shifts: { x: 0, y: 20 } }
 }" 
-                  h4 = $test
--# { data: [ [0,4],[1,4.5],[2,7],[3,4.5],[4,3],[5,3.5],[6,6],[7,3],[8,4],[9,3] ], label: 'B', points: { show: true, radius: 4 } }
 
