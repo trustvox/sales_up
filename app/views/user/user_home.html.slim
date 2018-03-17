@@ -25,7 +25,7 @@ html
                 = f.email_field :email, autocomplete: "email", placeholder:"Email", required:"", :class => "form-control no-border"
               .list-group-item
                 = f.password_field :password, placeholder:"Password", required:"", :class => "form-control no-border"
-            = f.submit "Log in", :class => "btn btn-lg btn-primary btn-block"
+            = f.submit "Log in", :class => "btn btn-lg btn-primary btn-block", :where => "graphic"
             .text-center.m-t.m-b
               = link_to 'Forgot your password?', forgot_password_path
  

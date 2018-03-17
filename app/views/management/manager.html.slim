@@ -1,0 +1,107 @@
+html
+  head
+    meta charset="utf-8" /
+    title Sales Up - Management
+    meta content="app, web app, responsive, responsive layout, admin, admin panel, admin dashboard, flat, flat ui, ui kit, AngularJS, ui route, charts, widgets, components" name="description" /
+    = stylesheet_link_tag 'animate', 'font-awesome.min', 'simple-line-icons', 'bootstrap', 'font', 'app'
+  body
+    .app
+      #content role="main" 
+        .app-content-body
+          .form-inline.row.menu.panel.panel-default
+            .form-group#menu-logo
+              .form-group
+                img src="/assets/img/trustvox-menu-logo.png" /
+              .form-group.margin
+                h2.font-thin.h2
+                  | Welcome
+                  br>/
+                  = current_user.full_name
+
+            .form-group#menu-search
+              form.form-group method="post" action="/search"
+                select#monthBox.form-control name="month" 
+                  -for report in Report.all.order('month_numb', 'year').reverse
+                    option value="#{report.month}/#{report.year}" = report.month + "/" + report.year.to_s
+                button.btn.btn-primary.btn-addon.btn-lg.margin name="where" value="graphic" type="submit" Search
+
+            .form-group#menu-options
+              button.btn.btn-primary.btn-addon.btn-lg.disabled.margin Management
+              form.form-group name="form" action="/login"
+                button.btn.btn-primary.btn-addon.btn-lg.margin name="where" value="spreadsheet" Spreadsheet
+              form.form-group name="form" action="/login"
+                button.btn.btn-primary.btn-addon.btn-lg.margin name="where" value="graphic" Graphic
+
+            .form-group#menu-logout
+              = link_to destroy_user_session_path, :method => 'delete'
+                button.btn.btn-primary.btn-addon.btn-lg.btn-dark.btn-size#btn-logout Logout
+
+          .wrapper-md
+            .panel.panel-default
+              div.panel-default.panel-heading.form-inline
+                h2.h2.font-thin.form-group Spreadsheet Manager
+
+                form.form-group.m-l-xl method="post" action="/search_spreedsheet"
+                  select#monthBox.form-control name="year" 
+                    -for year in Report.distinct.pluck(:year)
+                      option value="#{year}" = year.to_s
+                    option value="2017" 2017
+                  button.btn.btn-primary.btn-addon.btn-lg.margin type="submit" Search
+
+              table.table.table-bordered.table-hover.table-condensed.bg-white-only
+                tbody
+                  tr style=("font-weight: bold;") 
+                    td style="width:35%"  Spreadsheet Name
+                    td style="width:20%"  Goal
+                    td style="width:20%"  Month/Year
+                    td style="width:25%"  Options
+
+                  -for report in $spreadsheet_group
+                    tr
+                      td.v-middle
+                        = report.report_name
+                      td.v-middle
+                        = "R$" + report.goal.to_s
+                      td.v-middle
+                        = report.month + "/" + report.year.to_s
+                      td
+                        .buttons aria-hidden="false"
+                          button.btn.btn-info edit
+                          button.btn.btn-danger.m-l del
+
+            .panel.panel-default
+              div.panel-default.panel-heading.form-inline
+                h2.h2.font-thin.form-group Contract Manager
+
+                form.form-group.m-l-xl method="post" action="/search_contract"
+                  select#monthBox.form-control name="month_year" 
+                    -for report in Report.all.order('month_numb', 'year')
+                      option value="#{report.month}/#{report.year}" = report.month + "/" + report.year.to_s
+                  button.btn.btn-primary.btn-addon.btn-lg.margin type="submit" Search
+
+              table.table.table-bordered.table-hover.table-condensed.bg-white-only
+                tbody
+                  tr style=("font-weight: bold;") 
+                    td style="width:10%"  Day
+                    td style="width:30%"  Store Name
+                    td style="width:15%"  Contract Value
+                    td style="width:20%"  Salesman Name
+                    td style="width:25%"  Options
+
+                  -report = Report.find_by_id($contract_group[0].report_id) unless $contract_group.empty?
+                  -for contract in $contract_group
+                    tr.ng-scope ng-repeat=("user in users") 
+                      td.v-middle
+                        = contract.day.to_s + "/" + report.month + "/" + report.year.to_s
+                      td.v-middle
+                        = contract.store_name
+                      td.v-middle
+                        = "R$" + contract.value.to_s
+                      td.v-middle
+                        = User.find_by_id(contract.user_id).full_name
+                      td 
+                        .buttons aria-hidden="false" ng-show="!rowform.$visible" 
+                          button.btn.btn-info ng-click="rowform.$show()"  edit
+                          button.btn.btn-danger.m-l ng-click="removeUser($index)"  del
+                  
+

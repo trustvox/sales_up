@@ -9,7 +9,7 @@ html
       #content role="main" 
         .app-content-body
           .form-inline.row.menu.panel.panel-default
-            .form-group.menu-part-l
+            .form-group#menu-logo
               .form-group
                 img src="/assets/img/trustvox-menu-logo.png" /
               .form-group.margin
@@ -18,23 +18,23 @@ html
                   br>/
                   = current_user.full_name
 
-            .form-group.menu-part-l
+            .form-group#menu-search
               form.form-group method="post" action="/search"
                 select#monthBox.form-control name="month" 
                   -for report in Report.all.order('month_numb', 'year').reverse
                     option value="#{report.month}/#{report.year}" = report.month + "/" + report.year.to_s
                 button.btn.btn-primary.btn-addon.btn-lg.margin name="where" value="spreadsheet" type="submit" Search
 
-            .form-group.menu-part-r
-              form.form-group name="form" action="/view"
+            .form-group#menu-options
+              form.form-group name="form" method="post" action="/view"
                 button.btn.btn-primary.btn-addon.btn-lg.margin Management
               button.btn.btn-primary.btn-addon.btn-lg.disabled.margin Spreadsheet
               form.form-group name="form" action="/graphic"
                 button.btn.btn-primary.btn-addon.btn-lg.margin Graphic
 
-            .form-group.menu-part-r
+            .form-group#menu-logout
               = link_to destroy_user_session_path, :method => 'delete'
-                button.btn.btn-primary.btn-addon.btn-lg.btn-dark.btn-size#btn-logout Logout
+                button.btn.btn-primary.btn-addon.btn-lg.btn-dark.btn-size Logout
 
           .wrapper-md
             .panel.panel-default

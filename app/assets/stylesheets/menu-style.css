@@ -2,25 +2,30 @@
 	padding: 5px;
 }
 
-.menu-part-l{
-	width: 23%;
-	position: relative;
-	left: 15px;
-}
-
 .margin{
 	margin-left: 5px; 
 	margin-right: 5px; 
 }
 
-.menu-part-r{
+#menu-logo{
+	width: 23%;
 	position: relative;
-	left: 30px;
+	left: 25px;
 }
 
-#btn-logout{
+#menu-search{
 	position: relative;
-	left: 50px;
+	left: 5%;
+}
+
+#menu-options{
+	position: relative;
+	left: 20%;
+}
+
+#menu-logout{
+	position: relative;
+	left: 35%;
 }
 
 #monthBox{

@@ -12,7 +12,11 @@ class HomeController < ApplicationController
 
   def login
 		calculate_data Report.first
-		redirect_to graphic_path
+		if params[:where] == "spreadsheet"
+			redirect_to spreadsheet_path
+		else
+			redirect_to graphic_path
+		end
   end
 
 	def graphic
