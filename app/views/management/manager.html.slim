@@ -37,15 +37,16 @@ html
                 button.btn.btn-primary.btn-addon.btn-lg.btn-dark.btn-size#btn-logout Logout
 
           .wrapper-md
+
+
             .panel.panel-default
               div.panel-default.panel-heading.form-inline
                 h2.h2.font-thin.form-group Spreadsheet Manager
 
                 form.form-group.m-l-xl method="post" action="/search_spreedsheet"
                   select#monthBox.form-control name="year" 
-                    -for year in Report.distinct.pluck(:year)
+                    -for year in Report.distinct.pluck(:year).reverse
                       option value="#{year}" = year.to_s
-                    option value="2017" 2017
                   button.btn.btn-primary.btn-addon.btn-lg.margin type="submit" Search
 
               table.table.table-bordered.table-hover.table-condensed.bg-white-only
@@ -65,9 +66,11 @@ html
                       td.v-middle
                         = report.month + "/" + report.year.to_s
                       td
-                        .buttons aria-hidden="false"
-                          button.btn.btn-info edit
-                          button.btn.btn-danger.m-l del
+                        div.form-inline
+                          form.form-group method="post" action="/edit_spreadsheet"
+                            button.btn.btn-info edit
+                          form.form-group method="post" action="/delete_spreadsheet" onsubmit="if(!validateMyForm()){event.preventDefault();}"
+                            button.btn.btn-danger.m-l name="delete" value="#{report.month.to_s}/#{report.year.to_s}" del
 
             .panel.panel-default
               div.panel-default.panel-heading.form-inline
@@ -75,7 +78,7 @@ html
 
                 form.form-group.m-l-xl method="post" action="/search_contract"
                   select#monthBox.form-control name="month_year" 
-                    -for report in Report.all.order('month_numb', 'year')
+                    -for report in Report.all.order('month_numb', 'year').reverse
                       option value="#{report.month}/#{report.year}" = report.month + "/" + report.year.to_s
                   button.btn.btn-primary.btn-addon.btn-lg.margin type="submit" Search
 
@@ -100,8 +103,10 @@ html
                       td.v-middle
                         = User.find_by_id(contract.user_id).full_name
                       td 
-                        .buttons aria-hidden="false" ng-show="!rowform.$visible" 
-                          button.btn.btn-info ng-click="rowform.$show()"  edit
-                          button.btn.btn-danger.m-l ng-click="removeUser($index)"  del
+                        div.form-inline
+                          form.form-group method="post" action="/edit_contract"
+                            button.btn.btn-info edit
+                          form.form-group method="post" action="/delete_contract" onsubmit="if(!validateMyForm()){event.preventDefault();}"
+                            button.btn.btn-danger.m-l name="delete" value="#{contract.day.to_s}/#{contract.report_id.to_s}" del
                   
 

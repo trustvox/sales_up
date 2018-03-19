@@ -14,5 +14,7 @@ Rails.application.routes.draw do
   post "/view", to: "management#view"
   post "/search_spreedsheet", to: "management#search_spreadsheet"
   post "/search_contract", to: "management#search_contract"
+  post "/delete_spreadsheet", to: "management#delete_spreadsheet"
+  post "/delete_contract", to: "management#delete_contract"
  
 end

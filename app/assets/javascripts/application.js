@@ -18,6 +18,7 @@
 //= require ui-nav.js
 //= require ui-toggle.js
 //= require ui-client.js
+//= require functions.js
 //
 //= require rails-ujs
 //= require turbolinks

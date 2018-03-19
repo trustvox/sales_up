@@ -8,7 +8,6 @@ class HomeController < ApplicationController
 
 	$current_contracts_data = []
 	$current_contract_points = ""
-	$test = ""
 
   def login
 		calculate_data Report.first
@@ -180,7 +179,7 @@ class HomeController < ApplicationController
 		  		day_data << $current_contracts_data[data_index][2]
 		  		day_data << $current_contracts_data[data_index][3]
 		  		day_data << $current_contracts_data[data_index][4]
-		  		data_index += 1 unless data_index >= $current_contracts_data.length
+		  		data_index += 1 unless (data_index+1) >= $current_contracts_data.length
 		  	else
 		  		if data_index != 0
 		  			day_data << $current_contracts_data[data_index][1]
