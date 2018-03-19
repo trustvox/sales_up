@@ -36,9 +36,8 @@ html
               = link_to destroy_user_session_path, :method => 'delete'
                 button.btn.btn-primary.btn-addon.btn-lg.btn-dark.btn-size#btn-logout Logout
 
+
           .wrapper-md
-
-
             .panel.panel-default
               div.panel-default.panel-heading.form-inline
                 h2.h2.font-thin.form-group Spreadsheet Manager
@@ -47,7 +46,12 @@ html
                   select#monthBox.form-control name="year" 
                     -for year in Report.distinct.pluck(:year).reverse
                       option value="#{year}" = year.to_s
-                  button.btn.btn-primary.btn-addon.btn-lg.margin type="submit" Search
+                  button.btn.btn-primary.btn-addon.btn-lg.margin.m-r-xl type="submit" Search
+
+                = link_to "#add"
+                  button.btn.btn-primary.btn-addon.btn-lg.margin.form-group.m-l-md
+                    i.fa.fa-plus
+                    | Spreadsheet
 
               table.table.table-bordered.table-hover.table-condensed.bg-white-only
                 tbody
@@ -75,12 +79,17 @@ html
             .panel.panel-default
               div.panel-default.panel-heading.form-inline
                 h2.h2.font-thin.form-group Contract Manager
-
+          
                 form.form-group.m-l-xl method="post" action="/search_contract"
                   select#monthBox.form-control name="month_year" 
                     -for report in Report.all.order('month_numb', 'year').reverse
                       option value="#{report.month}/#{report.year}" = report.month + "/" + report.year.to_s
-                  button.btn.btn-primary.btn-addon.btn-lg.margin type="submit" Search
+                  button.btn.btn-primary.btn-addon.btn-lg.margin.m-r-xl type="submit" Search
+
+                = link_to "#add"
+                  button.btn.btn-primary.btn-addon.btn-lg.margin.form-group.m-l-md
+                    i.fa.fa-plus
+                    | Contract
 
               table.table.table-bordered.table-hover.table-condensed.bg-white-only
                 tbody
@@ -93,7 +102,7 @@ html
 
                   -report = Report.find_by_id($contract_group[0].report_id) unless $contract_group.empty?
                   -for contract in $contract_group
-                    tr.ng-scope ng-repeat=("user in users") 
+                    tr
                       td.v-middle
                         = contract.day.to_s + "/" + report.month + "/" + report.year.to_s
                       td.v-middle
@@ -108,5 +117,52 @@ html
                             button.btn.btn-info edit
                           form.form-group method="post" action="/delete_contract" onsubmit="if(!validateMyForm()){event.preventDefault();}"
                             button.btn.btn-danger.m-l name="delete" value="#{contract.day.to_s}/#{contract.report_id.to_s}" del
-                  
+          
+          div
+            .col-sm-6
+              .panel.panel-default
+                h2.h2.font-thin.panel-heading id="add" Spreadsheet register
+                .panel-body
+                  form method="post" action="/add_spreadsheet"
+                    .form-group
+                      h4.h4 Report name
+                      input.form-control name="report_name" placeholder="March report" type="text" /
+                    .form-group
+                      h4.h4 Goal
+                      input.form-control name="goal" placeholder="R$10000" type="decimal" /
+                    .form-group
+                      h4.h4 Month
+                      input.form-control name="month" placeholder="April" type="text" /
+                    .form-group
+                      h4.h4 Year
+                      input.form-control name="year" placeholder="2018" min="2000" max="#{Report.distinct.order('year').pluck(:year)[-1]}" type="number" /
+                    button.btn.btn-success.btn-addon.btn-lg.margin type="submit" Submit
+                      
+            .col-sm-6
+              .panel.panel-default
+                h2.h2.font-thin.panel-heading Contract register
+                .panel-body
+                  form method="post" action="/add_contract"
+                    .form-group
+                      h4.h4 Store name
+                      input.form-control name="store_name" placeholder="Miami Store" type="text" /
+                    .form-group
+                      h4.h4 Value
+                      input.form-control name="value" placeholder="R$299" type="decimal" /
+                    .checkbox
+                      h4.h4 Salesman name
+                      -users = User.all
+                      .radio.form-inline
+                        h4.h4.i-checks.m-r-md.form-group
+                          input type="radio" name="user_name" value="#{users[0].full_name}" checked="" 
+                          i
+                          | #{users[0].full_name}
+                        -for i in 1..users.length-1
+                          h4.h4.i-checks.m-r-md.form-group
+                            input type="radio" name="user_name" value="#{users[i].full_name}" 
+                            i
+                            | #{users[i].full_name}
+                        
+                    button.btn.btn-success.btn-addon.btn-lg.margin type="submit" Submit
+          
 
