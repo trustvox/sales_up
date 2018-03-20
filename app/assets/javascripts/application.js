@@ -11,15 +11,14 @@
 // about supported directives.
 //
 //= require jquery/jquery/dist/jquery
-//= require jquery/bootstrap/dist/js/bootstrap
-//= require ui-load.js
-//= require ui-jp.config.js
-//= require ui-jp.js
-//= require ui-nav.js
-//= require ui-toggle.js
-//= require ui-client.js
-//= require functions.js
+//= require bootstrap
+//= require ui-load
+//= require ui-jp.config
+//= require ui-jp
+//= require ui-nav
+//= require ui-toggle
+//= require ui-client
+//= require functions
 //
 //= require rails-ujs
-//= require turbolinks
 //= require_tree .

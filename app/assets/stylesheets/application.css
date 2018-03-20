@@ -12,4 +12,13 @@
  *
  *= require_tree .
  *= require_self
+ *
+ *= require bootstrap.min
+ *= require bootstrap
+ *= require app
+ *= require animate
+ *= require font
+ *= require font-awesome.min
+ *= require simple-line-icons
+ *= require menu-style
  */
