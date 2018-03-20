@@ -1,13 +1,7 @@
 class UserController < ApplicationController
+  def user_home
+    redirect_to graphic_path if user_signed_in?
+  end
 
-	def user_home
-		if user_signed_in?
-      redirect_to graphic_path
-    end
-	end
-
-	def forgot_password
-		
-	end
-
+  def forgot_password; end
 end
