@@ -16,15 +16,15 @@ class ApplicationController < ActionController::Base
     if user_signed_in?
       super
     else
-      redirect_to root_path, :alert => 'You must sign in first'
+      redirect_to root_path, alert: 'You must sign in first'
       ## if you want render 404 page
       ## render :file => File.join(Rails.root, 'public/404'), :formats => [:html], :status => 404, :layout => false
     end
   end
 
   def configure_permitted_parameters
-    attrs_create = [:full_name, :email, :password, :password_confirmation]
-    attrs_login = [:email, :password]
+    attrs_create = %i[full_name email password password_confirmation]
+    attrs_login = %i[email password]
 
     devise_parameter_sanitizer.permit :sign_in, keys: attrs_login
     devise_parameter_sanitizer.permit :sign_up, keys: attrs_create
