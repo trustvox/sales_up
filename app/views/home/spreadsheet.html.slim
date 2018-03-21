@@ -1,0 +1,64 @@
+html
+  head
+    meta charset="utf-8" /
+    title Sales Up - Spreadsheet
+    meta content="app, web app, responsive, responsive layout, admin, admin panel, admin dashboard, flat, flat ui, ui kit, AngularJS, ui route, charts, widgets, components" name="description" /
+   
+    = stylesheet_link_tag "application", media: 'all'
+  body
+    .app
+      #content role="main" 
+        .app-content-body
+          .form-inline.row.menu.panel.panel-default
+            .form-group#menu-logo
+              .form-group
+                img src="/assets/img/trustvox-menu-logo.png" /
+              .form-group.margin
+                h2.font-thin.h2
+                  | Welcome
+                  br>/
+                  = current_user.full_name
+
+            .form-group#menu-search
+              form.form-group method="post" action="/search"
+                select#monthBox.form-control name="month" 
+                  -for report in Report.all.order('month_numb', 'year').reverse
+                    option value="#{report.month}/#{report.year}" = report.month + "/" + report.year.to_s
+                button.btn.btn-primary.btn-addon.btn-lg.margin name="where" value="spreadsheet" type="submit" Search
+
+            .form-group#menu-options
+              form.form-group name="form" method="post" action="/view"
+                button.btn.btn-primary.btn-addon.btn-lg.margin Management
+              button.btn.btn-primary.btn-addon.btn-lg.disabled.margin Spreadsheet
+              form.form-group name="form" action="/graphic"
+                button.btn.btn-primary.btn-addon.btn-lg.margin Graphic
+
+            .form-group#menu-logout
+              = link_to destroy_user_session_path, :method => 'delete'
+                button.btn.btn-primary.btn-addon.btn-lg.btn-dark.btn-size Logout
+
+          .wrapper-md
+            .panel.panel-default
+              h2.h2.font-thin.panel-heading
+                = $current_report.report_name + " --- Goal value: R$" + $current_report.goal.to_s + ")"
+              div
+                table.table ui-jq="footable" 
+                  thead
+                    tr
+                      th data-breakpoints="xs"  Day
+                      th Weekdays
+                      th Daily Goal
+                      th Contract Sum
+                      th data-breakpoints="xs"  Store Name 
+                      th data-breakpoints=("xs sm")  Contract Values
+                      th data-breakpoints=("xs sm md") Salesman Name
+                  tbody
+                    - for data in $current_report_data
+                      tr
+                        td = data[0]
+                        td = data[1]
+                        td = "R$" + data[2]
+                        td = "R$" + data[3].to_s
+                        td = data[4]
+                        td = "R$" + data[5].to_s
+                        td = data[6]
