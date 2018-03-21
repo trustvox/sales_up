@@ -1,3 +1,5 @@
+# CreateReports is responsible to add a new record called Report
+#   which will store the report_name, goal, month and year of a report
 class CreateReports < ActiveRecord::Migration[5.1]
   def change
     create_table :reports do |t|
