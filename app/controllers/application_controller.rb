@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :configure_permitted_parameters, if: :devise_controller?
@@ -18,7 +20,8 @@ class ApplicationController < ActionController::Base
     else
       redirect_to root_path, alert: 'You must sign in first'
       ## if you want render 404 page
-      ## render :file => File.join(Rails.root, 'public/404'), :formats => [:html], :status => 404, :layout => false
+      ## render :file => File.join(Rails.root, 'public/404'),
+      ## :formats => [:html], :status => 404, :layout => false
     end
   end
 

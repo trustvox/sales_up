@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class HomeController < ApplicationController
   before_action :authenticate_user!
   skip_before_action :verify_authenticity_token
@@ -114,7 +116,7 @@ class HomeController < ApplicationController
         contracts_sum += contract_search[i].value
         partial_contract_sum += contract_search[i].value
         partial_store_name += value.to_s + '-' + contract_search[i].store_name + '; '
-        partial_vendor_name += value.to_s + '-' + User.find_by_id(contract_search[i].user_id).full_name + '; '
+        partial_vendor_name += value.to_s + '-' + User.find_by(id: contract_search[i].user_id).full_name + '; '
 
         value += 1
         wait = true
@@ -139,7 +141,7 @@ class HomeController < ApplicationController
         contract_data << contracts_sum
         contract_data << contract_search[i].store_name
         contract_data << contract_search[i].value
-        contract_data << User.find_by_id(contract_search[i].user_id).full_name
+        contract_data << User.find_by(id: contract_search[i].user_id).full_name
 
         $current_contracts_data << contract_data
         contract_data = []

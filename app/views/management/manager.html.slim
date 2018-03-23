@@ -3,11 +3,11 @@ html
     meta charset="utf-8" /
     title Sales Up - Management
     meta content="app, web app, responsive, responsive layout, admin, admin panel, admin dashboard, flat, flat ui, ui kit, AngularJS, ui route, charts, widgets, components" name="description" /
-    
+
     = stylesheet_link_tag "application", media: 'all'
   body
     .app
-      #content role="main" 
+      #content role="main"
         .app-content-body
           .form-inline.row.menu.panel.panel-default
             .form-group#menu-logo
@@ -21,7 +21,7 @@ html
 
             .form-group#menu-search
               form.form-group method="post" action="/search"
-                select#monthBox.form-control name="month" 
+                select#monthBox.form-control name="month"
                   -for report in Report.all.order('month_numb', 'year').reverse
                     option value="#{report.month}/#{report.year}" = report.month + "/" + report.year.to_s
                 button.btn.btn-primary.btn-addon.btn-lg.margin name="where" value="graphic" type="submit" Search
@@ -44,7 +44,7 @@ html
                 h2.h2.font-thin.form-group Spreadsheet Manager
 
                 form.form-group.m-l-xl method="post" action="/search_spreedsheet"
-                  select#monthBox.form-control name="year" 
+                  select#monthBox.form-control name="year"
                     -for year in Report.distinct.pluck(:year).reverse
                       option value="#{year}" = year.to_s
                   button.btn.btn-primary.btn-addon.btn-lg.margin.m-r-xl type="submit" Search
@@ -56,33 +56,33 @@ html
 
               table.table.table-bordered.table-hover.table-condensed.bg-white-only
                 tbody
-                  tr style=("font-weight: bold;") 
+                  tr style=("font-weight: bold;")
                     td style="width:35%"  Spreadsheet Name
                     td style="width:20%"  Goal
                     td style="width:20%"  Month/Year
                     td style="width:25%"  Options
 
-                  -for report in $spreadsheet_group
+                  -for report in session[:spreadsheets]
                     tr
                       td.v-middle
-                        = report.report_name
+                        = report['report_name']
                       td.v-middle
-                        = "R$" + report.goal.to_s
+                        = "R$" + report['goal'].to_s
                       td.v-middle
-                        = report.month + "/" + report.year.to_s
+                        = report['month'] + "/" + report['year'].to_s
                       td
                         div.form-inline
                           form.form-group method="post" action="/edit_spreadsheet"
                             button.btn.btn-info edit
                           form.form-group method="post" action="/delete_spreadsheet" onsubmit="if(!validateMyForm()){event.preventDefault();}"
-                            button.btn.btn-danger.m-l name="delete" value="#{report.month.to_s}/#{report.year.to_s}" del
+                            button.btn.btn-danger.m-l name="delete" value="#{report['month'].to_s}/#{report['year'].to_s}" del
 
             .panel.panel-default
               div.panel-default.panel-heading.form-inline
                 h2.h2.font-thin.form-group Contract Manager
-          
+
                 form.form-group.m-l-xl method="post" action="/search_contract"
-                  select#monthBox.form-control name="month_year" 
+                  select#monthBox.form-control name="month_year"
                     -for report in Report.all.order('month_numb', 'year').reverse
                       option value="#{report.month}/#{report.year}" = report.month + "/" + report.year.to_s
                   button.btn.btn-primary.btn-addon.btn-lg.margin.m-r-xl type="submit" Search
@@ -94,15 +94,15 @@ html
 
               table.table.table-bordered.table-hover.table-condensed.bg-white-only
                 tbody
-                  tr style=("font-weight: bold;") 
+                  tr style=("font-weight: bold;")
                     td style="width:10%"  Day
                     td style="width:30%"  Store Name
                     td style="width:15%"  Contract Value
                     td style="width:20%"  Salesman Name
                     td style="width:25%"  Options
 
-                  -report = Report.find_by_id($contract_group[0].report_id) unless $contract_group.empty?
-                  -for contract in $contract_group
+                  -report = Report.find_by_id(session[:contracts][0].report_id) unless session[:contracts].empty?
+                  -for contract in session[:contracts]
                     tr
                       td.v-middle
                         = contract.day.to_s + "/" + report.month + "/" + report.year.to_s
@@ -112,13 +112,13 @@ html
                         = "R$" + contract.value.to_s
                       td.v-middle
                         = User.find_by_id(contract.user_id).full_name
-                      td 
+                      td
                         div.form-inline
                           form.form-group method="post" action="/edit_contract"
                             button.btn.btn-info edit
                           form.form-group method="post" action="/delete_contract" onsubmit="if(!validateMyForm()){event.preventDefault();}"
-                            button.btn.btn-danger.m-l name="delete" value="#{contract.day.to_s}/#{contract.report_id.to_s}" del
-          
+                            button.btn.btn-danger.m-l name="delete" value="#{contract.day.to_s}/#{report.month.to_s}/#{report.year.to_s}" del
+
           div
             .col-sm-6
               .panel.panel-default
@@ -138,7 +138,7 @@ html
                       h4.h4 Year
                       input.form-control name="year" placeholder="2018" min="2000" max="#{Report.distinct.order('year').pluck(:year)[-1]}" type="number" /
                     button.btn.btn-success.btn-addon.btn-lg.margin type="submit" Submit
-                      
+
             .col-sm-6
               .panel.panel-default
                 h2.h2.font-thin.panel-heading Contract register
@@ -155,15 +155,15 @@ html
                       -users = User.all
                       .radio.form-inline
                         h4.h4.i-checks.m-r-md.form-group
-                          input type="radio" name="user_name" value="#{users[0].full_name}" checked="" 
+                          input type="radio" name="user_name" value="#{users[0].full_name}" checked=""
                           i
                           | #{users[0].full_name}
                         -for i in 1..users.length-1
                           h4.h4.i-checks.m-r-md.form-group
-                            input type="radio" name="user_name" value="#{users[i].full_name}" 
+                            input type="radio" name="user_name" value="#{users[i].full_name}"
                             i
                             | #{users[i].full_name}
-                        
+
                     button.btn.btn-success.btn-addon.btn-lg.margin type="submit" Submit
-          
+
 

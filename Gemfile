@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 
 gem 'coffee-rails', '~> 4.2'
@@ -9,6 +11,7 @@ gem 'sqlite3'
 gem 'turbolinks', '~> 5'
 gem 'uglifier', '>= 1.3.0'
 
+gem 'activerecord-session_store'
 gem 'cancancan'
 gem 'devise'
 gem 'jquery-rails'
