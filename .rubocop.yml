@@ -1,0 +1,24 @@
+Documentation:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: true
+  Exclude:
+    - spec/**/*
+
+AllCops:
+  TargetRubyVersion: 2.4
+  Exclude:
+    - 'Gemfile.lock'
+    - 'bin/**/*'
+    - 'db/**/*'
+    - 'tmp/**/*'
+    - 'vendor/**/*'
+    - 'log/**/*'
+    - '**/*schema.rb'
+    - 'lib/tasks/**/*'
+    - '**/factories/**/*'
+    - 'config/initializers/**/*'
+
+Rails:
+  Enabled: true
