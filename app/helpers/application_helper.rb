@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # ApplicationHelper is responsible to create some path options for the user by
 #   utilising the devise gem paths.
 module ApplicationHelper
