@@ -3,6 +3,7 @@ html
     meta charset="utf-8" /
     title Sales Up - Management
     = stylesheet_link_tag "application", media: 'all'
+    = javascript_include_tag "application", media: 'all'
   body
     .app
       #content role="main"
@@ -26,9 +27,9 @@ html
 
             .form-group#menu-options
               button.btn.btn-primary.btn-addon.btn-lg.disabled.margin Management
-              form.form-group name="form" action="/login"
+              form.form-group name="form" action="/spreadsheet"
                 button.btn.btn-primary.btn-addon.btn-lg.margin name="where" value="spreadsheet" Spreadsheet
-              form.form-group name="form" action="/login"
+              form.form-group name="form" action="/graphic"
                 button.btn.btn-primary.btn-addon.btn-lg.margin name="where" value="graphic" Graphic
 
             .form-group#menu-logout
