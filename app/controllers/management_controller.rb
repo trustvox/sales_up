@@ -12,7 +12,11 @@ class ManagementController < ApplicationController
     redirect_to manager_path
   end
 
-  def manager; end
+  def manager
+    authorize! :manager, ManagementController
+  rescue CanCan::AccessDenied
+    redirect_to graphic_path
+  end
 
   def add_spreadsheet
     @report = Report.new

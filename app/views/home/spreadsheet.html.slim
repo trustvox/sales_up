@@ -26,8 +26,9 @@ html
                 button.btn.btn-primary.btn-addon.btn-lg.margin name="where" value="spreadsheet" type="submit" Search
 
             .form-group#menu-options
-              form.form-group name="form" method="post" action="/view"
-                button.btn.btn-primary.btn-addon.btn-lg.margin Management
+              - if can? :view, ManagementController
+                form.form-group name="form" method="post" action="/view"
+                  button.btn.btn-primary.btn-addon.btn-lg.margin Management
               button.btn.btn-primary.btn-addon.btn-lg.disabled.margin Spreadsheet
               form.form-group name="form" action="/graphic"
                 button.btn.btn-primary.btn-addon.btn-lg.margin Graphic
@@ -38,8 +39,16 @@ html
 
           .wrapper-md
             .panel.panel-default
-              h2.h2.font-thin.panel-heading
-                = @current_report.report_name + " --- Goal value: R$" + @current_report.goal.to_s + ")"
+              .panel.panel-default
+                  .panel-heading
+                    .form-inline
+                      h2.h2.form-group
+                        = "Name:"
+                      h2.h2.font-thin.form-group.m-l = @current_report.report_name
+                    .form-inline
+                      h2.h2.form-group
+                        = "Goal: "
+                      h2.h2.font-thin.form-group.m-l = "R$" + @current_report.goal.to_s
               div
                 table.table ui-jq="footable"
                   thead

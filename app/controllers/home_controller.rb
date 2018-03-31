@@ -14,6 +14,12 @@ class HomeController < ApplicationController
   end
 
   def spreadsheet
+    begin
+      authorize! :spreadsheet, HomeController
+    rescue CanCan::AccessDenied
+      redirect_to graphic_path
+    end
+
     @current_report = session[:current_report]
     @report_data = session[:report_data]
   end

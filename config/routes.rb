@@ -1,8 +1,9 @@
 Rails.application.routes.draw do
-  devise_for :users do
-    get '/users/sign_out' => 'devise/sessions#destroy'
-  end
+  devise_for :users
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+
+  get '/404', to: 'errors#error_404'
+  get '/500', to: 'errors#error_500'
 
   root to: 'user#user_home'
   get '/forgot_password', to: 'user#forgot_password', as: 'forgot_password'
