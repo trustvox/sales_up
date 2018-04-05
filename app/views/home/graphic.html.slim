@@ -2,12 +2,10 @@ html
   head
     meta charset="utf-8" /
     title Sales Up - Graphic
-    meta content="app, web app, responsive, responsive layout, admin, admin panel, admin dashboard, flat, flat ui, ui kit, AngularJS, ui route, charts, widgets, components" name="description" /
-    
     = stylesheet_link_tag "application", media: 'all'
   body
     .app
-      #content role="main" 
+      #content role="main"
         .app-content-body
           .form-inline.row.menu.panel.panel-default
             .form-group#menu-logo
@@ -21,7 +19,7 @@ html
 
             .form-group#menu-search
               form.form-group method="post" action="/search"
-                select#monthBox.form-control name="month" 
+                select#monthBox.form-control name="month"
                   -for report in Report.all.order('month_numb', 'year').reverse
                     option value="#{report.month}/#{report.year}" = report.month + "/" + report.year.to_s
                 button.btn.btn-primary.btn-addon.btn-lg.margin name="where" value="graphic" type="submit" Search
@@ -36,9 +34,9 @@ html
             .form-group#menu-logout
               = link_to destroy_user_session_path, :method => 'delete'
                 button.btn.btn-primary.btn-addon.btn-lg.btn-dark.btn-size Logout
-                
+
           .wrapper-md
-            div ng-controller="FlotChartDemoCtrl" 
+            div ng-controller="FlotChartDemoCtrl"
               .row
                 .panel.panel-default
                   h2.h2.font-thin.panel-heading
@@ -46,7 +44,7 @@ html
                   .panel-body
                     div style="height:450px" ui-jq="plot" ui-options="
                     [
-                  { data: #{$current_report_points}, label: 'Goal', points: { show: true }, lines: { show: true, fill: true, fillColor: { colors: [{ opacity: 0.1 }, { opacity: 0.1}] } } }, 
+                  { data: #{$current_report_points}, label: 'Goal', points: { show: true }, lines: { show: true, fill: true, fillColor: { colors: [{ opacity: 0.1 }, { opacity: 0.1}] } } },
                   { data: #{$current_contract_points}, label: 'Reached', points: { show: true, radius: 4 }, lines: { show: true, fill: true, fillColor: { colors: [{ opacity: 0.1 }, { opacity: 0.1}] } } }
                 ],
                 {
@@ -57,5 +55,5 @@ html
                   grid: { hoverable: true, clickable: true, borderWidth: 0, color: '#ccc' },
                   tooltip: true,
                   tooltipOpts: { content: '%s of %x.1 is %y.4',  defaultTheme: false, shifts: { x: 0, y: 20 } }
-}" 
+}"
 

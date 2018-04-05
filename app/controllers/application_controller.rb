@@ -18,7 +18,8 @@ class ApplicationController < ActionController::Base
     else
       redirect_to root_path, alert: 'You must sign in first'
       ## if you want render 404 page
-      ## render :file => File.join(Rails.root, 'public/404'), :formats => [:html], :status => 404, :layout => false
+      ## render :file => File.join(Rails.root, 'public/404'),
+      ## :formats => [:html], :status => 404, :layout => false
     end
   end
 

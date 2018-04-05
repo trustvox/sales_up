@@ -9,6 +9,7 @@ gem 'sqlite3'
 gem 'turbolinks', '~> 5'
 gem 'uglifier', '>= 1.3.0'
 
+gem 'activerecord-session_store'
 gem 'cancancan'
 gem 'devise'
 gem 'jquery-rails'
