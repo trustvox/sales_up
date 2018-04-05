@@ -3,6 +3,7 @@ html
     meta charset="utf-8" /
     title Sales Up - Spreadsheet
     = stylesheet_link_tag "application", media: 'all'
+    = javascript_include_tag "application", media: 'all'
   body
     .app
       #content role="main"
@@ -18,8 +19,8 @@ html
                   = current_user.full_name
 
             .form-group#menu-search
-              form.form-group method="post" action="/search"
-                select#monthBox.form-control name="month"
+              form.form-group action="/search"
+                select#monthBox.form-control name="month_year"
                   -for report in Report.all.order('month_numb', 'year').reverse
                     option value="#{report.month}/#{report.year}" = report.month + "/" + report.year.to_s
                 button.btn.btn-primary.btn-addon.btn-lg.margin name="where" value="spreadsheet" type="submit" Search
@@ -32,13 +33,13 @@ html
                 button.btn.btn-primary.btn-addon.btn-lg.margin Graphic
 
             .form-group#menu-logout
-              = link_to destroy_user_session_path, :method => 'delete'
+              form.form-group name="form" action="/logout"
                 button.btn.btn-primary.btn-addon.btn-lg.btn-dark.btn-size Logout
 
           .wrapper-md
             .panel.panel-default
               h2.h2.font-thin.panel-heading
-                = $current_report.report_name + " --- Goal value: R$" + $current_report.goal.to_s + ")"
+                = @current_report.report_name + " --- Goal value: R$" + @current_report.goal.to_s + ")"
               div
                 table.table ui-jq="footable"
                   thead
@@ -51,7 +52,7 @@ html
                       th data-breakpoints=("xs sm")  Contract Values
                       th data-breakpoints=("xs sm md") Salesman Name
                   tbody
-                    - for data in $current_report_data
+                    - @report_data.each do |data|
                       tr
                         td = data[0]
                         td = data[1]
