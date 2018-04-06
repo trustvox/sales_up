@@ -2,20 +2,15 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
-    authorize_user(user) if user.present?
+    logedin = user.present?
+    (user.priority == 3 ? can(:manage, :all) : authorize_user(user)) if logedin
   end
 
   def authorize_user(user)
     if user.priority >= 1
-      can [:spreadsheet], HomeController
-
-      if user.priority == 2
-        can :manage, ManagementController
-      else
-        can %i[view manager add_contract
-               alter_contract search_contract], ManagementController
-      end
+      can :manage, ManagementController if user.priority == 2
+      can %i[add_contract_data alter_contract_data], HomeController
     end
-    can %i[graphic search], HomeController
+    can %i[graphic search spreadsheet], HomeController
   end
 end

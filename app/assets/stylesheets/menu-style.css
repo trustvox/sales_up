@@ -7,22 +7,12 @@
 	margin-right: 5px;
 }
 
-.editable{
-  position: relative;
-  visibility: hidden;
-  left: 0px;
-}
-
-.static{
-  visibility: visible;
-}
-
 .numbers{
   width: 100px;
 }
 
 .text{
-  width: 350px;
+  width: 300px;
 }
 
 .day{

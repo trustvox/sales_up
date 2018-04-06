@@ -11,7 +11,8 @@ html
           .form-inline.row.menu.panel.panel-default
             .form-group#menu-logo
               .form-group
-                img src="/assets/img/trustvox-menu-logo.png" /
+                = link_to graphic_path
+                  img src="/assets/img/trustvox-menu-logo.png" /
               .form-group.margin
                 h2.font-thin.h2
                   | Welcome
@@ -19,51 +20,55 @@ html
                   = current_user.full_name
 
             .form-group#menu-search
-              form.form-group action="/search"
-                select#monthBox.form-control name="month_year"
-                  -for report in Report.all.order('month_numb', 'year').reverse
-                    option value="#{report.month}/#{report.year}" = report.month + "/" + report.year.to_s
-                button.btn.btn-primary.btn-addon.btn-lg.margin name="where" value="graphic" type="submit" Search
+              form.form-group action="/search" id="formSelectBox"
+                select#monthBox.form-control name="month_year" onchange="sendData('formSelectBox')"
+                  option value="#{@current_report.month}/#{@current_report.year}" = @current_report.month + "/" + @current_report.year.to_s
+                  - @month_year_list.each do |report|
+                    - next if @current_report.id == report.id
+                    option value="#{report.month}/#{report.year}/g" = report.month + "/" + report.year.to_s
 
             .form-group#menu-options
-              - if can? :view, ManagementController
-                form.form-group name="form" method="post" action="/view"
-                  button.btn.btn-primary.btn-addon.btn-lg.margin Management
+              button.btn.btn-primary.btn-addon.btn-lg.disabled.margin Graphic
               - if can? :spreadsheet, HomeController
                 form.form-group name="form" action="/spreadsheet"
                   button.btn.btn-primary.btn-addon.btn-lg.margin Spreadsheet
-              button.btn.btn-primary.btn-addon.btn-lg.disabled.margin Graphic
-
-            .form-group#menu-logout
-              form.form-group name="form" action="/logout"
+              - if can? :view, ManagementController
+                form.form-group name="form" method="post" action="/view"
+                  button.btn.btn-primary.btn-addon.btn-lg.margin Settings
+              form.form-group.m-l-xxl name="form" action="/logout"
                 button.btn.btn-primary.btn-addon.btn-lg.btn-dark.btn-size Logout
 
           .wrapper-md
-            div ng-controller="FlotChartDemoCtrl"
+            div ng-controller="FlotChartDemoCtrl" style="margin-top: -30px;"
               .row
                 .panel.panel-default
                   .panel-heading
                     .form-inline
-                      h2.h2.form-group
+                      h3.h3.form-group
                         = "Name:"
-                      h2.h2.font-thin.form-group.m-l = @current_report.report_name
-                    .form-inline
-                      h2.h2.form-group
+                      h3.h3.font-thin.form-group.m-l = @current_report.report_name
+                    .form-inline style="text-ali"
+                      h3.h3.form-group
                         = "Goal: "
-                      h2.h2.font-thin.form-group.m-l = "R$" + @current_report.goal.to_s
-                  .panel-body
-                    div style="height:450px" ui-jq="plot" ui-options="
+                      h3.h3.font-thin.form-group.m-l = "R" + number_to_currency(@current_report.goal).to_s
+                  .panel-body style="font-size: 25px; font-weight: bold;"
+                    - day_text = "[1, 'Day/1'], "
+                    - @report_data.each do |data|
+                      - next if data[0] == "1"
+                      - day_text += "[" + data[0] + ", '#{data[0].to_s}'], "
+                    - day_text = day_text[0..day_text.length-3]
+                    div style="height:450px;" ui-jq="plot" ui-options="
                     [
                   { data: #{@report_points}, label: 'Goal', points: { show: true }, lines: { show: true, fill: true, fillColor: { colors: [{ opacity: 0.1 }, { opacity: 0.1}] } } },
-                  { data: #{@contract_points}, label: 'Reached', points: { show: true, radius: 4 }, lines: { show: true, fill: true, fillColor: { colors: [{ opacity: 0.1 }, { opacity: 0.1}] } } }
+                  { data: #{@contract_points}, label: 'Reached', points: { show: true, radius: 6 }, lines: { show: true, fill: true, fillColor: { colors: [{ opacity: 0.3 }, { opacity: 0.3}] } } }
                 ],
                 {
-                  colors: [ '#23b7e5','#fad733' ],
+                  colors: [ '#fad733','#23b7e5' ],
                   series: { shadowSize: 2 },
-                  xaxis:{ font: { color: '#ccc' } },
+                  xaxis:{ font: { color: '#ccc' }, ticks: [ #{day_text} ] },
                   yaxis:{ font: { color: '#ccc' } },
-                  grid: { hoverable: true, clickable: true, borderWidth: 0, color: '#ccc' },
+                  grid: { hoverable: true, clickable: true, borderWidth: 0 },
                   tooltip: true,
-                  tooltipOpts: { content: '%s of %x.1 is %y.4',  defaultTheme: false, shifts: { x: 0, y: 20 } }
+                  tooltipOpts: { content: '%x.0/#{@current_report.month}/#{@current_report.year}: R$%y.2',  defaultTheme: false, shifts: { x: 0, y: 20 } }
 }"
 

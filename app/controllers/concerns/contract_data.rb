@@ -15,15 +15,41 @@ module ContractData
     @contract_data
   end
 
-  def fetch_contract_points
+  def fetch_contract_points(days_in_month)
     @contract_points = '[ [1,0]'
 
     @contract_data.each do |contract|
       @contract_points += ', [' + contract[0].to_s +
                           ',' + contract[1].to_s + ']'
     end
+    add_last_day(days_in_month) if @contract_data[-1][0] != days_in_month
+    @contract_points += ' ]'
+  end
 
-    @contract_points += ']'
+  def add_last_day(days_in_month)
+    @contract_points +=
+      ', [' + days_in_month.to_s + ',' + @contract_data[-1][1].to_s + ']'
+  end
+
+  def add_contract
+    @contract = Contract.new
+    save_contract(params[:day], params[:store_name], params[:value],
+                  params[:username], params[:report])
+  end
+
+  def alter_contract
+    request = params[:contract_data].split('/-/')
+    @contract = Contract.find_by(id: request[0].to_i)
+
+    save_contract(request[1].to_i, request[2], request[3].to_i,
+                  request[4], @contract.report_id)
+  end
+
+  def delete_contract
+    report_id = destroy_contract_by_contract_id(params[:delete])
+
+    session[:contracts] = fetch_contract_by_report_id(report_id)
+    redirect_to manager_path
   end
 
   private
@@ -78,5 +104,22 @@ module ContractData
 
   def create_string(text)
     @data[:value].to_s + '-' + text + '; '
+  end
+
+  def save_contract(day, store_name, value, username, report_id)
+    fetch_contract_values(day, store_name, value, username, report_id)
+    @contract.save! if @contract.changed?
+  end
+
+  def fetch_contract_values(day, store_name, value, username, report_id)
+    @contract.day = day
+    @contract.store_name = store_name
+    @contract.value = value
+    @contract.user_id = fetch_user_by_full_name(username)
+    @contract.report_id = report_id
+  end
+
+  def fetch_user_by_full_name(full_name)
+    User.where(full_name: full_name)[0].id
   end
 end

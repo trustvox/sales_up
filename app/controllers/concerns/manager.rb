@@ -20,20 +20,9 @@ module Manager
             .order('day')
   end
 
-  def fetch_contract_by_report_id(report_id)
-    Contract.where(report_id: report_id).order('day')
-  end
-
   def fetch_contract_by_day_report(day, month, year)
     Contract.where(day: day,
                    report_id: fetch_report_by_month_year(month, year))[0]
-  end
-
-  def destroy_contract_by_contract_id(contract_id)
-    contract = Contract.find_by(id: contract_id)
-    report_id = contract.report_id
-    contract.destroy
-    report_id
   end
 
   def destroy_report_by_report_id(report_id)
@@ -41,9 +30,5 @@ module Manager
     year = report.year
     report.destroy
     year
-  end
-
-  def fetch_user_by_full_name(full_name)
-    User.where(full_name: full_name)[0].id
   end
 end
