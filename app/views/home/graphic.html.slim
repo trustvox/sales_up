@@ -26,10 +26,12 @@ html
                 button.btn.btn-primary.btn-addon.btn-lg.margin name="where" value="graphic" type="submit" Search
 
             .form-group#menu-options
-              form.form-group name="form" method="post" action="/view"
-                button.btn.btn-primary.btn-addon.btn-lg.margin Management
-              form.form-group name="form" action="/spreadsheet"
-                button.btn.btn-primary.btn-addon.btn-lg.margin Spreadsheet
+              - if can? :view, ManagementController
+                form.form-group name="form" method="post" action="/view"
+                  button.btn.btn-primary.btn-addon.btn-lg.margin Management
+              - if can? :spreadsheet, HomeController
+                form.form-group name="form" action="/spreadsheet"
+                  button.btn.btn-primary.btn-addon.btn-lg.margin Spreadsheet
               button.btn.btn-primary.btn-addon.btn-lg.disabled.margin Graphic
 
             .form-group#menu-logout
@@ -40,8 +42,15 @@ html
             div ng-controller="FlotChartDemoCtrl"
               .row
                 .panel.panel-default
-                  h2.h2.font-thin.panel-heading
-                    = @current_report.report_name + " --- Goal value: R$" + @current_report.goal.to_s + ")"
+                  .panel-heading
+                    .form-inline
+                      h2.h2.form-group
+                        = "Name:"
+                      h2.h2.font-thin.form-group.m-l = @current_report.report_name
+                    .form-inline
+                      h2.h2.form-group
+                        = "Goal: "
+                      h2.h2.font-thin.form-group.m-l = "R$" + @current_report.goal.to_s
                   .panel-body
                     div style="height:450px" ui-jq="plot" ui-options="
                     [
