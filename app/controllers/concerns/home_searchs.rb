@@ -10,11 +10,29 @@ module HomeSearchs
   end
 
   def fetch_last_month(last_year)
-    Report.distinct.where(year: last_year).order('month_numb').pluck(:month_numb)[-1]
+    Report.distinct.where(year: last_year)
+          .order('month_numb').pluck(:month_numb)[-1]
   end
 
   def fetch_report(month_year)
     Report.where(month: month_year[0], year: month_year[1].to_i)[0]
+  rescue StandardError
+    nil
+  end
+
+  def fetch_report_by_month_numb(month_numb)
+    Report.where(month_numb: month_numb)[0]
+  rescue StandardError
+    nil
+  end
+
+  def fetch_report_by_months(current_report, months)
+    previous = current_report.month_numb - months
+    if previous.negative?
+      Report.where(month_numb: previous + 13, year: current_report.year - 1)[0]
+    else
+      Report.where(month_numb: previous, year: current_report.year)[0]
+    end
   end
 
   def fetch_contract_by_report_id(report_id)
@@ -52,9 +70,10 @@ module HomeSearchs
   end
 
   def destroy_contract_by_contract_id(contract_id)
-    contract = Contract.find_by(id: contract_id)
-    report_id = contract.report_id
-    contract.destroy
-    report_id
+    Contract.find_by(id: contract_id).destroy
+  end
+
+  def month_days
+    Time.days_in_month(session[:current_report].month_numb)
   end
 end

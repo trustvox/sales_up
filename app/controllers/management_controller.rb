@@ -1,5 +1,6 @@
 class ManagementController < ApplicationController
   include Manager
+  include OverviewPoints
 
   before_action :authenticate_user!
   skip_before_action :verify_authenticity_token
@@ -19,6 +20,15 @@ class ManagementController < ApplicationController
     authorize! :manager, ManagementController
   rescue CanCan::AccessDenied
     redirect_to graphic_path
+  end
+
+  def overview
+    @month_year_list = session[:month_year_list]
+    @reports = [session[:first_report], session[:last_report]]
+
+    @goal_points = session[:goal_points]
+    @sum_points = session[:sum_points]
+    @months_between = session[:months_between]
   end
 
   def add_spreadsheet
@@ -50,6 +60,12 @@ class ManagementController < ApplicationController
     redirect_to manager_path
   end
 
+  def search_overview_data
+    init_overview_data(params[:first_date], params[:last_date])
+    overview_data
+    redirect_to overview_path
+  end
+
   private
 
   def fetch_and_reload_spreadsheet(name, goal, month, year)
@@ -57,6 +73,7 @@ class ManagementController < ApplicationController
     @report.save!
 
     session[:spreadsheets] = fetch_report_by_year(year)
+    session[:month_year_list] = month_year_list
     redirect_to manager_path
   end
 

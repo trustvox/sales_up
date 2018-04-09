@@ -3,6 +3,7 @@ class HomeController < ApplicationController
   include ContractData
   include ReportData
   include ReportPoints
+  include OverviewPoints
 
   before_action :authenticate_user!
   skip_before_action :verify_authenticity_token
@@ -31,8 +32,7 @@ class HomeController < ApplicationController
   def search
     @text = ''
     if session[:month_year_list].nil?
-      session[:month_year_list] =
-        month_year_list
+      session[:month_year_list] = month_year_list
     end
 
     init_current_report
@@ -55,7 +55,7 @@ class HomeController < ApplicationController
   end
 
   def delete_contract_data
-    report_id = destroy_contract_by_contract_id(params[:delete])
+    destroy_contract_by_contract_id(params[:delete])
     refresh_spreadsheet
   end
 
@@ -68,11 +68,10 @@ class HomeController < ApplicationController
 
   def init_current_report
     if params[:month_year].nil?
-      session[:current_report] = fetch_last_report
-    else
-      session[:current_report] = fetch_report(params[:month_year].split('/'))
-      @text = params[:month_year].split('/')[2]
+      return session[:current_report] = fetch_last_report
     end
+    session[:current_report] = fetch_report(params[:month_year].split('/'))
+    @text = params[:month_year].split('/')[2]
   end
 
   def clear_session_data
@@ -88,7 +87,7 @@ class HomeController < ApplicationController
     clear_session_data
     result = fetch_contract_by_report_id(session[:current_report].id)
 
-    @days = calculate_month_days
+    @days = month_days
     @days -= 9 if session[:current_report].month_numb == 12
 
     fetch_contract_data_points(result) unless result.empty?
@@ -114,9 +113,5 @@ class HomeController < ApplicationController
     start_contract(session[:contract_data], session[:contract_points], data)
     session[:contract_data] = fetch_contract_data
     session[:contract_points] = fetch_contract_points(@days)
-  end
-
-  def calculate_month_days
-    Time.days_in_month(session[:current_report].month_numb)
   end
 end

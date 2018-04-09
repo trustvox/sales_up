@@ -19,6 +19,9 @@ Rails.application.routes.draw do
   post '/add_spreadsheet', to: 'management#add_spreadsheet'
   post '/alter_spreadsheet', to: 'management#alter_spreadsheet'
 
+  get '/overview', to: 'management#overview'
+  post '/search_overview_data', to: 'management#search_overview_data'
+
   post '/search_spreedsheet', to: 'management#search_spreadsheet'
   post '/delete_spreadsheet', to: 'management#delete_spreadsheet'
 end

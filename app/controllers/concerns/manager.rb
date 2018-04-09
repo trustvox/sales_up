@@ -31,4 +31,14 @@ module Manager
     report.destroy
     year
   end
+
+  def month_year_list
+    list = []
+    fetch_all_years.each do |year|
+      fetch_report_by_years(year).each do |report|
+        list << report
+      end
+    end
+    list
+  end
 end

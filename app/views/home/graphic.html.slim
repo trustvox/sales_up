@@ -28,7 +28,9 @@ html
                     option value="#{report.month}/#{report.year}/g" = report.month + "/" + report.year.to_s
 
             .form-group#menu-options
-              button.btn.btn-primary.btn-addon.btn-lg.disabled.margin Graphic
+              form.form-group method="post" name="form" action="/search_overview_data"
+                button.btn.btn-primary.btn-addon.btn-lg.margin Overview
+              button.btn.btn-primary.btn-addon.btn-lg.disabled.margin Graphics
               - if can? :spreadsheet, HomeController
                 form.form-group name="form" action="/spreadsheet"
                   button.btn.btn-primary.btn-addon.btn-lg.margin Spreadsheet

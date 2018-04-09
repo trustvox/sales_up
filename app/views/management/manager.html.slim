@@ -28,6 +28,8 @@ html
                     option value="#{report.month}/#{report.year}/m" = report.month + "/" + report.year.to_s
 
             .form-group#menu-options
+              form.form-group method="post" name="form" action="/search_overview_data"
+                button.btn.btn-primary.btn-addon.btn-lg.margin Overview
               form.form-group name="form" action="/graphic"
                 button.btn.btn-primary.btn-addon.btn-lg.margin Graphic
               form.form-group name="form" action="/spreadsheet"
