@@ -2,6 +2,7 @@ class ManagementController < ApplicationController
   include Manager
   include OverviewPoints
 
+  layout "menu"
   before_action :authenticate_user!
   skip_before_action :verify_authenticity_token
 
@@ -13,19 +14,24 @@ class ManagementController < ApplicationController
   end
 
   def manager
+    begin
+      authorize! :manager, ManagementController
+    rescue CanCan::AccessDenied
+      redirect_to graphic_path
+    end
+
     @year = session[:report_year]
     @current_report = session[:current_report]
     @month_year_list = session[:month_year_list]
 
-    authorize! :manager, ManagementController
-  rescue CanCan::AccessDenied
-    redirect_to graphic_path
+    render layout: "menu"
   end
 
   def overview
     @month_year_list = session[:month_year_list]
     @reports = [session[:first_report], session[:last_report]]
 
+    @current_report = session[:current_report]
     @goal_points = session[:goal_points]
     @sum_points = session[:sum_points]
     @months_between = session[:months_between]

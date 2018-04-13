@@ -1,0 +1,59 @@
+html
+  head
+    meta charset="utf-8" /
+    = stylesheet_link_tag "application", media: 'all'
+    = javascript_include_tag "application", media: 'all'
+  body
+    .app
+      #content role="main"
+        .app-content-body
+          .form-inline.row.menu.panel.panel-default
+            .form-group#menu-logo
+              .form-group
+                = link_to(image_tag("trustvox-menu-logo.png"), graphic_path)
+              .form-group.margin
+                h2.font-thin.h2
+                  | Welcome
+                  br>/
+                  = current_user.full_name
+
+            .form-group#menu-search
+              form.form-group action="/search" id="formSelectBox"
+                select#monthBox.form-control name="month_year" onchange="sendData('formSelectBox')"
+                  option value="#{@current_report.month}/#{@current_report.year}" = @current_report.month + "/" + @current_report.year.to_s
+                  - @month_year_list.each do |report|
+                    - next if @current_report.id == report.id
+                    option value="#{report.month}/#{report.year}/g" = report.month + "/" + report.year.to_s
+
+            .form-group#menu-options
+              - if current_page?(controller: 'management', action: 'overview')
+                button.btn.btn-primary.btn-addon.btn-lg.disabled.margin Overview
+              - else
+                form.form-group method="post" name="form" action="/search_overview_data"
+                  button.btn.btn-primary.btn-addon.btn-lg.margin Overview
+
+              - if current_page?(controller: 'home', action: 'graphic')
+                button.btn.btn-primary.btn-addon.btn-lg.disabled.margin Graphics
+              - else
+                form.form-group name="form" action="/graphic"
+                  button.btn.btn-primary.btn-addon.btn-lg.margin Graphics
+
+              - if can? :spreadsheet, HomeController
+                - if current_page?(controller: 'home', action: 'spreadsheet')
+                  button.btn.btn-primary.btn-addon.btn-lg.disabled.margin Spreadsheet
+                - else
+                  form.form-group name="form" action="/spreadsheet"
+                    button.btn.btn-primary.btn-addon.btn-lg.margin Spreadsheet
+
+              - if can? :view, ManagementController
+                - if current_page?(controller: 'management', action: 'manager')
+                  button.btn.btn-primary.btn-addon.btn-lg.disabled.margin Settings
+                - else
+                  form.form-group name="form" method="post" action="/view"
+                    button.btn.btn-primary.btn-addon.btn-lg.margin Settings
+
+              form.form-group.m-l-xxl name="form" action="/logout"
+                button.btn.btn-primary.btn-addon.btn-lg.btn-dark.btn-size Logout
+
+          .wrapper-md
+            = yield

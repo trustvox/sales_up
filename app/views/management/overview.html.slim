@@ -1,79 +1,46 @@
 html
   head
-    meta charset="utf-8" /
     title Sales Up - Overview
-    = stylesheet_link_tag "application", media: 'all'
   body
-    .app
-      #content role="main"
-        .app-content-body
-          .form-inline.row.menu.panel.panel-default
-            .form-group#menu-logo
-              .form-group
-                = link_to(image_tag("trustvox-menu-logo.png"), graphic_path)
-              .form-group.margin
-                h2.font-thin.h2
-                  | Welcome
-                  br>/
-                  = current_user.full_name
+    div style="margin-top: -30px;"
+      .row
+        .panel.panel-default
+          .panel-heading
+            .form-inline
+              form.form-group method="post" action="/search_overview_data"
+                h3.h3.form-group.m-r
+                  = "Between: "
+                select#monthBox.form-control align="central" name="first_date"
+                  option value="#{@reports[0].month}/#{@reports[0].year}" = @reports[0].month + "/" + @reports[0].year.to_s
+                  - @month_year_list.each do |report|
+                    - next if @reports[0].id == report.id
+                    option value="#{report.month}/#{report.year}" = report.month + "/" + report.year.to_s
 
-            .form-group#menu-search
-              select#monthBox.form-control
-                option --------------------
+                h3.h3.form-group.m-r.m-l
+                  = "And"
+                select#monthBox.form-control align="central" name="last_date"
+                  option value="#{@reports[1].month}/#{@reports[1].year}" = @reports[1].month + "/" + @reports[1].year.to_s
+                  - @month_year_list.each do |report|
+                    - next if @reports[1].id == report.id
+                    option value="#{report.month}/#{report.year}" = report.month + "/" + report.year.to_s
+                button.btn.btn-primary.btn-addon.btn-lg.margin.m-l Search
 
-            .form-group#menu-options
-              button.btn.btn-primary.btn-addon.btn-lg.margin.disabled Overview
-              form.form-group name="form" action="/graphic"
-                button.btn.btn-primary.btn-addon.btn-lg.margin Graphics
-              - if can? :spreadsheet, HomeController
-                form.form-group name="form" action="/spreadsheet"
-                  button.btn.btn-primary.btn-addon.btn-lg.margin Spreadsheet
-              - if can? :view, ManagementController
-                form.form-group name="form" method="post" action="/view"
-                  button.btn.btn-primary.btn-addon.btn-lg.margin Settings
-              form.form-group.m-l-xxl name="form" action="/logout"
-                button.btn.btn-primary.btn-addon.btn-lg.btn-dark.btn-size Logout
-
-          .wrapper-md
-            div ng-controller="FlotChartDemoCtrl" style="margin-top: -30px;"
-              .row
-                .panel.panel-default
-                  .panel-heading
-                    .form-inline
-                      form.form-group method="post" action="/search_overview_data"
-                        h3.h3.form-group.m-r
-                          = "Between: "
-                        select#monthBox.form-control align="central" name="first_date"
-                          option value="#{@reports[0].month}/#{@reports[0].year}" = @reports[0].month + "/" + @reports[0].year.to_s
-                          - @month_year_list.each do |report|
-                            - next if @reports[0].id == report.id
-                            option value="#{report.month}/#{report.year}" = report.month + "/" + report.year.to_s
-
-                        h3.h3.form-group.m-r.m-l
-                          = "And"
-                        select#monthBox.form-control align="central" name="last_date"
-                          option value="#{@reports[1].month}/#{@reports[1].year}" = @reports[1].month + "/" + @reports[1].year.to_s
-                          - @month_year_list.each do |report|
-                            - next if @reports[1].id == report.id
-                            option value="#{report.month}/#{report.year}" = report.month + "/" + report.year.to_s
-                        button.btn.btn-primary.btn-addon.btn-lg.margin.m-l Search
-
-                  .panel-body style="font-size: 25px; font-weight: bold;"
-                    - month_text = ""
-                    - @months_between.each_with_index do |report, i|
-                      - month_text += "[" + (i+1).to_s + ", '#{report.month[0..2]}'], "
-                    - month_text = month_text[0..month_text.length-3]
-                    div style="height:450px;" ui-jq="plot" ui-options="
-                    [
-                  { data: #{@goal_points}, label: 'Goal', points: { show: true }, lines: { show: true, fill: true, fillColor: { colors: [{ opacity: 0.1 }, { opacity: 0.1}] } } },
-                  { data: #{@sum_points}, label: 'Reached', points: { show: true, radius: 6 }, lines: { show: true, fill: true, fillColor: { colors: [{ opacity: 0.3 }, { opacity: 0.3}] } } }
-                ],
-                {
-                  colors: [ '#fad733','#23b7e5' ],
-                  series: { shadowSize: 2 },
-                  xaxis:{ font: { color: '#ccc' }, ticks: [ #{month_text} ] },
-                  yaxis:{ font: { color: '#ccc' } },
-                  grid: { hoverable: true, clickable: true, borderWidth: 0 },
-                  tooltip: true,
-                  tooltipOpts: { content: 'R$%y.2',  defaultTheme: false, shifts: { x: 0, y: 20 } }
+          .panel-body style="font-size: 25px; font-weight: bold;"
+            - month_text = ""
+            - @months_between.each_with_index do |report, i|
+              - month_text += "[" + (i+1).to_s + ", '#{report.month[0..2]}'], "
+            - month_text = month_text[0..month_text.length-3]
+            div style="height:450px;" ui-jq="plot" ui-options="
+            [
+          { data: #{@goal_points}, label: 'Goal', points: { show: true }, lines: { show: true, fill: true, fillColor: { colors: [{ opacity: 0.1 }, { opacity: 0.1}] } } },
+          { data: #{@sum_points}, label: 'Reached', points: { show: true, radius: 6 }, lines: { show: true, fill: true, fillColor: { colors: [{ opacity: 0.3 }, { opacity: 0.3}] } } }
+        ],
+        {
+          colors: [ '#fad733','#23b7e5' ],
+          series: { shadowSize: 2 },
+          xaxis:{ font: { color: '#ccc' }, ticks: [ #{month_text} ] },
+          yaxis:{ font: { color: '#ccc' } },
+          grid: { hoverable: true, clickable: true, borderWidth: 0 },
+          tooltip: true,
+          tooltipOpts: { content: 'R$%y.2',  defaultTheme: false, shifts: { x: 0, y: 20 } }
 }"

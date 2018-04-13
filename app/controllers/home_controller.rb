@@ -5,6 +5,7 @@ class HomeController < ApplicationController
   include ReportPoints
   include OverviewPoints
 
+  layout :menu
   before_action :authenticate_user!
   skip_before_action :verify_authenticity_token
 
@@ -14,6 +15,8 @@ class HomeController < ApplicationController
     @report_points = session[:report_points]
     @contract_points = session[:contract_points]
     @month_year_list = session[:month_year_list]
+
+    render layout: "menu"
   end
 
   def spreadsheet
@@ -27,6 +30,8 @@ class HomeController < ApplicationController
     @current_report = session[:current_report]
     @report_data = session[:report_data]
     @users = session[:all_users]
+
+    render layout: "menu"
   end
 
   def search
