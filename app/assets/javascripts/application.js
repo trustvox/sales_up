@@ -10,7 +10,15 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require jquery/jquery/dist/jquery
+//= require jquery
+//= require jquery.flot.js
+//= require jquery.flot.pie.js
+//= require jquery.flot.resize.js
+//= require jquery.flot.tooltip.min.js
+//= require jquery.flot.orderBars.js
+//= require jquery.flot.spline.min.js
+//= require moment.js
+//
 //= require bootstrap
 //= require ui-load
 //= require ui-jp.config
@@ -20,5 +28,4 @@
 //= require ui-client
 //= require functions
 //
-//= require rails-ujs
 //= require_tree .
