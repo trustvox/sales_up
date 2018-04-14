@@ -1,5 +1,6 @@
 module OverviewPoints
-  include HomeSearchs
+  include DatabaseSearchs
+
   def init_overview_data(first, last)
     first.nil? ? fetch_data : fetch_data(first.split('/'), last.split('/'))
 
@@ -11,7 +12,7 @@ module OverviewPoints
   def fetch_data(first = nil, last = nil)
     if first.nil? || last.nil?
       session[:last_report] = fetch_last_report
-      session[:first_report] = fetch_report_by_months(session[:last_report], 6)
+      session[:first_report] = fetch_reports_by_month_range(session[:last_report], 6)
     else
       session[:last_report] = fetch_report(last)
       session[:first_report] = fetch_report(first)
@@ -65,7 +66,7 @@ module OverviewPoints
     report = if first.month_numb + 1 > 12
                fetch_report(['January', (first.year + 1).to_s])
              else
-               fetch_report_by_month_numb(first.month_numb + 1)
+               fetch_report_by_next_month(first)
              end
     session[:months_between] << report unless report.nil?
     report
@@ -79,3 +80,4 @@ module OverviewPoints
     sum.to_s
   end
 end
+

@@ -45,13 +45,6 @@ module ContractData
                   request[4], @contract.report_id)
   end
 
-  def delete_contract
-    report_id = destroy_contract_by_contract_id(params[:delete])
-
-    session[:contracts] = fetch_contract_by_report_id(report_id)
-    redirect_to manager_path
-  end
-
   private
 
   def search_data

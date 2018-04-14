@@ -1,14 +1,10 @@
-class ManagementController < ApplicationController
-  include Manager
+class ManagementController < DashboardController
+  include DatabaseSearchs
   include OverviewPoints
-
-  layout "menu"
-  before_action :authenticate_user!
-  skip_before_action :verify_authenticity_token
 
   def view
     session[:report_year] = fetch_last_year
-    session[:spreadsheets] = fetch_report_by_year(session[:report_year])
+    session[:spreadsheets] = fetch_reports_by_year(session[:report_year])
 
     redirect_to manager_path
   end
@@ -24,7 +20,7 @@ class ManagementController < ApplicationController
     @current_report = session[:current_report]
     @month_year_list = session[:month_year_list]
 
-    render layout: "menu"
+    render_menu
   end
 
   def overview
@@ -35,6 +31,8 @@ class ManagementController < ApplicationController
     @goal_points = session[:goal_points]
     @sum_points = session[:sum_points]
     @months_between = session[:months_between]
+
+    render_menu
   end
 
   def add_spreadsheet
@@ -53,7 +51,7 @@ class ManagementController < ApplicationController
   end
 
   def search_spreadsheet
-    session[:spreadsheets] = fetch_report_by_year(params[:year])
+    session[:spreadsheets] = fetch_reports_by_year(params[:year])
 
     session[:report_year] = params[:year].to_i
     redirect_to manager_path
@@ -62,7 +60,7 @@ class ManagementController < ApplicationController
   def delete_spreadsheet
     year = destroy_report_by_report_id(params[:delete])
 
-    session[:spreadsheets] = fetch_report_by_year(year)
+    session[:spreadsheets] = fetch_reports_by_year(year)
     redirect_to manager_path
   end
 
@@ -78,7 +76,7 @@ class ManagementController < ApplicationController
     fetch_report_values(name, goal, month, year)
     @report.save!
 
-    session[:spreadsheets] = fetch_report_by_year(year)
+    session[:spreadsheets] = fetch_reports_by_year(year)
     session[:month_year_list] = month_year_list
     redirect_to manager_path
   end
