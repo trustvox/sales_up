@@ -1,7 +1,4 @@
 class ManagementController < DashboardController
-  include DatabaseSearchs
-  include OverviewPoints
-
   def view
     session[:report_year] = fetch_last_year
     session[:spreadsheets] = fetch_reports_by_year(session[:report_year])
@@ -62,12 +59,6 @@ class ManagementController < DashboardController
 
     session[:spreadsheets] = fetch_reports_by_year(year)
     redirect_to manager_path
-  end
-
-  def search_overview_data
-    init_overview_data(params[:first_date], params[:last_date])
-    overview_data
-    redirect_to overview_path
   end
 
   private

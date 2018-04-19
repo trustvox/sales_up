@@ -1,8 +1,8 @@
 class DashboardController < ApplicationController
-  include DatabaseSearchs
   include ContractData
   include ReportData
   include ReportPoints
+  include OverviewPoints
 
   layout 'menu'
   before_action :authenticate_user!
@@ -20,7 +20,18 @@ class DashboardController < ApplicationController
 
     init_current_report
     fetch_data_and_points
-    @text == 's' ? redirect_to(spreadsheet_path) : redirect_to(graphic_path)
+
+    if @text == 'o'
+      search_overview_data
+    else
+      @text == 's' ? redirect_to(spreadsheet_path) : redirect_to(graphic_path)
+    end
+  end
+
+  def search_overview_data
+    init_overview_data(params[:first_date], params[:last_date])
+    overview_data
+    redirect_to overview_path
   end
 
   def month_year_list
@@ -35,6 +46,7 @@ class DashboardController < ApplicationController
 
   def init_current_report
     if params[:month_year].nil?
+      @text = 'o'
       return session[:current_report] = fetch_last_report
     end
     session[:current_report] = fetch_report(params[:month_year].split('/'))

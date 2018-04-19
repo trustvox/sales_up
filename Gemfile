@@ -9,6 +9,7 @@ gem 'turbolinks', '~> 5'
 gem 'uglifier', '>= 1.3.0'
 
 gem 'activerecord-session_store'
+gem 'backup'
 gem 'cancancan'
 gem 'devise'
 gem 'jquery-rails'

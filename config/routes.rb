@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   post '/delete_contract_data', to: 'home#delete_contract_data'
 
   get '/search', to: 'dashboard#search'
+  post '/search_overview_data', to: 'dashboard#search_overview_data'
 
   get '/manager', to: 'management#manager'
   post '/view', to: 'management#view'
@@ -22,5 +23,4 @@ Rails.application.routes.draw do
   post '/delete_spreadsheet', to: 'management#delete_spreadsheet'
 
   get '/overview', to: 'management#overview'
-  post '/search_overview_data', to: 'management#search_overview_data'
 end

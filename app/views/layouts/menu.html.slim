@@ -23,7 +23,10 @@ html
                   option value="#{@current_report.month}/#{@current_report.year}" = @current_report.month + "/" + @current_report.year.to_s
                   - @month_year_list.each do |report|
                     - next if @current_report.id == report.id
-                    option value="#{report.month}/#{report.year}/g" = report.month + "/" + report.year.to_s
+                    - if current_page?(controller: 'home', action: 'spreadsheet')
+                      option value="#{report.month}/#{report.year}/s" = report.month + "/" + report.year.to_s
+                    - else
+                      option value="#{report.month}/#{report.year}/g" = report.month + "/" + report.year.to_s
 
             .form-group#menu-options
               - if current_page?(controller: 'management', action: 'overview')
