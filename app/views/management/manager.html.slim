@@ -11,41 +11,88 @@ html
           .form-inline.row.menu.panel.panel-default
             .form-group#menu-logo
               .form-group
-                img src="/assets/img/trustvox-menu-logo.png" /
+                = link_to graphic_path
+                  img src="/assets/img/trustvox-menu-logo.png" /
               .form-group.margin
                 h2.font-thin.h2
                   | Welcome
                   br>/
                   = current_user.full_name
 
+            .form-group#menu-search
+              form.form-group action="/search" id="formSelectBox"
+                select#monthBox.form-control name="month_year" onchange="sendData('formSelectBox')"
+                  option value="#{@current_report.month}/#{@current_report.year}" = @current_report.month + "/" + @current_report.year.to_s
+                  - @month_year_list.each do |report|
+                    - next if @current_report.id == report.id
+                    option value="#{report.month}/#{report.year}/m" = report.month + "/" + report.year.to_s
+
             .form-group#menu-options
-              button.btn.btn-primary.btn-addon.btn-lg.disabled.margin Management
-              form.form-group name="form" action="/spreadsheet"
-                button.btn.btn-primary.btn-addon.btn-lg.margin name="where" value="spreadsheet" Spreadsheet
+              form.form-group method="post" name="form" action="/search_overview_data"
+                button.btn.btn-primary.btn-addon.btn-lg.margin Overview
               form.form-group name="form" action="/graphic"
-                button.btn.btn-primary.btn-addon.btn-lg.margin name="where" value="graphic" Graphic
-
-            .form-group#menu-logout
-              = link_to destroy_user_session_path, :method => 'delete'
-                button.btn.btn-primary.btn-addon.btn-lg.btn-dark.btn-size#btn-logout Logout
-
+                button.btn.btn-primary.btn-addon.btn-lg.margin Graphic
+              form.form-group name="form" action="/spreadsheet"
+                button.btn.btn-primary.btn-addon.btn-lg.margin Spreadsheet
+              button.btn.btn-primary.btn-addon.btn-lg.margin.disabled Settings
+              form.form-group.m-l-xxl name="form" action="/logout"
+                button.btn.btn-primary.btn-addon.btn-lg.btn-dark.btn-size Logout
 
           .wrapper-md
-            - if can? :all, ManagementController
+            .row
               .panel.panel-default
                 div.panel-default.panel-heading.form-inline
                   h2.h2.font-thin.form-group Spreadsheet Manager
 
-                  form.form-group.m-l-xl method="post" action="/search_spreedsheet"
-                    select#monthBox.form-control name="year"
-                      -for year in Report.distinct.pluck(:year).reverse
+                  form.form-group.m-l-xl id="formSelectBoxYear" method="post" action="/search_spreedsheet"
+                    select#monthBox.form-control name="year" onchange="sendData('formSelectBoxYear')"
+                      option value="#{@year}" = @year.to_s
+                      - Report.distinct.pluck(:year).reverse.each do |year|
+                        - next if year == @year
                         option value="#{year}" = year.to_s
-                    button.btn.btn-primary.btn-addon.btn-lg.margin.m-r-xl type="submit" Search
 
-                  = link_to "#add"
-                    button.btn.btn-primary.btn-addon.btn-lg.margin.form-group.m-l-md
-                      i.fa.fa-plus
-                      | Spreadsheet
+                  button.btn.btn-primary.btn-addon.btn-lg.margin.form-group.m-l-md data-target="#exampleModal" data-toggle="modal" type="button"
+                    i.fa.fa-plus
+                    | Spreadsheet
+                  #exampleModal.modal.fade aria-hidden="true" aria-labelledby="exampleModalLabel" role="dialog" tabindex="-1"
+                    .modal-dialog role="document"
+                      .modal-content
+                        .modal-header.form-inline
+                          h3.h3.modal-title.form-group New Spreadsheet
+                          button.close.form-group aria-label="Close" data-dismiss="modal" type="button" onclick="cleanData()"
+                            span aria-hidden="true"
+                            | &times;
+                        form method="post" action="/add_spreadsheet"
+                          .modal-body
+                            .form-inline.m-b
+                              .form-group
+                                h4.h4 Report name
+                                input.form-control id="report_name" style="width:450px;" name="report_name" placeholder="March report" required="" type="text" /
+                            .form-inline
+                              .form-group
+                                h4.h4 Goal
+                                input.form-control id="goal" name="goal" min="0" placeholder="10000" required="" type="number" /
+                              .form-group.m-l
+                                h4.h4 Month
+                                select.form-control name="month" id="month"
+                                  option value="January" January
+                                  option value="Febuary" Febuary
+                                  option value="March" March
+                                  option value="April" April
+                                  option value="May" May
+                                  option value="June" June
+                                  option value="July" July
+                                  option value="August" August
+                                  option value="September" September
+                                  option value="October" October
+                                  option value="November" November
+                                  option value="December" December
+                              .form-group.m-l
+                                h4.h4 Year
+                                input.form-control id="year" name="year" style="width:120px;" placeholder="2018" min="2000" required="" max="#{Report.distinct.order('year').pluck(:year)[-1]}" type="number" /
+                          .modal-footer
+                            button.btn.btn-primary type="submit" Save changes
+                            button.btn.btn-danger data-dismiss="modal" type="button" onclick="cleanDataSpreadsheet()" Close
 
                 table.table.table-bordered.table-hover.table-condensed.bg-white-only
                   tbody
@@ -57,157 +104,27 @@ html
                     -for report in session[:spreadsheets]
                       tr
                         td.v-middle
-                          label.static id="#{report.id}l_report_name" = report['report_name']
-                          input.editable type="text" style="width: 300px;" value="#{report['report_name']}" name="report_name" id="#{report.id}report_name"
+                          label id="#{report.id}l_report_name" = report['report_name']
+                          input hidden="" type="text" style="width: 300px;" value="#{report['report_name']}" name="report_name" id="#{report.id}report_name"
                         td.v-middle
-                          label.static id="#{report.id}l_goal" = "R$" + report['goal'].to_s
-                          input.editable.numbers type="text" value="#{report['goal']}" name="goal" id="#{report.id}goal"
+                          label id="#{report.id}l_goal" = "R" + number_to_currency(report['goal']).to_s
+                          input.numbers hidden="" type="text" value="#{report['goal']}" name="goal" id="#{report.id}goal"
                         td.v-middle
-                          label.static id="#{report.id}l_month_year" = report['month'] + "/" + report['year'].to_s
-                          input.editable.numbers type="text" value="#{report['month']}" name="month" id="#{report.id}month"
-                          input.editable.numbers type="text" value="#{report['year'].to_s}" name="year" id="#{report.id}year"
+                          label id="#{report.id}l_month_year" = report['month'] + "/" + report['year'].to_s
+                          input.numbers hidden="" type="text" value="#{report['month']}" name="month" id="#{report.id}month"
+                          input.numbers hidden="" type="text" value="#{report['year'].to_s}" name="year" id="#{report.id}year"
                         td
-                          div.form-inline.static id="#{report.id}divR1"
-                            button.btn.btn-info id="#{report.id}editR" onclick="reportVisibility(#{report.id}, true);" edit
+                          div.form-inline id="#{report.id}divR1"
+                            form.form-group id="#{report.id}formVR" action="/search"
+                              button.btn.btn-info.m-l name="month_year" value="#{report.month}/#{report.year}/g" View
 
+                            button.btn.btn-info.m-l id="#{report.id}editR" onclick="reportVisibility(#{report.id}, true);" Edit
                             form.form-group id="#{report.id}formDR" method="post" action="/delete_spreadsheet" onsubmit="if(!validateMyForm()){event.preventDefault();}"
-                              button.btn.btn-danger.m-l id="#{report.id}delR" name="delete" value="#{report.id}" delete
+                              button.btn.btn-danger.m-l id="#{report.id}delR" name="delete" value="#{report.id}" Delete
 
-                            div.editable.form-group id="#{report.id}divR2"
-                              button.btn.btn-info.form-group id="#{report.id}cancelR" onclick="reportVisibility(#{report.id}, false);" cancel
-
-                              form.form-group id="#{report.id}formSR" method="post" action="/alter_spreadsheet" onsubmit="if(!validateMyForm()){event.preventDefault();}"
-                                button.btn.btn-success.m-l.form-group id="#{report.id}submitR" name="add_alter" onclick="fillReportData(#{report.id});" submit
-
-            .panel.panel-default
-              div.panel-default.panel-heading.form-inline
-                h2.h2.font-thin.form-group Contract Manager
-
-                form.form-group.m-l-xl method="post" action="/search_contract"
-                  select#monthBox.form-control name="month_year"
-                    -for report in Report.all.order('month_numb', 'year').reverse
-                      option value="#{report.month}/#{report.year}" = report.month + "/" + report.year.to_s
-                  button.btn.btn-primary.btn-addon.btn-lg.margin.m-r-xl type="submit" Search
-
-                = link_to "#add"
-                  button.btn.btn-primary.btn-addon.btn-lg.margin.form-group.m-l-md
-                    i.fa.fa-plus
-                    | Contract
-
-              table.table.table-bordered.table-hover.table-condensed.bg-white-only
-                tbody
-                  tr style=("font-weight: bold;")
-                    td style="width:10%"  Day
-                    td style="width:30%"  Store Name
-                    td style="width:15%"  Contract Value
-                    td style="width:20%"  Salesman Name
-                    td style="width:25%"  Options
-
-                  -report = Report.find_by_id(session[:contracts][0].report_id) unless session[:contracts].empty?
-                  -for contract in session[:contracts]
-                    -username = User.find_by_id(contract.user_id).full_name
-                    tr
-                      td.v-middle
-                        label.static id="#{contract.id}l_day" = contract.day.to_s + "/" + report.month + "/" + report.year.to_s
-                        input.editable.day type="text" value="#{contract.day.to_s}" name="day" id="#{contract.id}day"
-                      td.v-middle
-                        label.static id="#{contract.id}l_store_name" = contract.store_name
-                        input.editable.text type="text" value="#{contract.store_name}" name="store_name" id="#{contract.id}store_name"
-                      td.v-middle
-                        label.static id="#{contract.id}l_value" = "R$" + contract.value.to_s
-                        input.editable.numbers type="text" value="#{contract.value.to_s}" name="value" id="#{contract.id}value"
-                      td.v-middle
-                        label.static id="#{contract.id}l_username" = username
-                        input.editable type="text" value="#{username.to_s}" name="username" id="#{contract.id}username"
-                      td
-                        - if can? :all, ManagementController
-                          div.form-inline.static id="#{contract.id}divC1"
-                            button.btn.btn-info id="#{contract.id}editC" onclick="contractVisibility(#{contract.id}, true);" edit
-
-                            form.form-group id="#{contract.id}formDC" method="post" action="/delete_contract" onsubmit="if(!validateMyForm()){event.preventDefault();}"
-                              button.btn.btn-danger.m-l id="#{contract.id}delC" name="delete" value="#{contract.id}" delete
-
-                            div.editable.form-group id="#{contract.id}divC2"
-                              button.btn.btn-info.form-group id="#{contract.id}cancelC" onclick="contractVisibility(#{contract.id}, false);" cancel
-
-                              form.form-group id="#{contract.id}formSC" method="post" action="/alter_contract" onsubmit="if(!validateMyForm()){event.preventDefault();}"
-                                button.btn.btn-success.m-l.form-group id="#{contract.id}submitC" name="add_alter" onclick="fillContractData(#{contract.id}, #{report.id});" submit
-
-          div
-            - if can? :all, ManagementController
-              .col-sm-6
-                .panel.panel-default
-                  h2.h2.font-thin.panel-heading id="add" Spreadsheet register
-                  .panel-body
-                    form method="post" action="/add_spreadsheet"
-                      .form-group
-                        h4.h4 Report name
-                        input.form-control name="report_name" placeholder="March report" required="" type="text" /
-                      .form-group
-                        h4.h4 Goal
-                        input.form-control name="goal" min="0" placeholder="R$10000" required="" type="number" /
-                      .form-group
-                        h4.h4 Month
-                        select.form-control name="month"
-                          option value="January" January
-                          option value="Febuary" Febuary
-                          option value="March" March
-                          option value="April" April
-                          option value="May" May
-                          option value="June" June
-                          option value="July" July
-                          option value="August" August
-                          option value="September" September
-                          option value="October" October
-                          option value="November" November
-                          option value="December" December
-                      .form-group
-                        h4.h4 Year
-                        input.form-control name="year" placeholder="2018" min="2000" required="" max="#{Report.distinct.order('year').pluck(:year)[-1]}" type="number" /
-                      button.btn.btn-success.btn-addon.btn-lg.margin type="submit" Submit
-
-            .col-sm-6
-              .panel.panel-default
-                h2.h2.font-thin.panel-heading Contract register
-                .panel-body
-                  form method="post" action="/add_contract"
-                    .form-group
-                      h4.h4 Store name
-                      input.form-control name="store_name" placeholder="Miami Store" required="" type="text" /
-                    .form-group
-                      h4.h4 Value
-                      input.form-control name="value" placeholder="R$299" required="" type="decimal" /
-                    .form-group
-                      h4.h4 Month/Year
-                      select.form-control name="report"
-                        -for report in Report.all.order('month_numb', 'year').reverse
-                          option value="#{report.id}" = report.month + "/" + report.year.to_s
-                    .form-group
-                      h4.h4 Day
-                      input.form-control name="day" placeholder="26" min="1" max="31" required="" type="decimal" /
-                    - if can? :all, ManagementController
-                      .checkbox
-                        h4.h4 Salesman name
-                        -users = User.all
-                        .radio.form-inline
-                          label.h4.i-checks.m-r-md.form-group
-                            input type="radio" name="username" required="" value="#{users[0].full_name}" checked=""
-                            i
-                            | #{users[0].full_name}
-                          -for i in 1..users.length-1
-                            label.h4.i-checks.m-r-md.form-group
-                              input type="radio" name="username" value="#{users[i].full_name}"
-                              i
-                              | #{users[i].full_name}
-                    -else
-                      .checkbox
-                        h4.h4 Salesman name
-                        .radio.form-inline
-                          label.h4.i-checks.m-r-md.form-group
-                            input type="radio" name="username" required="" value="#{current_user.full_name}" checked=""
-                            i
-                            | #{current_user.full_name}
-
-                    button.btn.btn-success.btn-addon.btn-lg.margin type="submit" Submit
+                          div.form-inline id="#{report.id}divR2" hidden=""
+                            form.form-group id="#{report.id}formSR" method="post" action="/alter_spreadsheet" onsubmit="if(!validateMyForm()){event.preventDefault();}"
+                              button.btn.btn-success.m-l.form-group id="#{report.id}submitR" name="add_alter" onclick="fillReportData(#{report.id});" Save
+                            button.btn.btn-info.form-group.m-l id="#{report.id}cancelR" onclick="reportVisibility(#{report.id}, false);" Cancel
 
 
