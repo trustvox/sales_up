@@ -98,8 +98,9 @@ body
                   - if data[4] != '-'
                     - message = ''
                     - usernames = ''
-                    - Contract.where(day: data[0], report_id: @current_report).each do |contract|
-                      - message += contract.id.to_s + '/' + contract.store_name + '/' + contract.value.to_s + '/' + User.find_by(id: contract.user_id).full_name + '/-/'
+                    - fetch_contracts_by_day_report_id(data[0], @current_report).each do |contract|
+                      - message += contract.id.to_s + '/' + contract.store_name + '/' + contract.value.to_s + '/' + fetch_username_by_id(contract.user_id) + '/-/'
+
                     - message = message[0..message.length-4]
                     - @users.each do |user|
                       - usernames += user.full_name + "/-/"
@@ -125,7 +126,5 @@ body
                     td style="width:20%"  Options
                 form id='alter_contract' class='form-group' method='post' action='/alter_contract_data' onsubmit='if(!validateMyForm()){event.preventDefault();}'
                   tbody id="editTableContract"
-
-
             .modal-footer
               button.btn.btn-info data-dismiss="modal" type="button" onclick="cleanDataContract()" Back

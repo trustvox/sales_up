@@ -13,6 +13,7 @@ class ManagementController < DashboardController
       redirect_to graphic_path
     end
 
+    @unique_years = fetch_report_by_unique_years
     @year = session[:report_year]
     @current_report = session[:current_report]
     @month_year_list = session[:month_year_list]

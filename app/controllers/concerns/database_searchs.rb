@@ -55,6 +55,10 @@ module DatabaseSearchs
     year
   end
 
+  def fetch_report_by_unique_years
+    Report.distinct.pluck(:year).reverse
+  end
+
   #--------------------------------------------------------------------------##
   #--------------------------------------------------------------------------##
   #--------------------------------------------------------------------------##
@@ -65,6 +69,10 @@ module DatabaseSearchs
 
   def destroy_contract_by_id(contract_id)
     Contract.find_by(id: contract_id).destroy
+  end
+
+  def fetch_contracts_by_day_report_id(day, report_id)
+    Contract.where(day: day, report_id: report_id)
   end
 
   #--------------------------------------------------------------------------##

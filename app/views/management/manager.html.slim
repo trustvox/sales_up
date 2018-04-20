@@ -9,7 +9,7 @@ body
         form.form-group.m-l-xl id="formSelectBoxYear" method="post" action="/search_spreedsheet"
           select#monthBox.form-control name="year" onchange="sendData('formSelectBoxYear')"
             option value="#{@year}" = @year.to_s
-            - Report.distinct.pluck(:year).reverse.each do |year|
+            - @unique_years.each do |year|
               - next if year == @year
               option value="#{year}" = year.to_s
 
@@ -41,7 +41,7 @@ body
                           option value="#{m}" = Date::MONTHNAMES[m]
                     .form-group.m-l
                       h4.h4 Year
-                      input.form-control id="year" name="year" style="width:120px;" placeholder="2018" min="2000" required="" max="#{Report.distinct.order('year').pluck(:year)[-1]}" type="number" /
+                      input.form-control id="year" name="year" style="width:120px;" placeholder="2018" min="2000" required="" max="#{@year}" type="number" /
                 .modal-footer
                   button.btn.btn-primary type="submit" Save changes
                   button.btn.btn-danger data-dismiss="modal" type="button" onclick="cleanDataSpreadsheet()" Close
