@@ -13,32 +13,31 @@ module DatabaseSearchs
   end
 
   def fetch_report(month_year)
-    begin
-      Report.where(month: month_year[0], year: month_year[1].to_i)[0]
-    rescue StandardError
-      nil
-    end
+    Report.where(month: month_year[0], year: month_year[1].to_i)[0]
+  rescue StandardError
+    nil
   end
 
   def fetch_reports_by_month_range(current_report, quantity = 1)
-    begin
-      previous = current_report.month_numb - quantity
-      if previous.negative?
-        Report.where(month_numb: previous + 13, year: current_report.year - 1)[0]
-      else
-        Report.where(month_numb: previous, year: current_report.year)[0]
-      end
-    rescue StandardError
-      nil
+    previous = current_report.month_numb - quantity
+    if previous.negative?
+      Report.where(month_numb: previous + 13, year: current_report.year - 1)[0]
+    else
+      Report.where(month_numb: previous, year: current_report.year)[0]
     end
+  rescue StandardError
+    nil
   end
 
   def fetch_report_by_next_month(current_report)
-    begin
-      Report.where(month_numb: current_report.month_numb + 1, year: current_report.year)[0]
-    rescue StandardError
-      nil
+    if current_report.month_numb + 1 > 12
+      fetch_report(['January', (current_report.year + 1).to_s])
+    else
+      Report.where(month_numb: current_report.month_numb + 1,
+                   year: current_report.year)[0]
     end
+  rescue StandardError
+    nil
   end
 
   def fetch_all_years
@@ -86,5 +85,15 @@ module DatabaseSearchs
 
   def month_days
     Time.days_in_month(session[:current_report].month_numb)
+  end
+
+  def all_date_list
+    list = []
+    fetch_all_years.each do |year|
+      fetch_reports_by_year(year).each do |report|
+        list << report
+      end
+    end
+    list
   end
 end

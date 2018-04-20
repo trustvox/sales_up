@@ -36,19 +36,9 @@ body
                       input.form-control id="goal" name="goal" min="0" placeholder="10000" required="" type="number" /
                     .form-group.m-l
                       h4.h4 Month
-                      select.form-control name="month" id="month"
-                        option value="January" January
-                        option value="Febuary" Febuary
-                        option value="March" March
-                        option value="April" April
-                        option value="May" May
-                        option value="June" June
-                        option value="July" July
-                        option value="August" August
-                        option value="September" September
-                        option value="October" October
-                        option value="November" November
-                        option value="December" December
+                      select.form-control name="month_numb" id="month"
+                        - (1..12).each do |m|
+                          option value="#{m}" = Date::MONTHNAMES[m]
                     .form-group.m-l
                       h4.h4 Year
                       input.form-control id="year" name="year" style="width:120px;" placeholder="2018" min="2000" required="" max="#{Report.distinct.order('year').pluck(:year)[-1]}" type="number" /
@@ -63,7 +53,7 @@ body
             td style="width:20%"  Goal
             td style="width:20%"  Month/Year
             td style="width:25%"  Options
-          -for report in session[:spreadsheets]
+          -for report in @spreadsheets
             tr
               td.v-middle
                 label id="#{report.id}l_report_name" = report['report_name']
@@ -73,7 +63,7 @@ body
                 input.numbers hidden="" type="text" value="#{report['goal']}" name="goal" id="#{report.id}goal"
               td.v-middle
                 label id="#{report.id}l_month_year" = report['month'] + "/" + report['year'].to_s
-                input.numbers hidden="" type="text" value="#{report['month']}" name="month" id="#{report.id}month"
+                input.numbers hidden="" type="text" value="#{report['month_numb']}" name="month" id="#{report.id}month"
                 input.numbers hidden="" type="text" value="#{report['year'].to_s}" name="year" id="#{report.id}year"
               td
                 div.form-inline id="#{report.id}divR1"

@@ -2,23 +2,27 @@ module OverviewPoints
   include DatabaseSearchs
 
   def init_overview_data(first, last)
-    first.nil? ? fetch_overview_reports : fetch_overview_reports(first.split('/'), last.split('/'))
+    first.nil? ? fetch_reports : fetch_reports(first, last)
 
     session[:goal_points] = '[ '
     session[:sum_points] = '[ '
     session[:months_between] = [session[:first_report]]
   end
 
-  def fetch_overview_reports(first = nil, last = nil)
-    if first.nil? || last.nil?
+  def fetch_reports(first = nil, last = nil)
+    if all_nil?(first, last)
       session[:last_report] = fetch_last_report
       session[:first_report] =
         fetch_reports_by_month_range(session[:last_report], 6)
     else
-      session[:last_report] = fetch_report(last)
-      session[:first_report] = fetch_report(first)
+      session[:last_report] = fetch_report(last.split('/'))
+      session[:first_report] = fetch_report(first.split('/'))
       verify_dates
     end
+  end
+
+  def all_nil?(first, last)
+    first.nil? || last.nil?
   end
 
   def verify_month
@@ -64,11 +68,7 @@ module OverviewPoints
 
   def verify_next_month(first)
     @i += 1
-    report = if first.month_numb + 1 > 12
-               fetch_report(['January', (first.year + 1).to_s])
-             else
-               fetch_report_by_next_month(first)
-             end
+    report = fetch_report_by_next_month(first)
     session[:months_between] << report unless report.nil?
     report
   end

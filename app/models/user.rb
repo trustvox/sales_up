@@ -5,4 +5,24 @@ class User < ApplicationRecord
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
+
+  def admin?
+    priority == 3
+  end
+
+  def manager?
+    priority == 2
+  end
+
+  def regular?
+    priority == 1
+  end
+
+  def spectator?
+    priority.zero?
+  end
+
+  def above_spectator?
+    priority.positive?
+  end
 end

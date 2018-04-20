@@ -14,9 +14,7 @@ class DashboardController < ApplicationController
 
   def search
     @text = ''
-    if session[:month_year_list].nil?
-      session[:month_year_list] = month_year_list
-    end
+    session[:month_year_list] = all_date_list if session[:month_year_list].nil?
 
     init_current_report
     fetch_data_and_points
@@ -32,16 +30,6 @@ class DashboardController < ApplicationController
     init_overview_data(params[:first_date], params[:last_date])
     overview_data
     redirect_to overview_path
-  end
-
-  def month_year_list
-    list = []
-    fetch_all_years.each do |year|
-      fetch_reports_by_year(year).each do |report|
-        list << report
-      end
-    end
-    list
   end
 
   def init_current_report

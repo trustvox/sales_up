@@ -16,6 +16,7 @@ class ManagementController < DashboardController
     @year = session[:report_year]
     @current_report = session[:current_report]
     @month_year_list = session[:month_year_list]
+    @spreadsheets = session[:spreadsheets]
 
     render_menu
   end
@@ -35,7 +36,7 @@ class ManagementController < DashboardController
   def add_spreadsheet
     @report = Report.new
     fetch_and_reload_spreadsheet(params[:report_name], params[:goal],
-                                 params[:month], params[:year])
+                                 params[:month_numb], params[:year])
   end
 
   def alter_spreadsheet
@@ -58,6 +59,7 @@ class ManagementController < DashboardController
     year = destroy_report_by_report_id(params[:delete])
 
     session[:spreadsheets] = fetch_reports_by_year(year)
+    session[:month_year_list] = month_year_list
     redirect_to manager_path
   end
 
@@ -68,16 +70,16 @@ class ManagementController < DashboardController
     @report.save!
 
     session[:spreadsheets] = fetch_reports_by_year(year)
-    session[:month_year_list] = month_year_list
+    session[:month_year_list] = all_date_list
     redirect_to manager_path
   end
 
-  def fetch_report_values(name, goal, month, year)
+  def fetch_report_values(name, goal, month_numb, year)
     @report.report_name = name
     @report.goal = goal
 
-    @report.month_numb = Date.parse(year.to_s + month + '-01').month
-    @report.month = month
+    @report.month_numb = month_numb
+    @report.month = Date::MONTHNAMES[month_numb.to_i]
     @report.year = year
   end
 end

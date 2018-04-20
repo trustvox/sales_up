@@ -36,12 +36,26 @@ function reportVisibility(id, choice) {
 
 function fillReportData(id) {
   var submit = document.getElementById(id+'submitR');
-  var report_name = document.getElementById(id+'report_name');
-  var goal = document.getElementById(id+'goal');
-  var month = document.getElementById(id+'month');
-  var year = document.getElementById(id+'year');
+  var param_list = [document.getElementById(id+'report_name'),
+                    document.getElementById(id+'goal'),
+                    document.getElementById(id+'month'),
+                    document.getElementById(id+'year')];
+  submit.value = 'id:' + id
+  for (var i = 0; i < param_list.length; i++)
+    submit.value += '/-/' + param_list[i].value
+}
 
-  submit.value = 'id:' + id + '/-/' + report_name.value + '/-/' + goal.value + '/-/' + month.value + '/-/' + year.value
+function fillContractData(idCont, idRep) {
+  var submit = document.getElementById(idCont+'submitC');
+  var param_list = [document.getElementById(idCont+'day'),
+                    document.getElementById(idCont+'store_name'),
+                    document.getElementById(idCont+'value'),
+                    document.getElementById(idCont+'username')];
+  submit.value = 'id:' + idCont
+  for (var i = 0; i < param_list.length; i++)
+    submit.value += '/-/' + param_list[i].value
+
+  submit.value += '/-/' + idRep
 }
 
 function contractVisibility(id, choice) {
@@ -73,16 +87,6 @@ function contractVisibility(id, choice) {
     document.getElementById(id+'divC1').removeAttribute("hidden");
     document.getElementById(id+'divC2').setAttribute("hidden", true);
   }
-}
-
-function fillContractData(idCont, idRep) {
-  var submit = document.getElementById(idCont+'submitC');
-  var day = document.getElementById(idCont+'day');
-  var store_name = document.getElementById(idCont+'store_name');
-  var value = document.getElementById(idCont+'value');
-  var username = document.getElementById(idCont+'username');
-
-  submit.value = 'id:' + idCont + '/-/' + day.value + '/-/' + store_name.value + '/-/' + value.value + '/-/' + username.value + '/-/' + idRep
 }
 
 function sendData(formName) {
