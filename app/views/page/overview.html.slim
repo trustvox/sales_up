@@ -1,6 +1,6 @@
 head
   title Sales Up - Overview
-body
+body onload="generatePlot(#{@goal_points}, #{@sum_points}, #{@month_text})"
   div style="margin-top: -30px;"
     .row
       .panel.panel-default
@@ -18,27 +18,11 @@ body
                 = f.input :year, label: false, :collection => @last_list, :prompt => false, input_html: { class: "form-control", id: "monthBox", align: "central"}
 
               = f.button :submit, "Search", class: "btn btn-primary btn-addon btn-lg margin m-l"
-
         .panel-body style="font-size: 25px; font-weight: bold;"
-          - month_text = ""
-          - index_report = @reports[0]
-          - i = 1
-          - while !index_report.nil? && index_report.id != @reports[1].id
-            - month_text += "[" + i.to_s + ", '#{index_report.month[0..2]}/#{index_report.year.to_s[2..3]}'], "
-            - index_report = fetch_report_by_next_month(index_report)
-            - i += 1
-          - month_text += "[" + i.to_s + ", '#{index_report.month[0..2]}/#{index_report.year.to_s[2..3]}']"
-          div style="height:450px;" ui-jq="plot" ui-options="
-          [
-        { data: #{@goal_points}, label: 'Goal', points: { show: true }, lines: { show: true, fill: true, fillColor: { colors: [{ opacity: 0.1 }, { opacity: 0.1}] } } },
-        { data: #{@sum_points}, label: 'Reached', points: { show: true, radius: 6 }, lines: { show: true, fill: true, fillColor: { colors: [{ opacity: 0.3 }, { opacity: 0.3}] } } }
-      ],
-      {
-        colors: [ '#fad733','#23b7e5' ],
-        series: { shadowSize: 2 },
-        xaxis:{ font: { color: '#ccc' }, ticks: [ #{month_text} ] },
-        yaxis:{ font: { color: '#ccc' } },
-        grid: { hoverable: true, clickable: true, borderWidth: 0 },
-        tooltip: true,
-        tooltipOpts: { content: 'R$%y.2',  defaultTheme: false, shifts: { x: 0, y: 20 } }
-}"
+          div id="placeholder" style="height:450px;width:1250px;"
+          = simple_form_for @report, method: :get, url: "/search", html: { class: "form-group", id: "formSearch" } do |f|
+            = f.input :month, as: :hidden, input_html: { id: "monthSearch", value: "t"}
+            = f.input :year, as: :hidden, input_html: { id: "yearSearch", value: "y"}
+
+
+

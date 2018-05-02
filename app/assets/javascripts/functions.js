@@ -1,3 +1,5 @@
+var colors = ["#ffff99","#fccaf9","#9ceaff","#d1c1ee","#b7ffc2","#d6ccc8","#fdd2ab","#c1d8ff","#ffc1c1","#dbdfe4"]
+
 function validateMyForm() {
 	var answer = confirm("Deseja realizar esta ação?");
 	return answer;
@@ -91,5 +93,89 @@ function fillUsername(idList) {
       user_id.value = document.getElementById(idList[i]).value;
       break;
     }
+  }
+}
+
+function highLight(store_names, salesman_names, storeId, salesmanId) {
+  var highLightStores = "";
+  var highLightSalesman = "";
+  highLightStores = setTextColor(store_names.split('; '));
+  highLightSalesman = setTextColor(salesman_names.split('; '));
+  document.getElementById(storeId).innerHTML = highLightStores;
+  document.getElementById(salesmanId).innerHTML = highLightSalesman;
+}
+
+function setTextColor(text) {
+  text.splice(-1,1);
+  var colorIndex = 0;
+  var result = "";
+  for (var i = 0; i < text.length; i++) {
+    result += "<strong style='background-color: "+colors[colorIndex]+"'>"+text[i].substring(2, text[i].length).fontcolor("black")+" </strong>";
+    if (colorIndex < colors.length){
+      colorIndex++;
+    }
+    else{
+      colorIndex = 0;
+    }
+  }
+  return result;
+}
+
+function generatePlot(goalPoints,sumPoints,monthText) {
+  var teste = [ [1, 'Teste'] ]
+  var data = [
+        { data: goalPoints, label: 'Goal', points: { show: true }, lines: { show: true, fill: true, fillColor: { colors: [{ opacity: 0.1 }, { opacity: 0.1}] } } },
+        { data: sumPoints, label: 'Reached', points: { show: true, radius: 6 }, lines: { show: true, fill: true, fillColor: { colors: [{ opacity: 0.3 }, { opacity: 0.3}] } } }
+      ];
+  var options = {
+        colors: [ '#fad733','#23b7e5' ],
+        series: { shadowSize: 2 },
+        xaxis:{ font: { color: '#ccc' }, ticks: monthText },
+        yaxis:{ font: { color: '#ccc' } },
+        grid: { hoverable: true, clickable: true, borderWidth: 0 },
+        tooltip: true,
+        tooltipOpts: { content: 'R$%y.2',  defaultTheme: false, shifts: { x: 0, y: 20 } }
+
+  };
+  $.plot($("#placeholder"), data, options);
+  $("#placeholder").bind("plotclick", function (event, pos, item) {
+    if (item != null) {
+      var data = [stringToMonth(monthText[item.dataIndex][1].substring(0,3)), "20"+monthText[item.dataIndex][1].substring(4,7)];
+      var month = document.getElementById("monthSearch");
+      var year = document.getElementById("yearSearch");
+      month.value = data[0];
+      year.value = data[1];
+
+      document.getElementById("formSearch").submit();
+    }
+});
+}
+
+function stringToMonth(text) {
+  switch(text) {
+    case "Jan":
+        return "January";
+    case "Feb":
+        return "Febuary";
+    case "Mar":
+        return "March";
+    case "Apr":
+        return "April";
+    case "May":
+        return "May";
+    case "Jun":
+        return "June";
+    case "Jul":
+        return "July";
+    case "Aug":
+        return "August";
+    case "Sep":
+        return "September";
+    case "Oct":
+        return "October";
+    case "Nov":
+        return "November";
+    default:
+        return "December";
   }
 }

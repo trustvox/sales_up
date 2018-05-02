@@ -1,6 +1,5 @@
 class PageController < DashboardController
   before_action :verify_spreadsheets, only: [:manager]
-  before_action :start_overview_search, only: [:search_overview_data]
   before_action :init_main_data,
                 only: %i[graphic spreadsheet manager overview]
 
@@ -27,11 +26,11 @@ class PageController < DashboardController
   end
 
   def overview
-    @reports = [session[:first_report], session[:last_report]]
     @goal_points = session[:goal_points]
     @sum_points = session[:sum_points]
     @first_list = session[:first_list]
     @last_list = session[:last_list]
+    @month_text = month_text_generator
 
     render_menu
   end
@@ -40,20 +39,19 @@ class PageController < DashboardController
     sign_out_and_redirect(current_user)
   end
 
-  def search_overview_data
-    overview_data
-    selection_list
-
-    adjust_list(session[:last_list], session[:last_report])
-    redirect_to overview_path
-  end
-
   private
 
-  def start_overview_search
-    return init_overview_data(nil, nil) if params[:report].nil?
-    init_overview_data(params[:report][:month].split('/'),
-                       params[:report][:year].split('/'))
+  def month_text_generator
+    month_text = []
+    reports = [session[:first_report], session[:last_report]]
+    index_report = reports[0]
+    i = 1
+    while !index_report.nil? && index_report.id != reports[1].id
+      month_text << [i, index_report.month[0..2]+'/'+index_report.year.to_s[2..3]]
+      index_report = fetch_report_by_next_month(index_report)
+      i += 1
+    end
+    month_text << [i, index_report.month[0..2]+'/'+index_report.year.to_s[2..3]]
   end
 
   def selection_list

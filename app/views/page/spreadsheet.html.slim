@@ -83,15 +83,17 @@ body
               th Salesman Name
               th Options
           tbody
-            - @report_data.each do |data|
+            - @report_data.each_with_index do |data, i|
               tr
                 td = data[0]
                 td = data[1]
                 td = "R" + number_to_currency(data[2]).to_s
                 td = "R" + number_to_currency(data[3]).to_s
-                td = data[4]
+                td id="tdStore#{i}" = data[4]
                 td = "R" + number_to_currency(data[5]).to_s
-                td = data[6]
+                td id="tdSalesman#{i}" = data[6]
+                - if data[4][0] == "1"
+                  script type="text/javascript" highLight("#{data[4]}", "#{data[6]}", "tdStore#{i}", "tdSalesman#{i}");
                 td
                   - if data[4] != '-'
                     button.btn.btn-info data-target="#editModal#{data[0]}" data-toggle="modal" type="button" id="#{data[0]}edit" Edit
