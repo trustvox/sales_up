@@ -7,9 +7,12 @@ class Ability
 
   def authorize_user(user)
     if user.above_spectator?
-      can :manage, ManagementController if user.manager? == 2
-      can %i[add_contract_data alter_contract_data], HomeController
+      can :manage, ContractsController
+      if user.admin?
+        can :manager, PageController
+        can :manage, ReportsController
+      end
     end
-    can %i[graphic search spreadsheet overview], HomeController
+    can %i[graphic search spreadsheet overview], PageController
   end
 end

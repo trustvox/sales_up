@@ -17,6 +17,7 @@ gem 'pg'
 gem 'rails_12factor', group: :production
 gem 'rspec'
 gem 'rubocop'
+gem 'simple_form'
 gem 'slim-rails'
 
 group :development, :test do

@@ -18,45 +18,44 @@ html
                   = current_user.full_name
 
             .form-group#menu-search
-              form.form-group action="/search" id="formSelectBox"
-                select#monthBox.form-control name="month_year" onchange="sendData('formSelectBox')"
-                  option value="#{@current_report.month}/#{@current_report.year}" = @current_report.month + "/" + @current_report.year.to_s
-                  - @month_year_list.each do |report|
-                    - next if @current_report.id == report.id
-                    - if current_page?(controller: 'home', action: 'spreadsheet')
-                      option value="#{report.month}/#{report.year}/s" = report.month + "/" + report.year.to_s
-                    - else
-                      option value="#{report.month}/#{report.year}/g" = report.month + "/" + report.year.to_s
+              = simple_form_for @report, method: :get, url: "/search", html: { class: "form-group", id: "formSelectBox" } do |f|
+                - if current_page?(controller: 'page', action: 'spreadsheet')
+                  = f.input :report_name, as: :hidden, input_html: { value: "s" }
+                - else
+                  = f.input :report_name, as: :hidden, input_html: { value: "g" }
+                = f.input :month, as: :hidden, input_html: { value: "p", id: "monthSelected" }
+                = f.input :year, label: false, :collection => @month_year_list.map { |report| [ report.month+"/"+report.year.to_s, report.month+"/"+report.year.to_s] }, :prompt => false, input_html: { class: "form-control", id: "monthBox",  :onchange => "sendData('formSelectBox', 0)"}
 
             .form-group#menu-options
-              - if current_page?(controller: 'management', action: 'overview')
+              - if current_page?(controller: 'page', action: 'overview')
                 button.btn.btn-primary.btn-addon.btn-lg.disabled.margin Overview
               - else
-                form.form-group method="post" name="form" action="/search_overview_data"
-                  button.btn.btn-primary.btn-addon.btn-lg.margin Overview
+                = simple_form_for @report, method: :post, url: "/search_overview_data", html: { class: "form-group" } do |f|
+                  = f.button :submit, "Overview", class: "btn btn-primary btn-addon btn-lg margin"
 
-              - if current_page?(controller: 'home', action: 'graphic')
+              - if current_page?(controller: 'page', action: 'graphic')
                 button.btn.btn-primary.btn-addon.btn-lg.disabled.margin Graphics
               - else
-                form.form-group name="form" action="/graphic"
-                  button.btn.btn-primary.btn-addon.btn-lg.margin Graphics
+                = simple_form_for @report, method: :get, url: "/graphic", html: { class: "form-group" } do |f|
+                  = f.button :submit, "Graphics", class: "btn btn-primary btn-addon btn-lg margin"
 
-              - if can? :spreadsheet, HomeController
-                - if current_page?(controller: 'home', action: 'spreadsheet')
+              - if can? :spreadsheet, PageController
+                - if current_page?(controller: 'page', action: 'spreadsheet')
                   button.btn.btn-primary.btn-addon.btn-lg.disabled.margin Spreadsheet
                 - else
-                  form.form-group name="form" action="/spreadsheet"
-                    button.btn.btn-primary.btn-addon.btn-lg.margin Spreadsheet
+                  = simple_form_for @report, method: :get, url: "/spreadsheet", html: { class: "form-group" } do |f|
+                    = f.button :submit, "Spreadsheet", class: "btn btn-primary btn-addon btn-lg margin"
 
-              - if can? :view, ManagementController
-                - if current_page?(controller: 'management', action: 'manager')
+              - if can? :manager, PageController
+                - if current_page?(controller: 'page', action: 'manager')
                   button.btn.btn-primary.btn-addon.btn-lg.disabled.margin Settings
                 - else
-                  form.form-group name="form" method="post" action="/view"
-                    button.btn.btn-primary.btn-addon.btn-lg.margin Settings
+                  = simple_form_for @report, method: :get, url: "/manager", html: { class: "form-group" } do |f|
+                    = f.button :submit, "Settings", class: "btn btn-primary btn-addon btn-lg margin"
 
-              form.form-group.m-l-xxl name="form" action="/logout"
-                button.btn.btn-primary.btn-addon.btn-lg.btn-dark.btn-size Logout
+              = simple_form_for @report, method: :get, url: "/logout", html: { class: "form-group m-l-xxl" } do |f|
+                    = f.button :submit, "Logout", class: "btn btn-primary btn-addon btn-lg btn-dark btn-size"
 
           .wrapper-md
             = yield
+

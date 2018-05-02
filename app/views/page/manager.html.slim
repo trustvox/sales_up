@@ -1,0 +1,81 @@
+head
+  title Sales Up - Management
+body
+  .row
+    .panel.panel-default
+      div.panel-default.panel-heading.form-inline
+        h2.h2.font-thin.form-group Spreadsheet Manager
+        = simple_form_for @report, method: :post, url: "/reports/:year", html: { class: "form-group m-l-xl", id: "formSelectBoxYear" } do |f|
+          = f.input :year, label: false, :collection => @unique_years, :prompt => "Year", input_html: { class: "form-control", id: "monthBox",  :onchange => "sendData('formSelectBoxYear', 1)"}
+
+        button.btn.btn-primary.btn-addon.btn-lg.margin.form-group.m-l-md data-target="#exampleModal" data-toggle="modal" type="button"
+          i.fa.fa-plus
+          | Spreadsheet
+        #exampleModal.modal.fade aria-hidden="true" aria-labelledby="exampleModalLabel" role="dialog" tabindex="-1"
+          .modal-dialog role="document"
+            .modal-content
+              .modal-header.form-inline
+                h3.h3.modal-title.form-group New Spreadsheet
+                button.close.form-group aria-label="Close" data-dismiss="modal" type="button" onclick="cleanDataSpreadsheet()"
+                  span aria-hidden="true"
+                  | &times;
+              = simple_form_for @report, method: :post, url: "/reports", default: { input_html: { class: "form-control" } } do |f|
+                .modal-body
+                  .form-inline.m-b
+                    h4.h4 Report name
+                    = f.input :report_name, label: false, input_html: { style: "width:450px;", placeholder: "New spreadsheet name", id: "report_name_n" }
+                  .form-inline
+                    .form-group
+                      h4.h4 Goal
+                      = f.input :goal, as: :float, label: false, input_html: { min: "0", value: "", placeholder: "10000", id: "goal_n" }
+                    .form-group.m-l
+                      h4.h4 Month
+                      = f.input :month_numb, label: false, :collection => (1..12).map { |m| [ Date::MONTHNAMES[m], m] }, input_html: { id: "month_n" }, prompt: false
+                    .form-group.m-l
+                      h4.h4 Year
+                      = f.input :year, as: :integer, label: false, input_html: { min: "2010", max: @unique_years[0], id: "year_n", style: "width:120px;", value: "", placeholder: "2018" }
+                .modal-footer
+                  = f.button :submit, "Save changes", class: "btn btn-primary"
+                  = f.button :button, "Close", class: "btn btn-danger", :'data-dismiss' => "modal", :onclick => "cleanDataSpreadsheet()"
+
+      table.table.table-bordered.table-hover.table-condensed.bg-white-only
+        tbody
+          tr style=("font-weight: bold;")
+            td style="width:35%"  Spreadsheet Name
+            td style="width:20%"  Goal
+            td style="width:20%"  Month/Year
+            td style="width:25%"  Options
+          -for report in @spreadsheets
+            tr
+              td.v-middle
+                label id="#{report.id}l_report_name" = report['report_name']
+                input hidden="" type="text" style="width: 300px;" value="#{report['report_name']}" name="report_name" id="#{report.id}report_name"
+              td.v-middle
+                label id="#{report.id}l_goal" = "R" + number_to_currency(report['goal']).to_s
+                input.numbers hidden="" type="text" value="#{report['goal']}" name="goal" id="#{report.id}goal"
+              td.v-middle
+                label id="#{report.id}l_month_year" = report['month'] + "/" + report['year'].to_s
+                input.numbers hidden="" type="text" value="#{report['month_numb']}" name="month" id="#{report.id}month"
+                input.numbers hidden="" type="text" value="#{report['year'].to_s}" name="year" id="#{report.id}year"
+              td
+                div.form-inline id="#{report.id}divR1"
+                  = simple_form_for @report, method: :get, url: "/search", html: { class: "form-group" } do |f|
+                    = f.input :month, as: :hidden, input_html: { value: "#{report.month}" }
+                    = f.input :year, as: :hidden, input_html: { value: "#{report.year}" }
+                    = f.input :report_name, as: :hidden, input_html: { value: "g" }
+                    = f.button :submit, "View", class: "btn btn-info m-l"
+
+                  button.btn.btn-info.m-l id="#{report.id}editR" onclick="reportVisibility(#{report.id}, true);" Edit
+                  = simple_form_for @report, method: :delete, url: "/reports/"+report.id.to_s, html: { class: "form-group", :onsubmit => "if(!validateMyForm()){event.preventDefault();}" } do |f|
+                    = f.button :submit, "Delete", class: "btn btn-danger m-l"
+
+                div.form-inline id="#{report.id}divR2" hidden=""
+                  = simple_form_for @report, method: :put, url: "/reports/"+report.id.to_s, html: { class: "form-group", :onsubmit => "if(!validateMyForm()){event.preventDefault();}" } do |f|
+                    = f.input :month_numb, as: :hidden, input_html: { value: "m", id: report.id.to_s+"month"+report.id.to_s }
+                    = f.input :year, as: :hidden, input_html: { value: "y", id: report.id.to_s+"year"+report.id.to_s }
+                    = f.input :report_name, as: :hidden, input_html: { value: "r", id: report.id.to_s+"report_name"+report.id.to_s }
+                    = f.input :goal, as: :hidden, input_html: { value: "g", id: report.id.to_s+"goal"+report.id.to_s }
+                    = f.button :submit, "Save", class: "btn btn-success m-l form-group", :onclick => "fillData(#{report.id}, 'report_name', 'goal', 'month', 'year')"
+                  button.btn.btn-info.form-group.m-l id="#{report.id}cancelR" onclick="reportVisibility(#{report.id}, false);" Cancel
+
+
