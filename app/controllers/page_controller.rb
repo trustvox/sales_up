@@ -42,16 +42,23 @@ class PageController < DashboardController
   private
 
   def month_text_generator
-    month_text = []
-    reports = [session[:first_report], session[:last_report]]
-    index_report = reports[0]
+    @month_text = []
+    report = session[:first_report]
     i = 1
-    while !index_report.nil? && index_report.id != reports[1].id
-      month_text << [i, index_report.month[0..2]+'/'+index_report.year.to_s[2..3]]
-      index_report = fetch_report_by_next_month(index_report)
+    while proceed?(report)
+      add_month_text(i, report)
+      report = fetch_report_by_next_month(report)
       i += 1
     end
-    month_text << [i, index_report.month[0..2]+'/'+index_report.year.to_s[2..3]]
+    add_month_text(i, report)
+  end
+
+  def add_month_text(index, report)
+    @month_text << [index, report.month[0..2] + '/' + report.year.to_s[2..3]]
+  end
+
+  def proceed?(report)
+    !report.nil? && report.id != session[:last_report].id
   end
 
   def selection_list

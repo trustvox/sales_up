@@ -68,7 +68,7 @@ body
                           i
                           | #{current_user.full_name}
               .modal-footer
-                = f.button :submit, "Save changes", class: "btn btn-primary", :onclick => "cleanDataContract(#{@users.map { |user| 'username'+user.id.to_s }})"
+                = f.button :submit, "Save changes", class: "btn btn-primary"
                 = f.button :button, "Close", class: "btn btn-danger", :'data-dismiss' => "modal", :onclick => "cleanDataContract()"
       div
         table.table ui-jq="footable"
@@ -99,7 +99,7 @@ body
                     button.btn.btn-info data-target="#editModal#{data[0]}" data-toggle="modal" type="button" id="#{data[0]}edit" Edit
 
                     .modal.fade id="editModal#{data[0]}" aria-hidden="true" aria-labelledby="exampleModalLabel" role="dialog" tabindex="-1"
-                      .modal-dialog role="document" style="width: 50.5%;"
+                      .modal-dialog role="document" style="width: 65%;"
                         .modal-content
                           .modal-header.form-inline
                             h3.h3.modal-title.form-group Edit Contract
@@ -111,7 +111,7 @@ body
                               thead
                                 tr style=("font-weight: bold;")
                                   td style="width:5%"  Day
-                                  td style="width:1%"  Store Name
+                                  td style="width:10%"  Store Name
                                   td style="width:15%"  Value
                                   td style="width:25%"  Salesman Name
                                   td style="width:20%"  Options
@@ -121,26 +121,26 @@ body
                                     td.v-middle
                                       input style='width: 55px;' type='number' value="#{contract.day}" id="#{contract.id}day"
                                     td.v-middle
-                                      input style='width: 265px;' type='text' value="#{contract.store_name}" id="#{contract.id}store_name"
+                                      input style='width: 190px;' type='text' value="#{contract.store_name}" id="#{contract.id}store_name"
                                     td.v-middle
-                                      input style='width: 100px;' type='decimal' value="#{contract.value}" id="#{contract.id}value"
+                                      input style='width: 80px;' type='decimal' value="#{contract.value}" id="#{contract.id}value"
                                     td.v-middle
                                       select id="#{contract.id}user_id"
                                         option value="#{contract.user_id}" = fetch_username_by_id(contract.user_id)
                                         - @users.each do |user|
                                           - next if user.id == contract.user_id
                                           option value="#{user.id}" = user.full_name
-                                    td.v-middle
+                                    td.v-middle.form-inline
                                       = simple_form_for @contract, method: :put, url: "/contracts/"+contract.id.to_s, html: { class: "form-group" }, onsubmit: "if(!validateMyForm()){event.preventDefault();}" do |f|
                                         = f.input :day, as: :hidden, input_html: { value: "m", id: contract.id.to_s+"day"+contract.id.to_s }
                                         = f.input :store_name, as: :hidden, input_html: { value: "m", id: contract.id.to_s+"store_name"+contract.id.to_s }
                                         = f.input :value, as: :hidden, input_html: { value: "m", id: contract.id.to_s+"value"+contract.id.to_s }
                                         = f.input :user_id, as: :hidden, input_html: { value: "m", id: contract.id.to_s+"user_id"+contract.id.to_s }
                                         = f.input :report_id, as: :hidden, input_html: { value: @current_report.id }
-                                        = f.button :submit, "Save", class: "btn btn-success", :onclick => "fillData(#{contract.id}, 'day', 'store_name', 'value', 'user_id')"
+                                        = f.button :submit, "Save", class: "btn btn-success form-group", :onclick => "fillData(#{contract.id}, 'day', 'store_name', 'value', 'user_id')"
 
                                       = simple_form_for @contract, method: :delete, url: "/contracts/"+contract.id.to_s, html: { class: "form-group", :onsubmit => "if(!validateMyForm()){event.preventDefault();}" } do |f|
-                                        = f.button :submit, "Delete", class: "btn btn-danger m-l"
+                                        = f.button :submit, "Delete", class: "btn btn-danger m-l form-group"
 
                           .modal-footer
                             button.btn.btn-info data-dismiss="modal" type="button" onclick="cleanDataContract()" Back

@@ -110,7 +110,7 @@ function setTextColor(text) {
   var colorIndex = 0;
   var result = "";
   for (var i = 0; i < text.length; i++) {
-    result += "<strong style='background-color: "+colors[colorIndex]+"'>"+text[i].substring(2, text[i].length).fontcolor("black")+" </strong>";
+    result += "<strong style='background-color: "+colors[colorIndex]+"'>"+text[i].substring(2, text[i].length).fontcolor("black")+"</strong> - ";
     if (colorIndex < colors.length){
       colorIndex++;
     }
@@ -118,7 +118,7 @@ function setTextColor(text) {
       colorIndex = 0;
     }
   }
-  return result;
+  return result.substring(0,result.length-3);
 }
 
 function generatePlot(goalPoints,sumPoints,monthText) {

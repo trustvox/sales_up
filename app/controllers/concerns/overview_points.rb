@@ -45,7 +45,7 @@ module OverviewPoints
   end
 
   def verify_dates
-    switch if (verify_month && verify_year) || verify_year
+    switch if (!verify_month && verify_year) || verify_year
   end
 
   def acceptable?(first)
