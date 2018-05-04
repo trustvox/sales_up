@@ -31,12 +31,16 @@ module OverviewPoints
     first.blank? || last.blank?
   end
 
-  def verify_month
-    session[:first_report].month_numb > session[:last_report].month_numb
+  def greater_month
+    session[:first_report].month_numb < session[:last_report].month_numb
   end
 
-  def verify_year
-    session[:first_report].year >= session[:last_report].year
+  def greater_year
+    session[:first_report].year > session[:last_report].year
+  end
+
+  def same_year
+    session[:first_report].year == session[:last_report].year
   end
 
   def switch
@@ -45,7 +49,7 @@ module OverviewPoints
   end
 
   def verify_dates
-    switch if (!verify_month && verify_year) || verify_year
+    switch if (same_year && !greater_month) || greater_year
   end
 
   def acceptable?(first)

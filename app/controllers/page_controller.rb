@@ -7,6 +7,7 @@ class PageController < DashboardController
     @report_data = session[:report_data]
     @report_points = session[:report_points]
     @contract_points = session[:contract_points]
+    @day_text = day_text_generator
     render_menu
   end
 
@@ -40,6 +41,15 @@ class PageController < DashboardController
   end
 
   private
+
+  def day_text_generator
+    @day_text = "[ [1, 'Day/1'], "
+    @report_data.each do |data|
+      next if data[0] == '1'
+      @day_text += '[' + data[0] + ", '#{data[0]}'], "
+    end
+    @day_text = @day_text[0..@day_text.length - 3] + ' ]'
+  end
 
   def month_text_generator
     @month_text = []

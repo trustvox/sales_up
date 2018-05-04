@@ -36,7 +36,7 @@ body
                 .form-inline.m-b
                   .form-group
                     h4.h4 Value
-                    = f.input :value, as: :float, label: false, id: "value", input_html: { style: "width:100px;", value: "", placeholder: "299", class: "form-control" }
+                    = f.input :value, as: :float, label: false, id: "value", input_html: { style: "width:100px;", value: "", placeholder: "699", class: "form-control" }
                   .form-group.m-l
                     h4.h4 Month/Year
                     = f.input :report_id, label: false, id: "report", prompt: false, collection: @month_year_list.map { |report| [report.month+"/"+report.year.to_s, fetch_report(report.month, report.year).id] } , input_html: { class: "form-control" }
