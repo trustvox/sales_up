@@ -71,21 +71,6 @@ class PageController < DashboardController
     !report.nil? && report.id != session[:last_report].id
   end
 
-  def selection_list
-    create_lists(session[:first_list])
-    create_lists(session[:last_list])
-    adjust_list(session[:first_list], session[:first_report])
-  end
-
-  def create_lists(date_list)
-    all_date_list.map { |m| date_list << (m.month + '/' + m.year.to_s) }
-  end
-
-  def adjust_list(date_list, report)
-    date_list.delete(report.month + '/' + report.year.to_s)
-    date_list.unshift(report.month + '/' + report.year.to_s)
-  end
-
   def init_main_data
     @report = Report.new
     @current_report = session[:current_report]
@@ -103,10 +88,10 @@ class PageController < DashboardController
   end
 
   def verify_spreadsheets
-    session[:spreadsheets] = fetch_reports_by_current_year if nil?
+    session[:spreadsheets] = fetch_reports_by_current_year if nil_spreadsheets?
   end
 
-  def nil?
+  def nil_spreadsheets?
     session[:spreadsheets].blank?
   end
 

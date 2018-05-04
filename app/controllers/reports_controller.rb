@@ -1,5 +1,5 @@
 class ReportsController < DashboardController
-  before_action :prepare_params, only: %i[create update]
+  before_action :prepare_month_param, only: %i[create update]
 
   def create
     report = Report.new(report_params)
@@ -24,7 +24,7 @@ class ReportsController < DashboardController
 
   private
 
-  def prepare_params
+  def prepare_month_param
     params[:report][:month] =
       Date::MONTHNAMES[params[:report][:month_numb].to_i]
   end
