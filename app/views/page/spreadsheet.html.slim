@@ -81,7 +81,8 @@ body
               th Store Name
               th Contract Values
               th Salesman Name
-              th Options
+              - if can? :manage, ContractsController
+                th Options
           tbody
             - @report_data.each_with_index do |data, i|
               tr
@@ -95,7 +96,7 @@ body
                 - if data[4][0] == "1"
                   script type="text/javascript" highLight("#{data[4]}", "#{data[6]}", "tdStore#{i}", "tdSalesman#{i}");
                 td
-                  - if data[4] != '-'
+                  - if can?(:update, ContractsController) && data[4] != '-'
                     button.btn.btn-info data-target="#editModal#{data[0]}" data-toggle="modal" type="button" id="#{data[0]}edit" Edit
 
                     .modal.fade id="editModal#{data[0]}" aria-hidden="true" aria-labelledby="exampleModalLabel" role="dialog" tabindex="-1"
@@ -138,9 +139,9 @@ body
                                         = f.input :user_id, as: :hidden, input_html: { value: "m", id: contract.id.to_s+"user_id"+contract.id.to_s }
                                         = f.input :report_id, as: :hidden, input_html: { value: @current_report.id }
                                         = f.button :submit, "Save", class: "btn btn-success form-group", :onclick => "fillData(#{contract.id}, 'day', 'store_name', 'value', 'user_id')"
-
-                                      = simple_form_for @contract, method: :delete, url: "/contracts/"+contract.id.to_s, html: { class: "form-group", :onsubmit => "if(!validateMyForm()){event.preventDefault();}" } do |f|
-                                        = f.button :submit, "Delete", class: "btn btn-danger m-l form-group"
+                                      - if can?(:manage, ContractsController)
+                                        = simple_form_for @contract, method: :delete, url: "/contracts/"+contract.id.to_s, html: { class: "form-group", :onsubmit => "if(!validateMyForm()){event.preventDefault();}" } do |f|
+                                          = f.button :submit, "Delete", class: "btn btn-danger m-l form-group"
 
                           .modal-footer
                             button.btn.btn-info data-dismiss="modal" type="button" onclick="cleanDataContract()" Back
