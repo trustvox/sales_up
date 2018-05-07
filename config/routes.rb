@@ -1,27 +1,17 @@
 Rails.application.routes.draw do
   devise_for :users
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  resources :reports, :contracts
 
   root to: 'user#user_home'
-  get '/forgot_password', to: 'user#forgot_password', as: 'forgot_password'
+  get '/forgot_password', to: 'user#forgot_password'
 
-  get '/graphic', to: 'home#graphic'
-  get '/spreadsheet', to: 'home#spreadsheet'
-  get '/search', to: 'home#search'
-  get '/logout', to: 'home#logout'
+  get '/graphic', to: 'page#graphic'
+  get '/spreadsheet', to: 'page#spreadsheet'
+  get '/manager', to: 'page#manager'
+  get '/overview', to: 'page#overview'
+  get '/logout', to: 'page#logout'
+  post '/search_overview_data', to: 'page#search_overview_data'
 
-  post '/add_contract_data', to: 'home#add_contract_data'
-  post '/alter_contract_data', to: 'home#alter_contract_data'
-  post '/delete_contract_data', to: 'home#delete_contract_data'
-
-  get '/manager', to: 'management#manager'
-  post '/view', to: 'management#view'
-  post '/add_spreadsheet', to: 'management#add_spreadsheet'
-  post '/alter_spreadsheet', to: 'management#alter_spreadsheet'
-
-  get '/overview', to: 'management#overview'
-  post '/search_overview_data', to: 'management#search_overview_data'
-
-  post '/search_spreedsheet', to: 'management#search_spreadsheet'
-  post '/delete_spreadsheet', to: 'management#delete_spreadsheet'
+  get '/search', to: 'dashboard#search'
+  post '/reports/:year(.:format)', to: 'reports#search_report'
 end

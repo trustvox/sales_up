@@ -1,0 +1,61 @@
+html
+  head
+    meta charset="utf-8" /
+    = stylesheet_link_tag "application", media: 'all'
+    = javascript_include_tag "application", media: 'all'
+  body
+    .app
+      #content role="main"
+        .app-content-body
+          .form-inline.row.menu.panel.panel-default
+            .form-group#menu-logo
+              .form-group
+                = link_to(image_tag("trustvox-menu-logo.png"), graphic_path)
+              .form-group.margin
+                h2.font-thin.h2
+                  | Welcome
+                  br>/
+                  = current_user.full_name
+
+            .form-group#menu-search
+              = simple_form_for @report, method: :get, url: "/search", html: { class: "form-group", id: "formSelectBox" } do |f|
+                - if current_page?(controller: 'page', action: 'spreadsheet')
+                  = f.input :report_name, as: :hidden, input_html: { value: "s" }
+                - else
+                  = f.input :report_name, as: :hidden, input_html: { value: "g" }
+                = f.input :month, as: :hidden, input_html: { value: "p", id: "monthSelected" }
+                = f.input :year, label: false, :collection => @month_year_list.map { |report| [ report.month+"/"+report.year.to_s, report.month+"/"+report.year.to_s] }, :prompt => false, input_html: { class: "form-control", id: "monthBox",  :onchange => "sendData('formSelectBox', 0)"}
+
+            .form-group#menu-options
+              - if current_page?(controller: 'page', action: 'overview')
+                button.btn.btn-primary.btn-addon.btn-lg.disabled.margin Overview
+              - else
+                = simple_form_for @report, method: :post, url: "/search_overview_data", html: { class: "form-group" } do |f|
+                  = f.button :submit, "Overview", class: "btn btn-primary btn-addon btn-lg margin"
+
+              - if current_page?(controller: 'page', action: 'graphic')
+                button.btn.btn-primary.btn-addon.btn-lg.disabled.margin Graphics
+              - else
+                = simple_form_for @report, method: :get, url: "/graphic", html: { class: "form-group" } do |f|
+                  = f.button :submit, "Graphics", class: "btn btn-primary btn-addon btn-lg margin"
+
+              - if can? :spreadsheet, PageController
+                - if current_page?(controller: 'page', action: 'spreadsheet')
+                  button.btn.btn-primary.btn-addon.btn-lg.disabled.margin Spreadsheet
+                - else
+                  = simple_form_for @report, method: :get, url: "/spreadsheet", html: { class: "form-group" } do |f|
+                    = f.button :submit, "Spreadsheet", class: "btn btn-primary btn-addon btn-lg margin"
+
+              - if can? :manager, PageController
+                - if current_page?(controller: 'page', action: 'manager')
+                  button.btn.btn-primary.btn-addon.btn-lg.disabled.margin Settings
+                - else
+                  = simple_form_for @report, method: :get, url: "/manager", html: { class: "form-group" } do |f|
+                    = f.button :submit, "Settings", class: "btn btn-primary btn-addon btn-lg margin"
+
+              = simple_form_for @report, method: :get, url: "/logout", html: { class: "form-group m-l-xxl" } do |f|
+                    = f.button :submit, "Logout", class: "btn btn-primary btn-addon btn-lg btn-dark btn-size"
+
+          .wrapper-md
+            = yield
+

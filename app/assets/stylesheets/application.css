@@ -17,8 +17,8 @@
  *= require bootstrap
  *= require app
  *= require animate
- *= require font
  *= require font-awesome.min
+ *= require font
  *= require simple-line-icons
  *= require menu-style
  */
