@@ -1,8 +1,18 @@
 var colors = ["#ffff99","#fccaf9","#9ceaff","#d1c1ee","#b7ffc2","#d6ccc8","#fdd2ab","#c1d8ff","#ffc1c1","#dbdfe4"]
 
 function validateMyForm() {
-	return confirm("Deseja realizar esta ação?");
+  return confirm("Deseja realizar esta ação?");
 }
+
+function verifyPassword() {
+  if (document.getElementById('user_password').value !=
+      document.getElementById('user_confirm_password').value){
+    document.getElementById('alertRegister').innerHTML = "Passwords do not match";
+    return false;
+  }
+  return true;
+}
+
 function reportVisibility(id, choice) {
   if (choice){
     document.getElementById(id+'report_name').removeAttribute("hidden");

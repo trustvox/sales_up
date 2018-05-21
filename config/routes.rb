@@ -1,9 +1,10 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: { registrations: 'registrations' }
   resources :reports, :contracts
 
   root to: 'user#user_home'
   get '/forgot_password', to: 'user#forgot_password'
+  get '/sign_up', to: 'user#register'
 
   get '/graphic', to: 'page#graphic'
   get '/spreadsheet', to: 'page#spreadsheet'

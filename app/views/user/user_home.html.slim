@@ -1,5 +1,6 @@
 = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
-  .wrapper.text-center
+  .text-center.m-t-lg
+    h3.text-center Sign In
     strong Please, fill in all the data below
     h4.text-danger = alert
   .list-group.list-group-sm
@@ -9,6 +10,10 @@
       = f.password_field :password, placeholder:"Password", required:"", :class => "form-control no-border"
   button name="month_year" value="#{@current_month}/#{@current_year}/o" hidden=""
   = f.submit "Log in", :class => "btn btn-lg btn-primary btn-block"
-  .text-center.m-t.m-b
-    = link_to 'Forgot your password?', forgot_password_path
-
+.text-center.m-t-sm.m-b
+  = link_to 'Forgot your password?', forgot_password_path
+.line.line-dashed
+h4.text-center
+  strong You don't have an account?
+= link_to sign_up_path
+  button.btn.btn-lg.btn-primary.btn-block Create one here
