@@ -90,8 +90,32 @@ module DatabaseSearchs
     User.find_by(full_name: full_name).id
   end
 
+  def fetch_id_by_email(email)
+    User.find_by(email: email).id
+  end
+
+  def fetch_user_by_email(email)
+    User.find_by(email: email)
+  end
+
   def fetch_username_by_priority
     User.where('priority BETWEEN ? AND ?', 1, 2).order('full_name')
+  end
+
+  #--------------------------------------------------------------------------##
+  #--------------------------------------------------------------------------##
+  #--------------------------------------------------------------------------##
+
+  def verify_token_usage(token)
+    return false if token.blank?
+    TokenPassword.find_by(token: token).used == 'no'
+  end
+
+  def disable_user_tokens(user_id)
+    TokenPassword.where(user_id: user_id).each do |token|
+      token.used = "yes"
+      token.save
+    end
   end
 
   #--------------------------------------------------------------------------##

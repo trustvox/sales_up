@@ -10,6 +10,11 @@ function verifyPassword() {
     document.getElementById('alertRegister').innerHTML = "Passwords do not match";
     return false;
   }
+  else if (document.getElementById('user_password').value == "" ||
+           document.getElementById('user_confirm_password').value == ""){
+    document.getElementById('alertRegister').innerHTML = "Password fields are empty";
+    return false;
+  }
   return true;
 }
 

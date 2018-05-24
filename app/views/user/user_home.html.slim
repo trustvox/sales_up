@@ -3,6 +3,7 @@
     h3.text-center Sign In
     strong Please, fill in all the data below
     h4.text-danger = alert
+    h4.text-success = notice
   .list-group.list-group-sm
     .list-group-item
       = f.email_field :email, autocomplete: "email", placeholder:"Email", required:"", :class => "form-control no-border"
