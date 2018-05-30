@@ -1,38 +1,29 @@
 class PageController < DashboardController
-  before_action :verify_spreadsheets, only: [:manager]
-  before_action :init_main_data,
+  before_action :init_view_data,
                 only: %i[graphic spreadsheet manager overview]
-
+  before_action :init_manager_data, only: [:manager]
   def graphic
-    @report_data = session[:report_data]
-    @report_points = session[:report_points]
-    @contract_points = session[:contract_points]
+    search
     @day_text = day_text_generator
     render_menu
   end
 
   def spreadsheet
     verify_authorize('s')
+    search
+
     @contract = Contract.new
-    @report_data = session[:report_data]
-    @users = session[:all_users]
+    @users = fetch_username_by_priority
     render_menu
   end
 
   def manager
-    verify_authorize('m')
-    @spreadsheets = session[:spreadsheets]
-    @unique_years = fetch_report_by_unique_years(@spreadsheets[0].year)
     render_menu
   end
 
   def overview
-    @goal_points = session[:goal_points]
-    @sum_points = session[:sum_points]
-    @first_list = session[:first_list]
-    @last_list = session[:last_list]
+    search_overview_data
     @month_text = month_text_generator
-
     render_menu
   end
 
@@ -42,18 +33,21 @@ class PageController < DashboardController
 
   private
 
+  def init_manager_data
+    verify_authorize('m')
+    year = params[:report].nil? ? params[:year] : params[:report][:year]
+
+    @spreadsheets = fetch_reports_by_year(year)
+    @unique_years = fetch_report_by_unique_years(year.to_i)
+  end
+
   def day_text_generator
-    @day_text = "[ [1, 'Day/1'], "
-    @report_data.each do |data|
-      next if data[0] == '1'
-      @day_text += '[' + data[0] + ", '#{data[0]}'], "
-    end
-    @day_text = @day_text[0..@day_text.length - 3] + ' ]'
+    @report_data.collect { |data| [data[0], (data[0]).to_s] }
   end
 
   def month_text_generator
     @month_text = []
-    report = session[:first_report]
+    report = @first_report
     i = 1
     while proceed?(report)
       add_month_text(i, report)
@@ -68,13 +62,11 @@ class PageController < DashboardController
   end
 
   def proceed?(report)
-    !report.nil? && report.id != session[:last_report].id
+    !report.nil? && report.id != @last_report.id
   end
 
-  def init_main_data
+  def init_view_data
     @report = Report.new
-    @current_report = session[:current_report]
-    @month_year_list = session[:month_year_list]
   end
 
   def verify_authorize(which)
@@ -85,14 +77,6 @@ class PageController < DashboardController
     end
   rescue CanCan::AccessDenied
     redirect_to graphic_path
-  end
-
-  def verify_spreadsheets
-    session[:spreadsheets] = fetch_reports_by_current_year if nil_spreadsheets?
-  end
-
-  def nil_spreadsheets?
-    session[:spreadsheets].blank?
   end
 
   def render_menu

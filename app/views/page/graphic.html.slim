@@ -1,6 +1,6 @@
 head
   title Sales Up - Graphic
-body onload="generateGraphicPlot(#{@report_points}, #{@contract_points}, #{@day_text}, '#{@current_report.month}', '#{@current_report.year}')"
+body onload="generateGraphicPlot(#{@report_points}, #{@contract_points}, #{@day_text}, '#{params[:month]}', '#{params[:year]}')"
   div style="margin-top: -30px;"
     .row
       .panel.panel-default

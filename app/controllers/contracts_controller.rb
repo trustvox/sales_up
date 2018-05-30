@@ -1,27 +1,29 @@
 class ContractsController < DashboardController
   def create
     contract = Contract.new(contract_params)
+    contract.user_id = fetch_id_by_username(params[:username])
     contract.save!
-    restore_contract_data(true, contract.report_id)
+    redirect_to_spreadsheet(contract.report_id)
   end
 
   def update
     contract = Contract.find_by(id: params[:id])
     contract.update(contract_params)
-    restore_contract_data
+    redirect_to_spreadsheet(contract.report_id)
   end
 
   def destroy
-    Contract.find_by(id: params[:id]).destroy
-    restore_contract_data
+    contract = Contract.find_by(id: params[:id])
+    contract.destroy
+    redirect_to_spreadsheet(contract.report_id)
   end
 
   private
 
-  def restore_contract_data(can_search = false, report_id = 0)
-    session[:current_report] = fetch_report_by_id(report_id) if can_search
-    fetch_data_and_points
-    redirect_to spreadsheet_path
+  def redirect_to_spreadsheet(id)
+    report = fetch_report_by_id(id)
+    redirect_to controller: 'page', action: 'spreadsheet',
+                'report[month]' => report.month, 'report[year]' => report.year
   end
 
   def contract_params

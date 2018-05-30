@@ -6,7 +6,7 @@ body onload="generateOverviewPlot(#{@goal_points}, #{@sum_points}, #{@month_text
       .panel.panel-default
         .panel-heading
           .form-inline
-            = simple_form_for @report, method: :post, url: "/search_overview_data", html: { class: "form-group" } do |f|
+            = simple_form_for @report, method: :get, url: "/overview", html: { class: "form-group" } do |f|
               h3.h3.form-group.m-r
                 = "Between: "
                 - @first_list.delete(@last_list[0])

@@ -1,4 +1,5 @@
-var colors = ["#ffff99","#fccaf9","#9ceaff","#d1c1ee","#b7ffc2","#d6ccc8","#fdd2ab","#c1d8ff","#ffc1c1","#dbdfe4"]
+var colors = ["#ffff99","#fccaf9","#9ceaff","#d1c1ee","#b7ffc2","#d6ccc8",
+              "#fdd2ab","#c1d8ff","#ffc1c1","#dbdfe4"]
 
 function validateMyForm() {
 	return confirm("Deseja realizar esta ação?");
@@ -74,15 +75,18 @@ function cleanDataContract() {
 function fillUsername(idList) {
   for (var i = 0; i < idList.length; i++) {
     if (document.getElementById(idList[i]).checked) {
-      document.getElementById('user_id').value = document.getElementById(idList[i]).value;
+      document.getElementById('user_id').value =
+        document.getElementById(idList[i]).value;
       break;
     }
   }
 }
 
 function highLight(store_names, salesman_names, storeId, salesmanId) {
-  document.getElementById(storeId).innerHTML = setTextColor(store_names.split('; '));
-  document.getElementById(salesmanId).innerHTML = setTextColor(salesman_names.split('; '));
+  document.getElementById(storeId).innerHTML =
+    setTextColor(store_names.split('; '));
+  document.getElementById(salesmanId).innerHTML =
+    setTextColor(salesman_names.split('; '));
 }
 
 function setTextColor(text) {
@@ -90,7 +94,9 @@ function setTextColor(text) {
   var colorIndex = 0;
   var result = "";
   for (var i = 0; i < text.length; i++) {
-    result += "<strong style='background-color: "+colors[colorIndex]+"'>"+text[i].substring(2, text[i].length).fontcolor("black")+"</strong> - ";
+    result += "<strong style='background-color: "+colors[colorIndex]+"'>"+
+              text[i].substring(2, text[i].length).fontcolor("black")+
+              "</strong> - ";
     if (colorIndex < colors.length)
       colorIndex++;
     else
@@ -101,8 +107,12 @@ function setTextColor(text) {
 
 function generateOverviewPlot(goalPoints,sumPoints,monthText) {
   var data = [
-        { data: goalPoints, label: 'Goal', points: { show: true }, lines: { show: true, fill: true, fillColor: { colors: [{ opacity: 0.1 }, { opacity: 0.1}] } } },
-        { data: sumPoints, label: 'Reached', points: { show: true, radius: 6 }, lines: { show: true, fill: true, fillColor: { colors: [{ opacity: 0.3 }, { opacity: 0.3}] } } }
+        { data: goalPoints, label: 'Goal', points: { show: true },
+          lines: { show: true, fill: true,
+          fillColor: { colors: [{ opacity: 0.1 }, { opacity: 0.1}] } } },
+        { data: sumPoints, label: 'Reached', points: { show: true, radius: 6 },
+          lines: { show: true, fill: true,
+          fillColor: { colors: [{ opacity: 0.3 }, { opacity: 0.3}] } } }
       ];
   var options = {
         colors: [ '#fad733','#23b7e5' ],
@@ -111,13 +121,15 @@ function generateOverviewPlot(goalPoints,sumPoints,monthText) {
         yaxis:{ font: { color: '#ccc' } },
         grid: { hoverable: true, clickable: true, borderWidth: 0 },
         tooltip: true,
-        tooltipOpts: { content: 'R$%y.2',  defaultTheme: false, shifts: { x: 0, y: 20 } }
+        tooltipOpts: { content: 'R$%y.2',  defaultTheme: false,
+                        shifts: { x: 0, y: 20 } }
 
   };
   $.plot($("#placeholderO"), data, options);
   $("#placeholderO").bind("plotclick", function (event, pos, item) {
     if (item != null) {
-      var data = [stringToMonth(monthText[item.dataIndex][1].substring(0,3)), "20"+monthText[item.dataIndex][1].substring(4,7)];
+      var data = [stringToMonth(monthText[item.dataIndex][1].substring(0,3)),
+                  "20"+monthText[item.dataIndex][1].substring(4,7)];
       var month = document.getElementById("monthSearch");
       var year = document.getElementById("yearSearch");
       month.value = data[0];
@@ -130,8 +142,13 @@ function generateOverviewPlot(goalPoints,sumPoints,monthText) {
 
 function generateGraphicPlot(reportPoints,contractPoints,dayText,month,year) {
   var data = [
-        { data: reportPoints, label: 'Goal', points: { show: true }, lines: { show: true, fill: true, fillColor: { colors: [{ opacity: 0.1 }, { opacity: 0.1}] } } },
-        { data: contractPoints, label: 'Reached', points: { show: true, radius: 6 }, lines: { show: true, fill: true, fillColor: { colors: [{ opacity: 0.3 }, { opacity: 0.3}] } } }
+        { data: reportPoints, label: 'Goal', points: { show: true },
+          lines: { show: true, fill: true,
+          fillColor: { colors: [{ opacity: 0.1 }, { opacity: 0.1}] } } },
+        { data: contractPoints, label: 'Reached',
+          points: { show: true, radius: 6 },
+          lines: { show: true, fill: true, fillColor: {
+                   colors: [{ opacity: 0.3 }, { opacity: 0.3}] } } }
       ];
   var options = {
         colors: [ '#fad733','#23b7e5' ],
@@ -140,7 +157,8 @@ function generateGraphicPlot(reportPoints,contractPoints,dayText,month,year) {
         yaxis:{ font: { color: '#ccc' } },
         grid: { hoverable: true, clickable: true, borderWidth: 0 },
         tooltip: true,
-        tooltipOpts: { content: '%x.0/'+month+'/'+year+': R$%y.2',  defaultTheme: false, shifts: { x: 0, y: 20 } }
+        tooltipOpts: { content: '%x.0/'+month+'/'+year+': R$%y.2',
+                       defaultTheme: false, shifts: { x: 0, y: 20 } }
   };
   $.plot($("#placeholderG"), data, options);
   $("#placeholderG").bind("plotclick", function (event, pos, item) {
