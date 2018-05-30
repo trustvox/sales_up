@@ -2,6 +2,7 @@ class UserController < ApplicationController
   before_action :verify_user_status
   before_action :generate_token, only: [:json_maker]
   layout 'main'
+  before_action :graphic_path
 
   def user_home
     report = fetch_last_report
@@ -50,5 +51,10 @@ class UserController < ApplicationController
   def verify_user_status
     redirect_to graphic_path if user_signed_in?
     @user = User.new
+  end
+
+  def graphic_path
+    @report = fetch_last_report
+    @graphic_path = '/graphic/' + @report.month + '/' + @report.year.to_s
   end
 end
