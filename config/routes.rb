@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   get '/manager', to: 'page#manager'
   get '/overview', to: 'page#overview'
   get '/logout', to: 'page#logout'
+  post '/manage_new_user', to: 'page#manage_new_user'
 
   get '/search', to: 'dashboard#search'
 end

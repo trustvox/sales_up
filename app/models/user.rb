@@ -25,4 +25,8 @@ class User < ApplicationRecord
   def above_spectator?
     priority.positive?
   end
+
+  def new_user?
+    priority < 0
+  end
 end

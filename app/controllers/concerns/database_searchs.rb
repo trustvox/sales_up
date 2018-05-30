@@ -102,6 +102,14 @@ module DatabaseSearchs
     User.where('priority BETWEEN ? AND ?', 1, 2).order('full_name')
   end
 
+  def fetch_user_by_priority(priority)
+    User.where(priority: priority)
+  end
+
+  def fetch_managers
+    User.where(priority: 2)
+  end
+
   #--------------------------------------------------------------------------##
   #--------------------------------------------------------------------------##
   #--------------------------------------------------------------------------##
@@ -113,7 +121,7 @@ module DatabaseSearchs
 
   def disable_user_tokens(user_id)
     TokenPassword.where(user_id: user_id).each do |token|
-      token.used = "yes"
+      token.used = 'yes'
       token.save
     end
   end

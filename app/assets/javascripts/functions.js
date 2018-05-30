@@ -48,6 +48,18 @@ function reportVisibility(id, choice) {
   }
 }
 
+function fillUserData(id, permission) {
+  var param_priority = null;
+  var query_priority = null;
+
+  if (permission == 'yes'){
+    param_priority = document.getElementById(id+'permission');
+    query_priority = document.getElementById(id+'permission'+id);
+
+    query_priority.value = param_priority.value;
+  }
+}
+
 function fillData(id, first, second, third, forth) {
   var param_list = [document.getElementById(id+first),
                     document.getElementById(id+second),

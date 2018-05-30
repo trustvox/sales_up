@@ -2,6 +2,8 @@ class PageController < DashboardController
   before_action :init_view_data,
                 only: %i[graphic spreadsheet manager overview]
   before_action :init_manager_data, only: [:manager]
+  before_action :fetch_user_prioritys, only: [:manage_new_user]
+
   def graphic
     search
     @day_text = day_text_generator
@@ -18,6 +20,8 @@ class PageController < DashboardController
   end
 
   def manager
+    @user = User.new
+    @new_users = fetch_user_by_priority(-1)
     render_menu
   end
 
@@ -31,7 +35,31 @@ class PageController < DashboardController
     sign_out_and_redirect(current_user)
   end
 
+  def manage_new_user
+    if @priority.nil?
+      @user.destroy
+    else
+      @priority = 2 if @priority > 2
+      @user.priority = @priority
+      @user.save
+
+      send_out_message(@user.email)
+    end
+    redirect_to controller: 'page', action: 'manager',
+                'report[year]' => fetch_last_year
+  end
+
   private
+
+  def send_out_message(email)
+    zapper = ZapierRuby::Zapper.new(:example_zap)
+    zapper.zap({ email: email })
+  end
+
+  def fetch_user_prioritys
+    @user = User.find_by(id: params[:user][:id])
+    @priority = params[:user][:priority].to_i
+  end
 
   def init_manager_data
     verify_authorize('m')

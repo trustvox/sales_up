@@ -21,11 +21,11 @@ html
                 - if current_page?(controller: 'page', action: 'graphic')
                   = simple_form_for @report, method: :get, url: "/graphic", html: { class: "form-group", id: "formSelectBox" } do |f|
                     = f.input :month, as: :hidden, input_html: { value: "p", id: "monthSelected" }
-                    = f.input :year, label: false, :collection => @month_year_list.map { |report| [ report.month+"/"+report.year.to_s, report.month+"/"+report.year.to_s] }, :prompt => false, input_html: { class: "form-control", id: "monthBox",  :onchange => "sendData('formSelectBox', 0)"}
+                    = f.input :year, label: false, :collection => @month_year_list.map { |report| [ report.month+"/"+report.year.to_s, report.month+"/"+report.year.to_s] }, :prompt => false, input_html: { class: "form-control", id: "monthBox", :onchange => "sendData('formSelectBox', 0)"}
                 - else
                   = simple_form_for @report, method: :get, url: "/spreadsheet", html: { class: "form-group", id: "formSelectBox" } do |f|
                     = f.input :month, as: :hidden, input_html: { value: "p", id: "monthSelected" }
-                    = f.input :year, label: false, :collection => @month_year_list.map { |report| [ report.month+"/"+report.year.to_s, report.month+"/"+report.year.to_s] }, :prompt => false, input_html: { class: "form-control", id: "monthBox",  :onchange => "sendData('formSelectBox', 0)"}
+                    = f.input :year, label: false, :collection => @month_year_list.map { |report| [ report.month+"/"+report.year.to_s, report.month+"/"+report.year.to_s] }, :prompt => false, input_html: { class: "form-control", id: "monthBox", :onchange => "sendData('formSelectBox', 0)"}
               - else
                 input type="text" style="visibility: hidden;"
 

@@ -1,14 +1,4 @@
 module ContractData
-  def initialize
-    @contract_data = nil
-    @contract_points = nil
-    @search = nil
-
-    @data = nil
-    @wait = false
-    @user_id = 0
-  end
-
   def start_contract(data, points, searched_contract)
     @contract_data = data
     @contract_points = points

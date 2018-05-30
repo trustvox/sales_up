@@ -13,7 +13,6 @@
       = f.input :email, as: :email, label: false,input_html: { class: "form-control no-border", placeholder:"Email" }, wrapper: false
     .list-group-item
       = f.input :password, as: :password, label: false,input_html: { placeholder:"Password", class: "form-control no-border" }, wrapper: false
-      = f.input :priority, as: :hidden, input_html: { value: 0 }
     .list-group-item
       = f.input :confirm_password, as: :password, label: false,input_html: { placeholder:"Confirm Password", class: "form-control no-border" }, wrapper: false
   = f.button :submit, "Sign Up", class: "btn btn-lg btn-primary btn-block"
