@@ -27,6 +27,6 @@ class User < ApplicationRecord
   end
 
   def new_user?
-    priority < 0
+    priority.negative?
   end
 end

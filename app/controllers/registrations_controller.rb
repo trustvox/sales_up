@@ -27,8 +27,12 @@ class RegistrationsController < Devise::RegistrationsController
   end
 
   def sign_up_success
-    zapper = ZapierRuby::Zapper.new(:example_zap)
-    fetch_managers.each { |manager| zapper.zap({ email: manager.email }) }
+    zapper = ZapierRuby::Zapper.new(:email_zap)
+    fetch_user_by_priority(2).each do |manager|
+      zapper.zap(json_maker(manager.email, 'New user registration',
+                            'A new user has just sign up: ' +
+                            ENV['link_to_root']))
+    end
 
     redirect_to root_path,
                 notice: 'Registration complete. Wait until further permission'

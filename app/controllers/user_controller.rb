@@ -1,6 +1,6 @@
 class UserController < ApplicationController
   before_action :verify_user_status
-  before_action :generate_token, only: [:json_maker]
+  before_action :generate_token, only: [:after_forgot_password]
   layout 'main'
 
   def user_home
@@ -18,8 +18,9 @@ class UserController < ApplicationController
   def register; end
 
   def after_forgot_password
-    zapper = ZapierRuby::Zapper.new(:example_zap)
-    result = if zapper.zap(json_maker)
+    zapper = ZapierRuby::Zapper.new(:email_zap)
+    result = if zapper.zap(json_maker(@user_email,
+                                      'Edit password link', @link))
                'Email enviado com sucesso'
              else
                'Falha ao enviar email'
@@ -30,21 +31,15 @@ class UserController < ApplicationController
   private
 
   def generate_token
-    @token_gen = SecureRandom.base58(24)
+    @token = SecureRandom.base58(24)
     @user_email = params[:user][:email]
-    save_token(fetch_id_by_email(@user_email))
+    save_token(fetch_user_by_email(@user_email).id)
+    @link = ENV['link_to_root'] + edit_password_path +
+            '?token=' + @token + '&email=' + @user_email
   end
 
-  def json_maker
-    {
-      email: @user_email,
-      link: ENV['link_to_edit'] + edit_password_path,
-      token: @token_gen
-    }
-  end
-
-  def save_token
-    TokenPassword.new(token: @token_gen, used: 'no', user_id: @user_email).save
+  def save_token(id)
+    TokenPassword.new(token: @token, used: 'no', user_id: id).save
   end
 
   def verify_user_status

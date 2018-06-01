@@ -52,8 +52,10 @@ class PageController < DashboardController
   private
 
   def send_out_message(email)
-    zapper = ZapierRuby::Zapper.new(:example_zap)
-    zapper.zap({ email: email })
+    zapper = ZapierRuby::Zapper.new(:email_zap)
+    zapper.zap(json_maker(email, 'Account permission allowed',
+                          'Your account have been aproved: ' +
+                          ENV['link_to_root']))
   end
 
   def fetch_user_prioritys

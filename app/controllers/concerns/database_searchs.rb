@@ -90,10 +90,6 @@ module DatabaseSearchs
     User.find_by(full_name: full_name).id
   end
 
-  def fetch_id_by_email(email)
-    User.find_by(email: email).id
-  end
-
   def fetch_user_by_email(email)
     User.find_by(email: email)
   end
@@ -104,10 +100,6 @@ module DatabaseSearchs
 
   def fetch_user_by_priority(priority)
     User.where(priority: priority)
-  end
-
-  def fetch_managers
-    User.where(priority: 2)
   end
 
   #--------------------------------------------------------------------------##

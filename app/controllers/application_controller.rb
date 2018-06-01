@@ -7,6 +7,10 @@ class ApplicationController < ActionController::Base
 
   protected
 
+  def json_maker(user_email, email_subject, email_content)
+    { email: user_email, subject: email_subject, content: email_content }
+  end
+
   def after_sign_in_path_for(resource)
     if user_signed_in?
       stored_location_for(resource) || graphic_path
