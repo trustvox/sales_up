@@ -1,19 +1,19 @@
 class UserController < ApplicationController
   layout 'main'
-  before_action :graphic_path
+  before_action :verify_user_status
 
   def user_home
-    redirect_to @graphic_path if user_signed_in?
-    @current_month = @report.month
-    @current_year = @report.year
+    report = fetch_last_report
+    @current_month = report.month
+    @current_year = report.year
   end
 
   def forgot_password; end
 
   private
 
-  def graphic_path
-    @report = fetch_last_report
-    @graphic_path = '/graphic/' + @report.month + '/' + @report.year.to_s
+  def verify_user_status
+    redirect_to monthly_sales_path if user_signed_in?
+    @user = User.new
   end
 end

@@ -19,6 +19,10 @@
   width: 35px;
 }
 
+.dropdown-li{
+  width: 23%;
+}
+
 #menu-logo{
 	width: 23%;
 	position: relative;

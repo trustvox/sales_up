@@ -1,19 +1,23 @@
 class PageController < DashboardController
   before_action :init_view_data,
-                only: %i[graphic spreadsheet manager overview]
+                only: %i[monthly_sales manager overview report_sales]
+  before_action :init_month_year_list, only: %i[monthly_sales report_sales]
   before_action :init_manager_data, only: [:manager]
-  def graphic
-    search
-    @day_text = day_text_generator
-    render_menu
-  end
+  before_action :init_monthly_sales_data, only: [:monthly_sales]
 
-  def spreadsheet
-    verify_authorize('s')
+  def monthly_sales
+    init_month_year_list
     search
 
     @contract = Contract.new
+    @day_text = day_text_generator
     @users = fetch_username_by_priority
+
+    render_menu
+  end
+
+  def report_sales
+    init_month_year_list
     render_menu
   end
 
@@ -32,6 +36,18 @@ class PageController < DashboardController
   end
 
   private
+
+  def init_monthly_sales_data
+    @month = ''
+    @year = ''
+    if params[:report].nil?
+      @month = Date::MONTHNAMES[fetch_last_month]
+      @year = fetch_last_year.to_s
+    else
+      @month = params[:report][:month]
+      @year = params[:report][:year].to_s
+    end
+  end
 
   def init_manager_data
     verify_authorize('m')
@@ -70,11 +86,7 @@ class PageController < DashboardController
   end
 
   def verify_authorize(which)
-    if which == 'm'
-      authorize! :manager, PageController
-    elsif which == 's'
-      authorize! :spreadsheet, PageController
-    end
+    authorize! :manager, PageController if which == 'm'
   rescue CanCan::AccessDenied
     redirect_to graphic_path
   end

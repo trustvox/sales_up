@@ -1,6 +1,6 @@
 head
-  title Sales Up - Spreadsheet
-body
+  title Sales Up - Monthly Sales
+body onload="generateGraphicPlot(#{@report_points}, #{@contract_points}, #{@day_text}, '#{@month}', '#{@year}')"
   .row
     .panel.panel-default style="margin-top: -30px;"
       .panel-heading
@@ -70,7 +70,11 @@ body
               .modal-footer
                 = f.button :submit, "Save changes", class: "btn btn-primary"
                 = f.button :button, "Close", class: "btn btn-danger", :'data-dismiss' => "modal", :onclick => "cleanDataContract()"
-      div
+
+      .panel-body style="font-size: 25px; font-weight: bold;"
+        div id="placeholderG" style="height:450px;width:1250px;"
+
+      div.panel-default style="margin-top: 15px;"
         table.table ui-jq="footable"
           thead
             tr
@@ -145,3 +149,4 @@ body
 
                           .modal-footer
                             button.btn.btn-info data-dismiss="modal" type="button" onclick="cleanDataContract()" Back
+

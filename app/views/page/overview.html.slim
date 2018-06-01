@@ -20,7 +20,7 @@ body onload="generateOverviewPlot(#{@goal_points}, #{@sum_points}, #{@month_text
               = f.button :submit, "Search", class: "btn btn-primary btn-addon btn-lg margin m-l"
         .panel-body style="font-size: 25px; font-weight: bold;"
           div id="placeholderO" style="height:450px;width:1250px;"
-          = simple_form_for @report, method: :get, url: "/search", html: { class: "form-group", id: "formSearch" } do |f|
+          = simple_form_for @report, method: :get, url: "/monthly_sales", html: { class: "form-group", id: "formSearch" } do |f|
             = f.input :month, as: :hidden, input_html: { id: "monthSearch", value: "t"}
             = f.input :year, as: :hidden, input_html: { id: "yearSearch", value: "y"}
 

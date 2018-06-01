@@ -10,9 +10,6 @@ class DashboardController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def init_search_data
-    @current_report = nil
-    @month_year_list = []
-
     @report_data = []
     @report_points = '[ '
 
@@ -34,8 +31,6 @@ class DashboardController < ApplicationController
 
   def search
     init_search_data
-    init_current_report
-    init_month_year_list
     fetch_data_and_points
   end
 
@@ -46,6 +41,8 @@ class DashboardController < ApplicationController
   end
 
   def init_month_year_list
+    init_current_report
+
     @month_year_list = all_date_list
     @month_year_list.delete(@current_report)
     @month_year_list.unshift(@current_report)

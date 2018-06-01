@@ -1,9 +1,11 @@
 var colors = ["#ffff99","#fccaf9","#9ceaff","#d1c1ee","#b7ffc2","#d6ccc8",
               "#fdd2ab","#c1d8ff","#ffc1c1","#dbdfe4"]
 
+
 function validateMyForm() {
 	return confirm("Deseja realizar esta ação?");
 }
+
 function reportVisibility(id, choice) {
   if (choice){
     document.getElementById(id+'report_name').removeAttribute("hidden");
@@ -132,6 +134,11 @@ function generateOverviewPlot(goalPoints,sumPoints,monthText) {
                   "20"+monthText[item.dataIndex][1].substring(4,7)];
       var month = document.getElementById("monthSearch");
       var year = document.getElementById("yearSearch");
+
+      alert(data);
+      alert(month);
+      alert(year);
+
       month.value = data[0];
       year.value = data[1];
 
@@ -157,13 +164,14 @@ function generateGraphicPlot(reportPoints,contractPoints,dayText,month,year) {
         yaxis:{ font: { color: '#ccc' } },
         grid: { hoverable: true, clickable: true, borderWidth: 0 },
         tooltip: true,
-        tooltipOpts: { content: '%x.0/'+month+'/'+year+': R$%y.2',
+        tooltipOpts: { content: 'Day %x.0: R$%y.2',
                        defaultTheme: false, shifts: { x: 0, y: 20 } }
   };
   $.plot($("#placeholderG"), data, options);
   $("#placeholderG").bind("plotclick", function (event, pos, item) {
     if (item != null)
-      window.location.replace("/spreadsheet");
+      window.location.replace("/monthly_sales?report[month]=" +
+                              month + "&report[year]=" + year);
 });
 }
 

@@ -22,7 +22,7 @@ body
               = simple_form_for @report, method: :post, url: "/reports", default: { input_html: { class: "form-control" } } do |f|
                 .modal-body
                   .form-inline.m-b
-                    h4.h4 Report name
+                    h4.h4 Spreadsheet name
                     = f.input :report_name, label: false, input_html: { style: "width:450px;", placeholder: "New spreadsheet name", id: "report_name_n" }
                   .form-inline
                     .form-group
@@ -59,7 +59,7 @@ body
                 input.numbers hidden="" type="text" value="#{report['year'].to_s}" name="year" id="#{report.id}year"
               td
                 div.form-inline id="#{report.id}divR1"
-                  = simple_form_for @report, method: :get, url: "/graphic", html: { class: "form-group" } do |f|
+                  = simple_form_for @report, method: :get, url: "/monthly_sales", html: { class: "form-group" } do |f|
                     = f.input :month, as: :hidden, input_html: { value: "#{report.month}" }
                     = f.input :year, as: :hidden, input_html: { value: "#{report.year}" }
                     = f.input :report_name, as: :hidden, input_html: { value: "g" }
