@@ -1,4 +1,4 @@
-class ContractsController < DashboardController
+class ContractsController < ApplicationController
   def create
     contract = Contract.new(contract_params)
     contract.user_id = fetch_id_by_username(params[:username])

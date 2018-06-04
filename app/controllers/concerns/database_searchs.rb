@@ -78,6 +78,10 @@ module DatabaseSearchs
     Contract.where(day: day, report_id: report_id)
   end
 
+  def fetch_contracts_by_user_report_id(user_id, report_id)
+    Contract.where(user_id: user_id, report_id: report_id).order('day')
+  end
+
   #--------------------------------------------------------------------------##
   #--------------------------------------------------------------------------##
   #--------------------------------------------------------------------------##
@@ -92,6 +96,10 @@ module DatabaseSearchs
 
   def fetch_username_by_priority
     User.where('priority BETWEEN ? AND ?', 1, 2).order('full_name')
+  end
+
+  def fetch_user_by_priority(priority)
+    User.where(priority: priority)
   end
 
   #--------------------------------------------------------------------------##

@@ -1,4 +1,4 @@
-class ReportsController < DashboardController
+class ReportsController < ApplicationController
   before_action :prepare_month_param, only: %i[create update]
 
   def create

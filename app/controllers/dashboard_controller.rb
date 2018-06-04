@@ -1,107 +1,112 @@
-class DashboardController < ApplicationController
-  include ContractData
-  include ReportData
-  include ReportPoints
-  include OverviewPoints
+class DashboardController < OverviewController
+  before_action :init_view_data,
+                only: %i[monthly_sales manager overview report_sales]
+  before_action :init_month_year_list, only: %i[monthly_sales report_sales]
+  before_action :init_manager_data, only: [:manager]
 
-  layout 'menu'
-  before_action :authenticate_user!
-  before_action :init_overview_search_data, only: [:search_overview_data]
+  before_action :authenticate_user!, only: [:manager]
   skip_before_action :verify_authenticity_token
 
-  def init_search_data
-    @report_data = []
-    @report_points = '[ '
+  def monthly_sales
+    init_month_year_list
+    search_sales
 
-    @contract_data = []
-    @contract_points = '[ ]'
+    @contract = Contract.new
+    @day_text = day_text_generator
+    @users = fetch_username_by_priority
+
+    @month = ''
+    @year = ''
+    init_month_year
+
+    render_menu
   end
 
-  def init_overview_search_data
-    @goal_points = '[ '
-    @sum_points = '[ '
-    @months_between = []
+  def report_sales
+    init_month_year_list
+    search_recods
 
-    @first_list = []
-    @last_list = []
-
-    @first_report = nil
-    @last_report = nil
+    render_menu
   end
 
-  def search
-    init_search_data
-    fetch_data_and_points
+  def manager
+    render_menu
   end
 
-  def init_current_report
-    return @current_report = fetch_last_report if params[:report].nil?
-    @current_report =
-      fetch_report(params[:report][:month], params[:report][:year])
+  def overview
+    search_overview_data
+    @month_text = month_text_generator
+    render_menu
   end
 
-  def init_month_year_list
-    init_current_report
-
-    @month_year_list = all_date_list
-    @month_year_list.delete(@current_report)
-    @month_year_list.unshift(@current_report)
+  def logout
+    sign_out_and_redirect(current_user)
   end
 
-  def fetch_data_and_points
-    result = fetch_contract_by_report_id(@current_report.id)
+  private
 
-    @days = month_days
-    @days -= 9 if @current_report.month_numb == 12
-
-    fetch_contract_data_points(result) unless result.empty?
-    fetch_report_data_points
+  def init_month_year
+    @month_year = if params[:report].nil?
+                    fetch_default_data
+                  else
+                    fetch_custom_data
+                  end
+    list = @month_year.split('/')
+    @month = list[0]
+    @year = list[1]
   end
 
-  def fetch_contract_data_points(data)
-    start_contract(@contract_data, @contract_points, data)
-    @contract_data = fetch_contract_data
-    @contract_points = fetch_contract_points(@days)
+  def fetch_default_data
+    Date::MONTHNAMES[fetch_last_month] + '/' + fetch_last_year.to_s
   end
 
-  def fetch_report_data_points
-    start_data(@days, @current_report, @contract_data)
-    @report_data = fetch_report_data
-
-    start_points(@days, @report_data, @report_points)
-    @report_points = fetch_report_points
+  def fetch_custom_data
+    params[:report][:month] + '/' + params[:report][:year].to_s
   end
 
-  def which_page(page_letter)
-    params[:report][:report_name] == page_letter
+  def init_manager_data
+    verify_authorization
+    year = params[:report].nil? ? params[:year] : params[:report][:year]
+
+    @spreadsheets = fetch_reports_by_year(year)
+    @unique_years = fetch_report_by_unique_years(year.to_i)
   end
 
-  def start_overview_search
-    return init_overview_data(nil, nil) if params[:report].nil?
-    init_overview_data(params[:report][:month].split('/'),
-                       params[:report][:year].split('/'))
+  def day_text_generator
+    @report_data.collect { |data| [data[0], (data[0]).to_s] }
   end
 
-  def search_overview_data
-    start_overview_search
-    overview_data
-    selection_list
-
-    adjust_list(@last_list, @last_report)
+  def month_text_generator
+    @month_text = []
+    report = @first_report
+    i = 1
+    while proceed?(report)
+      add_month_text(i, report)
+      report = fetch_report_by_next_month(report)
+      i += 1
+    end
+    add_month_text(i, report)
   end
 
-  def selection_list
-    create_lists(@first_list)
-    create_lists(@last_list)
-    adjust_list(@first_list, @first_report)
+  def add_month_text(index, report)
+    @month_text << [index, report.month[0..2] + '/' + report.year.to_s[2..3]]
   end
 
-  def create_lists(date_list)
-    all_date_list.map { |m| date_list << (m.month + '/' + m.year.to_s) }
+  def proceed?(report)
+    !report.nil? && report.id != @last_report.id
   end
 
-  def adjust_list(date_list, report)
-    date_list.delete(report.month + '/' + report.year.to_s)
-    date_list.unshift(report.month + '/' + report.year.to_s)
+  def init_view_data
+    @report = Report.new
+  end
+
+  def verify_authorization
+    authorize! :manager, DashboardController
+  rescue CanCan::AccessDenied
+    redirect_to graphic_path
+  end
+
+  def render_menu
+    render layout: 'menu'
   end
 end

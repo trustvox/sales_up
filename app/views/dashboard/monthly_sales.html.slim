@@ -45,7 +45,7 @@ body onload="generateGraphicPlot(#{@report_points}, #{@contract_points}, #{@day_
                     = f.input :day, as: :integer, label: false, id: "day", input_html: { style: "width:65px;", value: "", placeholder: "26", class: "form-control", min: "1", max: "31" }
                 .form-inline
                   = f.input :user_id, as: :hidden, label: false, id: "user_id", input_html: { value: @users[0].id }
-                  - if can? :manager, PageController
+                  - if can? :manager, DashboardController
                     .checkbox
                       h4.h4 Salesman name
                       .radio.form-inline
