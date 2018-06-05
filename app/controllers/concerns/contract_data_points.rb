@@ -1,4 +1,4 @@
-module ContractData
+module ContractDataPoints
   def start_contract(data, points, searched_contract)
     @contract_data = data
     @contract_points = points

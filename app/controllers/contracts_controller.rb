@@ -22,7 +22,7 @@ class ContractsController < ApplicationController
 
   def redirect_to_monthly_sales(id)
     report = fetch_report_by_id(id)
-    redirect_to controller: 'page', action: 'monthly_sales',
+    redirect_to controller: 'dashboard', action: 'monthly_sales',
                 'report[month]' => report.month, 'report[year]' => report.year
   end
 

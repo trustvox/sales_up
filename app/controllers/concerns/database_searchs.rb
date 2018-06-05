@@ -99,7 +99,7 @@ module DatabaseSearchs
   end
 
   def fetch_user_by_priority(priority)
-    User.where(priority: priority)
+    User.where(priority: priority).order('full_name')
   end
 
   #--------------------------------------------------------------------------##

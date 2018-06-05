@@ -1,8 +1,8 @@
 class MonthlyController < ApplicationController
-  include ContractData
+  include ContractDataPoints
   include ReportData
   include ReportPoints
-  include RecordData
+  include RecordDataPoints
 
   layout 'menu'
   before_action :authenticate_user!
@@ -29,12 +29,18 @@ class MonthlyController < ApplicationController
 
   def init_search_record_data
     @record_data = []
-    # @record_points = '[ '
+    @record_points = []
   end
 
   def fetch_record_data_and_points
     start_record_data(@current_report)
     @record_data = fetch_record_data
+
+    start_record_points(@current_report)
+    @record_points = fetch_record_points
+
+    @record_data.delete(nil)
+    @record_points.delete(nil)
   end
 
   def init_search_sales_data

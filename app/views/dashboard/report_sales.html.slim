@@ -1,6 +1,6 @@
 head
   title Sales Up - Sales Report
-body
+body onload="generateRecordPlot(#{@record_points}, #{fetch_user_by_priority(1).collect{ |user| user.full_name }}, #{@day_text})"
   .row
     .panel.panel-default style="margin-top: -30px;"
       .panel-heading
@@ -14,7 +14,7 @@ body
           h3.h3.font-thin.form-group.m-l = "R" + number_to_currency(@current_report.goal).to_s
 
       .panel-body style="font-size: 25px; font-weight: bold;"
-        div id="placeholderG" style="height:450px;width:1250px;"
+        div id="placeholderR" style="height:450px;width:1250px;"
 
       div.panel-default style="margin-top: 15px;"
         table.table ui-jq="footable"
@@ -25,14 +25,21 @@ body
               th Contract Sum
               th Closed Per Active Day
               th Goal's Percentage
+              th Most Inactive Days
               th Options
-          tbody
+          tbody.form-inline
             - @record_data.each_with_index do |data, i|
               tr
                 td = data[0]
-                td = data[1]
+                td = data[1].to_s + " closed"
                 td = "R" + number_to_currency(data[2]).to_s
-                td = data[3]
+                - if data[1] == 0
+                  td None
+                - else
+                  td = data[3]
                 td = data[4].to_s + "%"
+                td = data[5].to_s + " days"
                 td
+                  = simple_form_for @report, method: :put, url: "/overview_record", html: { class: "form-group" } do |f|
+                      = f.button :submit, "Compare", class: "btn btn-info"
 

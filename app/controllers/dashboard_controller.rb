@@ -26,6 +26,8 @@ class DashboardController < OverviewController
     init_month_year_list
     search_recods
 
+    @day_text = day_text_generator
+
     render_menu
   end
 
@@ -73,7 +75,7 @@ class DashboardController < OverviewController
   end
 
   def day_text_generator
-    @report_data.collect { |data| [data[0], (data[0]).to_s] }
+    (1..month_days).collect { |day| [day, day.to_s] }
   end
 
   def month_text_generator
