@@ -1,6 +1,6 @@
 head
   title Sales Up - Sales Report
-body onload="generateRecordPlot(#{@record_points}, #{fetch_user_by_priority(1).collect{ |user| user.full_name }}, #{@day_text})"
+body onload="generateRecordPlot(#{@record_points}, #{fetch_username_by_salesman_priority}, #{@day_text})"
   .row
     .panel.panel-default style="margin-top: -30px;"
       .panel-heading

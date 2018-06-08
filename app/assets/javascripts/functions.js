@@ -135,14 +135,40 @@ function generateOverviewPlot(goalPoints,sumPoints,monthText) {
       var month = document.getElementById("monthSearch");
       var year = document.getElementById("yearSearch");
 
-      alert(data);
-      alert(month);
-      alert(year);
-
       month.value = data[0];
       year.value = data[1];
 
       document.getElementById("formSearch").submit();
+    }
+  });
+}
+
+function generateOverviewRecordPlot(salesPoints,names,monthText) {
+  var data = [];
+  var option_color = [];
+
+  for (var i = 0; i < salesPoints.length; i++) {
+    data.push({ data: salesPoints[i], label: names[i],
+          points: { show: true, radius: 6 },
+          lines: { show: true, fill: true, fillColor: {
+                   colors: [{ opacity: 0.3 }, { opacity: 0.3}] } } });
+    option_color.push(colors[i]);
+  }
+  var options = {
+        colors: option_color,
+        series: { shadowSize: 2 },
+        xaxis:{ font: { color: '#ccc' }, ticks: monthText },
+        yaxis:{ font: { color: '#ccc' } },
+        grid: { hoverable: true, clickable: true, borderWidth: 0 },
+        tooltip: true,
+        tooltipOpts: { content: 'R$%y.2',  defaultTheme: false,
+                        shifts: { x: 0, y: 20 } }
+
+  };
+  $.plot($("#placeholderOR"), data, options);
+  $("#placeholderO").bind("plotclick", function (event, pos, item) {
+    if (item != null) {
+
     }
   });
 }

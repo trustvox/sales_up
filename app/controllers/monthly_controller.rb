@@ -33,10 +33,10 @@ class MonthlyController < ApplicationController
   end
 
   def fetch_record_data_and_points
-    start_record_data(@current_report)
+    start_record_data
     @record_data = fetch_record_data
 
-    start_record_points(@current_report)
+    start_record_points
     @record_points = fetch_record_points
 
     @record_data.delete(nil)
@@ -68,16 +68,14 @@ class MonthlyController < ApplicationController
   end
 
   def fetch_contract_data_points(data)
-    start_contract(@contract_data, @contract_points, data)
+    start_contract(data)
     @contract_data = fetch_contract_data
-    @contract_points = fetch_contract_points(@days)
+    @contract_points = fetch_contract_points
   end
 
   def fetch_report_data_points
-    start_data(@days, @current_report, @contract_data)
+    start_data
     @report_data = fetch_report_data
-
-    start_points(@days, @report_data, @report_points)
     @report_points = fetch_report_points
   end
 end

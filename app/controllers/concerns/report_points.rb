@@ -1,10 +1,4 @@
 module ReportPoints
-  def start_points(day, data, points)
-    @report_data = data
-    @report_points = points
-    @last_day = day
-  end
-
   def fetch_report_points
     @list = []
     last_data = nil

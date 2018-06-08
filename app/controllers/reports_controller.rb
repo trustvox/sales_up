@@ -22,7 +22,8 @@ class ReportsController < ApplicationController
   private
 
   def redirect_to_manager(year)
-    redirect_to controller: 'dashboard', action: 'manager', 'report[year]' => year
+    redirect_to controller: 'dashboard', action: 'manager',
+                'report[year]' => year
   end
 
   def prepare_month_param

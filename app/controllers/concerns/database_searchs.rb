@@ -18,15 +18,25 @@ module DatabaseSearchs
     nil
   end
 
+  def prepare_fetch_reports_by_month_range(report)
+    @i = 1
+    @first_month = report.month_numb
+    @first_year = report.year
+  end
+
   def fetch_reports_by_month_range(current_report, quantity = 1)
-    previous = current_report.month_numb - quantity
-    if previous.negative?
-      Report.where(month_numb: previous + 13, year: current_report.year - 1)[0]
-    else
-      Report.where(month_numb: previous, year: current_report.year)[0]
+    prepare_fetch_reports_by_month_range(current_report)
+
+    while @i < quantity
+      @first_month -= 1
+      if @first_month.zero?
+        @last_to_first = 12
+        @last_year -= 1
+      end
+      @i += 1
     end
-  rescue StandardError
-    nil
+
+    Report.where(month_numb: @first_month, year: @first_year)[0]
   end
 
   def fetch_report_by_next_month(current_report)
@@ -82,6 +92,13 @@ module DatabaseSearchs
     Contract.where(user_id: user_id, report_id: report_id).order('day')
   end
 
+  def fetch_contract_sum(user_id, report_id)
+    values = 0
+    contracts = fetch_contracts_by_user_report_id(user_id, report_id)
+    contracts.each { |contract| values += contract.value }
+    values
+  end
+
   #--------------------------------------------------------------------------##
   #--------------------------------------------------------------------------##
   #--------------------------------------------------------------------------##
@@ -100,6 +117,10 @@ module DatabaseSearchs
 
   def fetch_user_by_priority(priority)
     User.where(priority: priority).order('full_name')
+  end
+
+  def fetch_username_by_salesman_priority
+    fetch_user_by_priority(1).collect(&:full_name)
   end
 
   #--------------------------------------------------------------------------##

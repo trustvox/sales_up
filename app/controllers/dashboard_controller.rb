@@ -1,6 +1,7 @@
 class DashboardController < OverviewController
   before_action :init_view_data,
-                only: %i[monthly_sales manager overview report_sales]
+                only: %i[monthly_sales manager overview_reports
+                         overview_months report_sales]
   before_action :init_month_year_list, only: %i[monthly_sales report_sales]
   before_action :init_manager_data, only: [:manager]
 
@@ -35,8 +36,14 @@ class DashboardController < OverviewController
     render_menu
   end
 
-  def overview
-    search_overview_data
+  def overview_months
+    search_overview_months
+    @month_text = month_text_generator
+    render_menu
+  end
+
+  def overview_reports
+    search_overview_reports
     @month_text = month_text_generator
     render_menu
   end
