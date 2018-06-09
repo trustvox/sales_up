@@ -1,9 +1,11 @@
 head
   title Sales Up - Sales Report
-body onload="generateRecordPlot(#{@record_points}, #{fetch_username_by_salesman_priority}, #{@day_text})"
+body onload="generateRecordPlot(#{@record_points}, #{@line_names}, #{@graphic_text})"
   .row
     .panel.panel-default style="margin-top: -30px;"
       .panel-heading
+        h3.h3.form-group.text-center
+            = "Sales Report"
         .form-inline
           h3.h3.form-group
             = "Name:"
@@ -26,7 +28,6 @@ body onload="generateRecordPlot(#{@record_points}, #{fetch_username_by_salesman_
               th Closed Per Active Day
               th Goal's Percentage
               th Most Inactive Days
-              th Options
           tbody.form-inline
             - @record_data.each_with_index do |data, i|
               tr
@@ -39,7 +40,3 @@ body onload="generateRecordPlot(#{@record_points}, #{fetch_username_by_salesman_
                   td = data[3]
                 td = data[4].to_s + "%"
                 td = data[5].to_s + " days"
-                td
-                  = simple_form_for @report, method: :put, url: "/overview_record", html: { class: "form-group" } do |f|
-                      = f.button :submit, "Compare", class: "btn btn-info"
-

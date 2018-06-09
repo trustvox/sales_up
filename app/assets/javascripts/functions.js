@@ -166,11 +166,6 @@ function generateOverviewRecordPlot(salesPoints,names,monthText) {
 
   };
   $.plot($("#placeholderOR"), data, options);
-  $("#placeholderO").bind("plotclick", function (event, pos, item) {
-    if (item != null) {
-
-    }
-  });
 }
 
 function generateGraphicPlot(reportPoints,contractPoints,dayText,month,year) {
@@ -194,11 +189,6 @@ function generateGraphicPlot(reportPoints,contractPoints,dayText,month,year) {
                        defaultTheme: false, shifts: { x: 0, y: 20 } }
   };
   $.plot($("#placeholderG"), data, options);
-  $("#placeholderG").bind("plotclick", function (event, pos, item) {
-    if (item != null)
-      window.location.replace("/monthly_sales?report[month]=" +
-                              month + "&report[year]=" + year);
-  });
 }
 
 function generateRecordPlot(salesPoints, names, dayText) {

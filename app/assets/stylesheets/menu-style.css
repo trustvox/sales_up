@@ -19,8 +19,9 @@
   width: 35px;
 }
 
-.dropdown-li{
-  width: 23%;
+.page-title{
+  position: relative;
+  left: 43%;
 }
 
 #menu-logo{

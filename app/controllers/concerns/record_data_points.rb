@@ -45,7 +45,7 @@ module RecordDataPoints
       @sum = 0
 
       prepare_points(user.id)
-      organize_data unless @unique_days.empty?
+      organize_data(user.id) unless @unique_days.empty?
 
       @list unless @unique_days.empty?
     end
@@ -65,15 +65,15 @@ module RecordDataPoints
     @gap.shift
   end
 
-  def organize_data
+  def organize_data(user_id)
     verify_first_unique_day if @unique_days[0] != 1
 
     @unique_days.each_with_index do |day, i|
-      add_day_sum(day, true)
-      add_day_sum(day + @gap[i]) if verify_add_day_sum(i)
+      add_day_sum(day, user_id, true)
+      add_day_sum(day + @gap[i], user_id) if verify_add_day_sum(i)
     end
 
-    add_day_sum(@last_day) if verify_last_day
+    add_day_sum(@last_day, user_id) if verify_last_day
   end
 
   def verify_add_day_sum(index)
@@ -84,8 +84,8 @@ module RecordDataPoints
     @unique_days[-1] != @last_day
   end
 
-  def contract_sum_in_day(day)
-    fetch_contracts_by_day_report_id(day, @current_report.id).map do |cont|
+  def contract_sum_in_day(day, report_id, user_id)
+    fetch_contracts_by_day_report_user_id(day, report_id, user_id).map do |cont|
       @sum += cont.value.to_f
     end
   end
@@ -97,8 +97,8 @@ module RecordDataPoints
     finish_search(gap_list)
   end
 
-  def add_day_sum(day, can_sum = false)
-    contract_sum_in_day(day) if can_sum
+  def add_day_sum(day, user_id, can_sum = false)
+    contract_sum_in_day(day, @current_report.id, user_id) if can_sum
     @list << [day, @sum]
   end
 

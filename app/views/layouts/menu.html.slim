@@ -33,7 +33,10 @@ html
 
             .form-group#menu-options
               .dropdown.form-group
-                button.btn.btn-primary.btn-addon.btn-lg.margin.dropdown-toggle data-toggle="dropdown" id="menu1" Overview
+                - if current_page?(controller: 'dashboard', action: 'overview_months') || current_page?(controller: 'dashboard', action: 'overview_reports')
+                  button.btn.btn-primary.btn-addon.btn-lg.margin.dropdown-toggle.btn-info data-toggle="dropdown" id="menu1" Overview
+                - else
+                  button.btn.btn-primary.btn-addon.btn-lg.margin.dropdown-toggle data-toggle="dropdown" id="menu1" Overview
                 ul.dropdown-menu style="left: 4px;"
                   li.dropdown-li role="presentation"
                     - if current_page?(controller: 'dashboard', action: 'overview_months')
@@ -51,26 +54,29 @@ html
                         = f.button :submit, "Reports", class: "btn btn-primary btn-addon btn-lg margin"
 
               .dropdown.form-group
-                button.btn.btn-primary.btn-addon.btn-lg.margin.dropdown-toggle data-toggle="dropdown" id="menu1" Monthly
+                - if current_page?(controller: 'dashboard', action: 'monthly_sales') || current_page?(controller: 'dashboard', action: 'report_sales')
+                  button.btn.btn-primary.btn-addon.btn-lg.margin.dropdown-toggle.btn-info data-toggle="dropdown" id="menu1" Monthly
+                - else
+                  button.btn.btn-primary.btn-addon.btn-lg.margin.dropdown-toggle data-toggle="dropdown" id="menu1" Monthly
                 ul.dropdown-menu role="menu" aria-labelledby="menu1"
                   li.dropdown-li role="presentation"
-                    - if current_page?(controller: 'dashboard', action: 'report_sales')
-                      button.btn.btn-primary.btn-addon.btn-lg.disabled.margin style="margin-bottom: 8px; margin-left: 6px;" Reports
+                    - if current_page?(controller: 'dashboard', action: 'monthly_sales')
+                      button.btn.btn-primary.btn-addon.btn-lg.disabled.margin style="margin-bottom: 8px; margin-left: 6px; width: 85px;"  Sales
                     - else
-                      = simple_form_for @report, method: :get, url: "/report_sales", html: { class: "form-group", style: "margin-bottom: 8px; margin-left: 1px;" } do |f|
+                      = simple_form_for @report, method: :get, url: "/monthly_sales", html: { class: "form-group", style: "margin-bottom: 8px; margin-left: 1px;" } do |f|
+                        - unless params[:report].nil? || params[:report][:month].blank? || params[:report][:month].include?("/")
+                          = f.input :month, as: :hidden, input_html: { value: params[:report][:month] }
+                          = f.input :year, as: :hidden, input_html: { value: params[:report][:year] }
+                        = f.button :submit, "Sales", class: "btn btn-primary btn-addon btn-lg margin", style: "width: 85px;"
+                  li.dropdown-li role="presentation"
+                    - if current_page?(controller: 'dashboard', action: 'report_sales')
+                      button.btn.btn-primary.btn-addon.btn-lg.disabled.margin style="margin-left: 6px;" Reports
+                    - else
+                      = simple_form_for @report, method: :get, url: "/report_sales", html: { class: "form-group", style: "margin-left: 1px;" } do |f|
                         - unless params[:report].nil? || params[:report][:month].blank? || params[:report][:month].include?("/")
                           = f.input :month, as: :hidden, input_html: { value: params[:report][:month] }
                           = f.input :year, as: :hidden, input_html: { value: params[:report][:year] }
                         = f.button :submit, "Reports", class: "btn btn-primary btn-addon btn-lg margin"
-                  li.dropdown-li role="presentation"
-                    - if current_page?(controller: 'dashboard', action: 'monthly_sales')
-                      button.btn.btn-primary.btn-addon.btn-lg.disabled.margin style="margin-left: 15px;" Sales
-                    - else
-                      = simple_form_for @report, method: :get, url: "/monthly_sales", html: { class: "form-group", style: "margin-left: 10px;" } do |f|
-                        - unless params[:report].nil? || params[:report][:month].blank? || params[:report][:month].include?("/")
-                          = f.input :month, as: :hidden, input_html: { value: params[:report][:month] }
-                          = f.input :year, as: :hidden, input_html: { value: params[:report][:year] }
-                        = f.button :submit, "Sales", class: "btn btn-primary btn-addon btn-lg margin"
 
               - if can? :manager, DashboardController
                 - if current_page?(controller: 'dashboard', action: 'manager')

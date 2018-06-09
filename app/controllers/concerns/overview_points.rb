@@ -1,6 +1,8 @@
 module OverviewPoints
   include DatabaseSearchs
 
+  DEFAULT_MONTH_SEARCH = 12
+
   def initialize
     @goal_points = []
     @sum_points = []
@@ -23,7 +25,7 @@ module OverviewPoints
     if all_nil?(first, last)
       @last_report = fetch_last_report
       @first_report =
-        fetch_reports_by_month_range(@last_report, 6)
+        fetch_reports_by_month_range(@last_report, DEFAULT_MONTH_SEARCH)
     else
       search_first_last_reports(first, last)
       verify_dates
@@ -100,7 +102,7 @@ module OverviewPoints
   end
 
   def overview_report_data
-    fetch_user_by_priority(1).each do |user|
+    @users.collect do |user|
       list = []
       while acceptable?
         list << [@i, fetch_contract_sum(user.id, @first.id)]
@@ -108,7 +110,7 @@ module OverviewPoints
       end
 
       prepare_overview_data
-      @salesman_points << list
+      list
     end
   end
 end

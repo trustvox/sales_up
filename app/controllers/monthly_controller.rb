@@ -1,4 +1,4 @@
-class MonthlyController < ApplicationController
+class MonthlyController < OverviewController
   include ContractDataPoints
   include ReportData
   include ReportPoints
@@ -30,6 +30,9 @@ class MonthlyController < ApplicationController
   def init_search_record_data
     @record_data = []
     @record_points = []
+
+    @line_names = []
+    @users = []
   end
 
   def fetch_record_data_and_points
@@ -39,8 +42,14 @@ class MonthlyController < ApplicationController
     start_record_points
     @record_points = fetch_record_points
 
+    finish_record_search
+  end
+
+  def finish_record_search
     @record_data.delete(nil)
     @record_points.delete(nil)
+
+    @line_names = @record_data.collect { |data| data[0] }
   end
 
   def init_search_sales_data

@@ -1,8 +1,7 @@
-class DashboardController < OverviewController
+class DashboardController < MonthlyController
   before_action :init_view_data,
                 only: %i[monthly_sales manager overview_reports
                          overview_months report_sales]
-  before_action :init_month_year_list, only: %i[monthly_sales report_sales]
   before_action :init_manager_data, only: [:manager]
 
   before_action :authenticate_user!, only: [:manager]
@@ -27,7 +26,7 @@ class DashboardController < OverviewController
     init_month_year_list
     search_recods
 
-    @day_text = day_text_generator
+    @graphic_text = day_text_generator
 
     render_menu
   end
@@ -53,6 +52,10 @@ class DashboardController < OverviewController
   end
 
   private
+
+  def verify_report
+    params[:report].nil? || params[:report][:report_name].nil?
+  end
 
   def init_month_year
     @month_year = if params[:report].nil?

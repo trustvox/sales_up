@@ -1,35 +1,46 @@
-class OverviewController < MonthlyController
+class OverviewController < ApplicationController
   include OverviewPoints
 
-  before_action :init_overview_search_months, only: [:search_overview_months]
-
   def search_overview_months
+    init_overview_search_months
+
     start_overview_search
     overview_data('m')
-    selection_list
-
-    adjust_list(@last_list, @last_report)
+    create_range_month_list
   end
 
   def search_overview_reports
-    start_overview_search
-    overview_data('r')
-    selection_list
+    init_overview_search_reports
 
-    adjust_list(@last_list, @last_report)
+    start_overview_search
+    @salesman_points = overview_data('r')
+    create_range_month_list
   end
 
   private
 
+  def create_range_month_list
+    selection_list
+    adjust_list(@last_list, @last_report)
+  end
+
   def init_overview_search_reports
     @salesman_points = []
+    @users = fetch_user_by_priority(1)
+    @usernames = fetch_username_by_salesman_priority
+
+    init_overview_search_bar
   end
 
   def init_overview_search_months
-    @goal_points = '[ '
-    @sum_points = '[ '
+    @goal_points = []
+    @sum_points = []
     @months_between = []
 
+    init_overview_search_bar
+  end
+
+  def init_overview_search_bar
     @first_list = []
     @last_list = []
 
