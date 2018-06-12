@@ -1,6 +1,6 @@
 head
   title Sales Up - Graphic
-body
+body onload="generateGraphicPlot(#{@report_points}, #{@contract_points}, #{@day_text}, '#{params[:month]}', '#{params[:year]}')"
   div style="margin-top: -30px;"
     .row
       .panel.panel-default
@@ -14,23 +14,5 @@ body
               = "Goal: "
             h3.h3.font-thin.form-group.m-l = "R" + number_to_currency(@current_report.goal).to_s
         .panel-body style="font-size: 25px; font-weight: bold;"
-          - day_text = "[1, 'Day/1'], "
-          - @report_data.each do |data|
-            - next if data[0] == "1"
-            - day_text += "[" + data[0] + ", '#{data[0].to_s}'], "
-          - day_text = day_text[0..day_text.length-3]
-          div style="height:450px;" ui-jq="plot" ui-options="
-          [
-        { data: #{@report_points}, label: 'Goal', points: { show: true }, lines: { show: true, fill: true, fillColor: { colors: [{ opacity: 0.1 }, { opacity: 0.1}] } } },
-        { data: #{@contract_points}, label: 'Reached', points: { show: true, radius: 6 }, lines: { show: true, fill: true, fillColor: { colors: [{ opacity: 0.3 }, { opacity: 0.3}] } } }
-      ],
-      {
-        colors: [ '#fad733','#23b7e5' ],
-        series: { shadowSize: 2 },
-        xaxis:{ font: { color: '#ccc' }, ticks: [ #{day_text} ] },
-        yaxis:{ font: { color: '#ccc' } },
-        grid: { hoverable: true, clickable: true, borderWidth: 0 },
-        tooltip: true,
-        tooltipOpts: { content: '%x.0/#{@current_report.month}/#{@current_report.year}: R$%y.2',  defaultTheme: false, shifts: { x: 0, y: 20 } }
-}"
+          div id="placeholderG" style="height:450px;width:1250px;"
 

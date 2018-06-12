@@ -12,6 +12,7 @@ gem 'activerecord-session_store'
 gem 'backup'
 gem 'cancancan'
 gem 'devise'
+gem 'figaro'
 gem 'jquery-rails'
 gem 'pg'
 gem 'rails_12factor', group: :production
@@ -19,6 +20,7 @@ gem 'rspec'
 gem 'rubocop'
 gem 'simple_form'
 gem 'slim-rails'
+gem 'zapier_ruby'
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]

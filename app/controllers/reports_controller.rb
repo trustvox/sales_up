@@ -1,38 +1,33 @@
 class ReportsController < DashboardController
-  before_action :prepare_params, only: %i[create update]
+  before_action :prepare_month_param, only: %i[create update]
 
   def create
     report = Report.new(report_params)
     report.save!
-    restore_report_data
+    redirect_to_manager(report.year)
   end
 
   def update
     report = Report.find_by(id: params[:id])
     report.update(report_params)
-    restore_report_data
-  end
-
-  def search_report
-    restore_report_data(false)
+    redirect_to_manager(report.year)
   end
 
   def destroy
-    Report.find_by(id: params[:id]).destroy
-    restore_report_data
+    report = Report.find_by(id: params[:id])
+    report.destroy
+    redirect_to_manager(report.year)
   end
 
   private
 
-  def prepare_params
-    params[:report][:month] =
-      Date::MONTHNAMES[params[:report][:month_numb].to_i]
+  def redirect_to_manager(year)
+    redirect_to controller: 'page', action: 'manager', 'report[year]' => year
   end
 
-  def restore_report_data(can_search_month_year = true)
-    session[:month_year_list] = all_date_list if can_search_month_year
-    session[:spreadsheets] = fetch_reports_by_year(params[:report][:year])
-    redirect_to manager_path
+  def prepare_month_param
+    params[:report][:month] =
+      Date::MONTHNAMES[params[:report][:month_numb].to_i]
   end
 
   def report_params

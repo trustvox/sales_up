@@ -3,13 +3,16 @@ class ApplicationController < ActionController::Base
   helper DatabaseSearchs
 
   protect_from_forgery with: :exception
+  before_action :init_path
   before_action :configure_permitted_parameters, if: :devise_controller?
 
   protected
 
+  def init_path; end
+
   def after_sign_in_path_for(resource)
     if user_signed_in?
-      stored_location_for(resource) || search_path
+      stored_location_for(resource) || graphic_path
     else
       root_path
     end

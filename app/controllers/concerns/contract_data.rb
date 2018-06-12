@@ -1,4 +1,14 @@
 module ContractData
+  def initialize
+    @contract_data = nil
+    @contract_points = nil
+    @search = nil
+
+    @data = nil
+    @wait = false
+    @user_id = 0
+  end
+
   def start_contract(data, points, searched_contract)
     @contract_data = data
     @contract_points = points
@@ -50,7 +60,7 @@ module ContractData
   def search_data
     @search.each_with_index do |info, i|
       @user_id = info.user_id
-      if proceed?(i)
+      if proceed_search?(i)
         set_partial_data(info.value, info.store_name)
       elsif @wait
         add_partial_data(info.day, info.value, info.store_name)
@@ -60,7 +70,7 @@ module ContractData
     end
   end
 
-  def proceed?(index)
+  def proceed_search?(index)
     !@search[index + 1].nil? && @search[index].day == @search[index + 1].day
   end
 

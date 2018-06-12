@@ -7,7 +7,6 @@
       = f.email_field :email, autocomplete: "email", placeholder:"Email", required:"", :class => "form-control no-border"
     .list-group-item
       = f.password_field :password, placeholder:"Password", required:"", :class => "form-control no-border"
-  button name="month_year" value="#{@current_month}/#{@current_year}/o" hidden=""
   = f.submit "Log in", :class => "btn btn-lg btn-primary btn-block"
   .text-center.m-t.m-b
     = link_to 'Forgot your password?', forgot_password_path

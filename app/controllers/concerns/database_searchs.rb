@@ -54,7 +54,7 @@ module DatabaseSearchs
 
   def fetch_report_by_unique_years(same_year = nil)
     list = Report.distinct.pluck(:year).reverse
-    list.delete(same_year) unless same_year.nil?
+    list.delete(same_year)
     list.unshift(same_year)
   end
 
@@ -99,7 +99,7 @@ module DatabaseSearchs
   #--------------------------------------------------------------------------##
 
   def month_days
-    Time.days_in_month(session[:current_report].month_numb)
+    Time.days_in_month(@current_report.month_numb)
   end
 
   def all_date_list
