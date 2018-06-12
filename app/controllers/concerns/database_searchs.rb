@@ -16,4 +16,8 @@ module DatabaseSearchs
     end
     list
   end
+
+  def fetch_default_data
+    Date::MONTHNAMES[fetch_last_month] + '/' + fetch_last_year.to_s
+  end
 end

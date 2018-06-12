@@ -25,11 +25,49 @@ class OverviewController < ApplicationController
   end
 
   def init_overview_search_reports
+    params[:report].nil? ? default_search : custom_search
+
     @salesman_points = []
+    init_overview_search_bar
+  end
+
+  def default_search
     @users = fetch_user_by_priority(1)
     @usernames = fetch_username_by_salesman_priority
+    @filter = 'CS'
+    @simbol = 'R$ %y.2'
+  end
 
-    init_overview_search_bar
+  def custom_search
+    @filter = params[:report][:goal]
+    if params[:report][:report_name] == 'All'
+      start_default_values
+    else
+      start_custom_values
+    end
+
+    set_simbol_with_filter
+  end
+
+  def set_simbol_with_filter
+    case @filter
+    when 'CS'
+      @simbol = 'R$ %y.2'
+    when 'CP'
+      @simbol = '%y.2%'
+    when 'CC'
+      @simbol = '%y Contract(s)'
+    end
+  end
+
+  def start_default_values
+    @usernames = fetch_username_by_salesman_priority
+    @users = fetch_user_by_priority(1)
+  end
+
+  def start_custom_values
+    @usernames = [params[:report][:report_name]]
+    @users = fetch_user_by_username(params[:report][:report_name])
   end
 
   def init_overview_search_months

@@ -143,7 +143,7 @@ function generateOverviewPlot(goalPoints,sumPoints,monthText) {
   });
 }
 
-function generateOverviewRecordPlot(salesPoints,names,monthText) {
+function generateOverviewRecordPlot(salesPoints,names,monthText,simbol) {
   var data = [];
   var option_color = [];
 
@@ -161,7 +161,7 @@ function generateOverviewRecordPlot(salesPoints,names,monthText) {
         yaxis:{ font: { color: '#ccc' } },
         grid: { hoverable: true, clickable: true, borderWidth: 0 },
         tooltip: true,
-        tooltipOpts: { content: 'R$%y.2',  defaultTheme: false,
+        tooltipOpts: { content: simbol,  defaultTheme: false,
                         shifts: { x: 0, y: 20 } }
 
   };

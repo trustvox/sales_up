@@ -71,4 +71,8 @@ module ReportSearchs
   def fetch_report_by_id(id)
     Report.find_by(id: id)
   end
+
+  def fetch_goal_by_id(id)
+    Report.find_by(id: id).goal
+  end
 end

@@ -16,13 +16,21 @@ module ContractSearchs
   end
 
   def fetch_contracts_by_user_report_id(user_id, report_id)
-    Contract.where(user_id: user_id, report_id: report_id).order('day')
+    Contract.where(user_id: user_id, report_id: report_id).count
   end
 
   def fetch_contract_sum(user_id, report_id)
     values = 0
-    contracts = fetch_contracts_by_user_report_id(user_id, report_id)
+    contracts = fetch_closed_contracts(user_id, report_id)
     contracts.each { |contract| values += contract.value }
     values
+  end
+
+  def fetch_closed_contracts(user_id, report_id)
+    Contract.where(user_id: user_id, report_id: report_id).order('day')
+  end
+
+  def fetch_unique_days(user_id, report_id)
+    fetch_closed_contracts(user_id, report_id).distinct.pluck(:day)
   end
 end

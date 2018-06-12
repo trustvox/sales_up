@@ -22,7 +22,7 @@ module OverviewPoints
   end
 
   def fetch_reports(first = nil, last = nil)
-    if all_nil?(first, last)
+    if first.blank? || last.blank?
       @last_report = fetch_last_report
       @first_report =
         fetch_reports_by_month_range(@last_report, DEFAULT_MONTH_SEARCH)
@@ -35,10 +35,6 @@ module OverviewPoints
   def search_first_last_reports(first, last)
     @last_report = fetch_report(last[0], last[1])
     @first_report = fetch_report(first[0], first[1])
-  end
-
-  def all_nil?(first, last)
-    first.blank? || last.blank?
   end
 
   def greater_month
@@ -54,8 +50,7 @@ module OverviewPoints
   end
 
   def switch
-    @first_report, @last_report =
-      @last_report, @first_report
+    @first_report, @last_report = @last_report, @first_report
   end
 
   def verify_dates
@@ -105,12 +100,24 @@ module OverviewPoints
     @users.collect do |user|
       list = []
       while acceptable?
-        list << [@i, fetch_contract_sum(user.id, @first.id)]
+        list << filter_operation(@i, user.id, @first.id)
         verify_next_month
       end
 
       prepare_overview_data
       list
+    end
+  end
+
+  def filter_operation(index, user_id, report_id)
+    case @filter
+    when 'CS'
+      [index, fetch_contract_sum(user_id, report_id)]
+    when 'CP'
+      sum = fetch_contract_sum(user_id, report_id)
+      [index, ((sum / fetch_goal_by_id(report_id)) * 100).round(1)]
+    when 'CC'
+      [index, fetch_contracts_by_user_report_id(user_id, report_id)]
     end
   end
 end

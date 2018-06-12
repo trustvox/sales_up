@@ -23,16 +23,12 @@ module RecordDataPoints
   end
 
   def prepare_data(user_id)
-    @closed_contracts = fetch_closed_contracts(user_id)
+    @closed_contracts = fetch_closed_contracts(user_id, @current_report.id)
 
     return if @closed_contracts.empty?
     @sum = fetch_contract_sum(user_id, @current_report.id)
-    @unique_days = @closed_contracts.distinct.pluck(:day)
+    @unique_days = fetch_unique_days(user_id, @current_report.id)
     @day_gap = calculate_delta_gap.sort[-1]
-  end
-
-  def fetch_closed_contracts(user_id)
-    fetch_contracts_by_user_report_id(user_id, @current_report.id)
   end
 
   def start_record_points
@@ -52,7 +48,7 @@ module RecordDataPoints
   end
 
   def prepare_points(user_id)
-    @unique_days = fetch_closed_contracts(user_id).distinct.pluck(:day)
+    @unique_days = fetch_unique_days(user_id, @current_report.id)
 
     return if @unique_days.empty?
     @last_day = month_days
