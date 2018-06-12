@@ -81,4 +81,36 @@ body
                     = f.button :submit, "Save", class: "btn btn-success m-l form-group", :onclick => "fillData(#{report.id}, 'report_name', 'goal', 'month', 'year')"
                   button.btn.btn-info.form-group.m-l id="#{report.id}cancelR" onclick="reportVisibility(#{report.id}, false);" Cancel
 
+    .panel.panel-default
+      div.panel-default.panel-heading.form-inline
+        h2.h2.font-thin.form-group New Registered Users
+
+      table.table.table-bordered.table-hover.table-condensed.bg-white-only
+        tbody
+          tr style=("font-weight: bold;")
+            td style="width:35%"  Full name
+            td style="width:20%"  Email
+            td style="width:20%"  Permission
+            td style="width:25%"  Options
+          -for new_user in @new_users
+            tr
+              td.v-middle
+                label id="#{new_user.id}full_name" = new_user.full_name
+              td.v-middle
+                label id="#{new_user.id}email" = new_user.email
+              td.v-middle
+                select.form-control style="font-size: 18px; height: auto;" id="#{new_user.id}permission"
+                  option value="0" Spector
+                  option value="1" Salesman
+                  option value="2" Manager
+              td
+                div.form-inline
+                  = simple_form_for @user, method: :post, url: "/manage_new_user", html: { class: "form-group", :onsubmit => "if(!validateMyForm()){event.preventDefault();}" } do |f|
+                    = f.input :priority, as: :hidden, input_html: { value: "p", id: new_user.id.to_s+"permission"+new_user.id.to_s }
+                    = f.input :id, as: :hidden, input_html: { value: new_user.id }
+                    = f.button :submit, "Allow", class: "btn btn-success m-l", :onclick => "fillUserData(#{new_user.id}, 'yes')"
+
+                  = simple_form_for @user, method: :post, url: "/manage_new_user", html: { class: "form-group", :onsubmit => "if(!validateMyForm()){event.preventDefault();}" } do |f|
+                    = f.input :id, as: :hidden, input_html: { value: new_user.id }
+                    = f.button :submit, "Deny", class: "btn btn-danger m-l", :onclick => "fillUserData(#{new_user.id}, 'no')"
 

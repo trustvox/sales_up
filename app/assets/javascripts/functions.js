@@ -3,7 +3,21 @@ var colors = ["#fccaf9","#9ceaff","#b7ffc2","#d6ccc8", "#d1c1ee",
 
 
 function validateMyForm() {
-	return confirm("Deseja realizar esta ação?");
+  return confirm("Deseja realizar esta ação?");
+}
+
+function verifyPassword() {
+  if (document.getElementById('user_password').value !=
+      document.getElementById('user_confirm_password').value){
+    document.getElementById('alertRegister').innerHTML = "Passwords do not match";
+    return false;
+  }
+  else if (document.getElementById('user_password').value == "" ||
+           document.getElementById('user_confirm_password').value == ""){
+    document.getElementById('alertRegister').innerHTML = "Password fields are empty";
+    return false;
+  }
+  return true;
 }
 
 function reportVisibility(id, choice) {
@@ -32,6 +46,18 @@ function reportVisibility(id, choice) {
 
     document.getElementById(id+'divR1').removeAttribute("hidden");
     document.getElementById(id+'divR2').setAttribute("hidden", true);
+  }
+}
+
+function fillUserData(id, permission) {
+  var param_priority = null;
+  var query_priority = null;
+
+  if (permission == 'yes'){
+    param_priority = document.getElementById(id+'permission');
+    query_priority = document.getElementById(id+'permission'+id);
+
+    query_priority.value = param_priority.value;
   }
 }
 

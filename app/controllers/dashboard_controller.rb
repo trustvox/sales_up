@@ -34,6 +34,9 @@ class DashboardController < MonthlyController
   end
 
   def manager
+    @user = User.new
+    @new_users = fetch_user_by_priority(-1)
+
     render_menu
   end
 
