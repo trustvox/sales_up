@@ -1,9 +1,11 @@
 head
-  title Sales Up - Spreadsheet
-body
+  title Sales Up - Monthly Sales
+body onload="generateGraphicPlot(#{@report_points}, #{@contract_points}, #{@day_text}, '#{@month}', '#{@year}')"
   .row
     .panel.panel-default style="margin-top: -30px;"
       .panel-heading
+        h3.h3.form-group.text-center
+          = "Monthly Sales"
         .form-inline
           h3.h3.form-group
             = "Name:"
@@ -45,7 +47,7 @@ body
                     = f.input :day, as: :integer, label: false, id: "day", input_html: { style: "width:65px;", value: "", placeholder: "26", class: "form-control", min: "1", max: "31" }
                 .form-inline
                   = f.input :user_id, as: :hidden, label: false, id: "user_id", input_html: { value: @users[0].id }
-                  - if can? :manager, PageController
+                  - if can? :manager, DashboardController
                     .checkbox
                       h4.h4 Salesman name
                       .radio.form-inline
@@ -70,7 +72,11 @@ body
               .modal-footer
                 = f.button :submit, "Save changes", class: "btn btn-primary"
                 = f.button :button, "Close", class: "btn btn-danger", :'data-dismiss' => "modal", :onclick => "cleanDataContract()"
-      div
+
+      .panel-body style="font-size: 25px; font-weight: bold;"
+        div id="placeholderG" style="height:450px;width:1250px;"
+
+      div.panel-default style="margin-top: 15px;"
         table.table ui-jq="footable"
           thead
             tr
@@ -145,3 +151,4 @@ body
 
                           .modal-footer
                             button.btn.btn-info data-dismiss="modal" type="button" onclick="cleanDataContract()" Back
+

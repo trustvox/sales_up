@@ -19,6 +19,11 @@
   width: 35px;
 }
 
+.page-title{
+  position: relative;
+  left: 43%;
+}
+
 #monthBox{
   font-size: 18px;
   height: auto;

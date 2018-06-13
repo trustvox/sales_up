@@ -43,7 +43,7 @@ class UserController < ApplicationController
   end
 
   def verify_user_status
-    redirect_to graphic_path if user_signed_in?
+    redirect_to monthly_sales_path if user_signed_in?
     @user = User.new
   end
 end

@@ -1,5 +1,6 @@
-var colors = ["#ffff99","#fccaf9","#9ceaff","#d1c1ee","#b7ffc2","#d6ccc8",
-              "#fdd2ab","#c1d8ff","#ffc1c1","#dbdfe4"]
+var colors = ["#fccaf9","#9ceaff","#b7ffc2","#d6ccc8", "#d1c1ee",
+              "#fdd2ab","#c1d8ff","#ffc1c1","#dbdfe4", "#ffff99"]
+
 
 function validateMyForm() {
   return confirm("Deseja realizar esta ação?");
@@ -159,12 +160,38 @@ function generateOverviewPlot(goalPoints,sumPoints,monthText) {
                   "20"+monthText[item.dataIndex][1].substring(4,7)];
       var month = document.getElementById("monthSearch");
       var year = document.getElementById("yearSearch");
+
       month.value = data[0];
       year.value = data[1];
 
       document.getElementById("formSearch").submit();
     }
-});
+  });
+}
+
+function generateOverviewRecordPlot(salesPoints,names,monthText,simbol) {
+  var data = [];
+  var option_color = [];
+
+  for (var i = 0; i < salesPoints.length; i++) {
+    data.push({ data: salesPoints[i], label: names[i],
+          points: { show: true, radius: 6 },
+          lines: { show: true, fill: true, fillColor: {
+                   colors: [{ opacity: 0.3 }, { opacity: 0.3}] } } });
+    option_color.push(colors[i]);
+  }
+  var options = {
+        colors: option_color,
+        series: { shadowSize: 2 },
+        xaxis:{ font: { color: '#ccc' }, ticks: monthText },
+        yaxis:{ font: { color: '#ccc' } },
+        grid: { hoverable: true, clickable: true, borderWidth: 0 },
+        tooltip: true,
+        tooltipOpts: { content: simbol,  defaultTheme: false,
+                        shifts: { x: 0, y: 20 } }
+
+  };
+  $.plot($("#placeholderOR"), data, options);
 }
 
 function generateGraphicPlot(reportPoints,contractPoints,dayText,month,year) {
@@ -184,14 +211,34 @@ function generateGraphicPlot(reportPoints,contractPoints,dayText,month,year) {
         yaxis:{ font: { color: '#ccc' } },
         grid: { hoverable: true, clickable: true, borderWidth: 0 },
         tooltip: true,
-        tooltipOpts: { content: '%x.0/'+month+'/'+year+': R$%y.2',
+        tooltipOpts: { content: 'Day %x.0: R$%y.2',
                        defaultTheme: false, shifts: { x: 0, y: 20 } }
   };
   $.plot($("#placeholderG"), data, options);
-  $("#placeholderG").bind("plotclick", function (event, pos, item) {
-    if (item != null)
-      window.location.replace("/spreadsheet");
-});
+}
+
+function generateRecordPlot(salesPoints, names, dayText) {
+  var data = [];
+  var option_color = [];
+
+  for (var i = 0; i < salesPoints.length; i++) {
+    data.push({ data: salesPoints[i], label: names[i],
+          points: { show: true, radius: 6 },
+          lines: { show: true, fill: true, fillColor: {
+                   colors: [{ opacity: 0.3 }, { opacity: 0.3}] } } });
+    option_color.push(colors[i]);
+  }
+  var options = {
+          colors: option_color,
+          series: { shadowSize: 2 },
+          xaxis:{ font: { color: '#ccc' }, ticks: dayText },
+          yaxis:{ font: { color: '#ccc' } },
+          grid: { hoverable: true, clickable: true, borderWidth: 0 },
+          tooltip: true,
+          tooltipOpts: { content: 'Day %x.0: R$%y.2',
+                         defaultTheme: false, shifts: { x: 0, y: 20 } }
+  };
+  $.plot($("#placeholderR"), data, options);
 }
 
 function stringToMonth(text) {
