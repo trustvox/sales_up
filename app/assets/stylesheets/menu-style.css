@@ -19,6 +19,16 @@
   width: 35px;
 }
 
+.page-title{
+  position: relative;
+  left: 43%;
+}
+
+#monthBox{
+  font-size: 18px;
+  height: auto;
+}
+
 #menu-logo{
 	width: 23%;
 	position: relative;
@@ -38,9 +48,4 @@
 #menu-logout{
 	position: relative;
 	left: 35%;
-}
-
-#monthBox{
-	font-size: 18px;
-	height: auto;
 }

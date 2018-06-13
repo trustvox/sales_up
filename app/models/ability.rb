@@ -12,10 +12,10 @@ class Ability
 
       if user.manager?
         can :destroy, ContractsController
-        can :manager, PageController
+        can :manager, DashboardController
         can :manage, ReportsController
       end
     end
-    can %i[graphic search spreadsheet overview], PageController
+    can %i[monthly_sales search report_sales overview], DashboardController
   end
 end

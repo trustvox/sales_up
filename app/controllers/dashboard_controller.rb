@@ -1,110 +1,128 @@
-class DashboardController < ApplicationController
-  include ContractData
-  include ReportData
-  include ReportPoints
-  include OverviewPoints
+class DashboardController < MonthlyController
+  before_action :init_view_data,
+                only: %i[monthly_sales manager overview_reports
+                         overview_months report_sales]
+  before_action :init_manager_data, only: [:manager]
 
-  layout 'menu'
-  before_action :authenticate_user!
-  before_action :init_overview_search_data, only: [:search_overview_data]
+  before_action :authenticate_user!, only: [:manager]
   skip_before_action :verify_authenticity_token
 
-  def init_search_data
-    @current_report = nil
-    @month_year_list = []
+  include GraphicHelper
 
-    @report_data = []
-    @report_points = '[ '
-
-    @contract_data = []
-    @contract_points = '[ ]'
-  end
-
-  def init_overview_search_data
-    @goal_points = '[ '
-    @sum_points = '[ '
-    @months_between = []
-
-    @first_list = []
-    @last_list = []
-
-    @first_report = nil
-    @last_report = nil
-  end
-
-  def search
-    init_search_data
-    init_current_report
+  def monthly_sales
     init_month_year_list
-    fetch_data_and_points
+    search_sales
+
+    @contract = Contract.new
+    @day_text = day_text_generator
+    @users = fetch_username_by_priority
+
+    @month = ''
+    @year = ''
+    init_month_year
+
+    render_menu
   end
 
-  def init_current_report
-    return @current_report = fetch_last_report if params[:report].nil?
-    @current_report =
-      fetch_report(params[:report][:month], params[:report][:year])
+  def report_sales
+    init_month_year_list
+    search_recods
+
+    @graphic_text = day_text_generator
+
+    render_menu
   end
 
-  def init_month_year_list
-    @month_year_list = all_date_list
-    @month_year_list.delete(@current_report)
-    @month_year_list.unshift(@current_report)
+  def manager
+    @user = User.new
+    @new_users = fetch_user_by_priority(-1)
+
+    render_menu
   end
 
-  def fetch_data_and_points
-    result = fetch_contract_by_report_id(@current_report.id)
+  def overview_months
+    search_overview_months
+    init_overview_options_list
 
-    @days = month_days
-    @days -= 9 if @current_report.month_numb == 12
-
-    fetch_contract_data_points(result) unless result.empty?
-    fetch_report_data_points
+    @month_text = month_text_generator
+    render_menu
   end
 
-  def fetch_contract_data_points(data)
-    start_contract(@contract_data, @contract_points, data)
-    @contract_data = fetch_contract_data
-    @contract_points = fetch_contract_points(@days)
+  def overview_reports
+    search_overview_reports
+
+    init_overview_options_list
+    verify_options unless params[:report].nil?
+
+    @month_text = month_text_generator
+    render_menu
   end
 
-  def fetch_report_data_points
-    start_data(@days, @current_report, @contract_data)
-    @report_data = fetch_report_data
-
-    start_points(@days, @report_data, @report_points)
-    @report_points = fetch_report_points
+  def logout
+    sign_out_and_redirect(current_user)
   end
 
-  def which_page(page_letter)
-    params[:report][:report_name] == page_letter
+  private
+
+  def init_overview_options_list
+    @user_options = [['All Salesman', 'All']] +
+                    fetch_username_by_salesman_priority.collect do |username|
+                      [username, username]
+                    end
+    @filter_options = [['Contract Sum', 'CS'], ['Contracts Closed', 'CC'],
+                       ["Goal's Percentage", 'CP']]
   end
 
-  def start_overview_search
-    return init_overview_data(nil, nil) if params[:report].nil?
-    init_overview_data(params[:report][:month].split('/'),
-                       params[:report][:year].split('/'))
+  def verify_filter
+    @filter_options.each do |op|
+      next unless op[1] == params[:report][:goal]
+      @filter_options.delete(op)
+      @filter_options.unshift(op)
+    end
   end
 
-  def search_overview_data
-    start_overview_search
-    overview_data
-    selection_list
-
-    adjust_list(@last_list, @last_report)
+  def verify_user
+    @user_options.each do |op|
+      next unless op[1] == params[:report][:report_name]
+      @user_options.delete(op)
+      @user_options.unshift(op)
+    end
   end
 
-  def selection_list
-    create_lists(@first_list)
-    create_lists(@last_list)
-    adjust_list(@first_list, @first_report)
+  def verify_options
+    verify_filter
+
+    return if params[:report][:report_name] == 'All'
+    verify_user
   end
 
-  def create_lists(date_list)
-    all_date_list.map { |m| date_list << (m.month + '/' + m.year.to_s) }
+  def init_month_year
+    @month_year = params[:report].nil? ? fetch_default_data : fetch_custom_data
+    list = @month_year.split('/')
+
+    @month = list[0]
+    @year = list[1]
   end
 
-  def adjust_list(date_list, report)
-    date_list.delete(report.month + '/' + report.year.to_s)
-    date_list.unshift(report.month + '/' + report.year.to_s)
+  def fetch_custom_data
+    params[:report][:month] + '/' + params[:report][:year].to_s
+  end
+
+  def init_manager_data
+    authorize! :manager, DashboardController
+    year = params[:report].nil? ? params[:year] : params[:report][:year]
+
+    @spreadsheets = fetch_reports_by_year(year)
+    @unique_years = fetch_report_by_unique_years(year.to_i)
+  rescue CanCan::AccessDenied
+    redirect_to graphic_path
+  end
+
+  def init_view_data
+    @report = Report.new
+  end
+
+  def render_menu
+    render layout: 'menu'
   end
 end
