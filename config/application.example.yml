@@ -1,0 +1,5 @@
+development:
+  link_to_edit: "put development link here"
+
+production:
+  link_to_edit: "put production link here"

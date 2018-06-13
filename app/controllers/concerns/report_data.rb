@@ -12,12 +12,11 @@ module ReportData
     @index = 0
   end
 
-  def start_data(day, report = nil, contract = [])
-    @contract_data = contract
-    fetch_date_values(day, report)
+  def start_data
+    fetch_date_values(@days, @current_report)
 
     @factor = 2
-    @goal = (report.goal / find_business_days).round 2
+    @goal = (@current_report.goal / find_business_days).round 2
     @value = @goal
     @index = 0
   end

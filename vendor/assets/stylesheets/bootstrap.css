@@ -3434,7 +3434,6 @@ tbody.collapse.in {
   z-index: 1000;
   display: none;
   float: left;
-  min-width: 160px;
   padding: 5px 0;
   margin: 2px 0 0;
   font-size: 14px;

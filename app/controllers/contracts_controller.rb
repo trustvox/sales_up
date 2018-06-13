@@ -1,28 +1,28 @@
-class ContractsController < DashboardController
+class ContractsController < ApplicationController
   def create
     contract = Contract.new(contract_params)
     contract.user_id = fetch_id_by_username(params[:username])
     contract.save!
-    redirect_to_spreadsheet(contract.report_id)
+    redirect_to_monthly_sales(contract.report_id)
   end
 
   def update
     contract = Contract.find_by(id: params[:id])
     contract.update(contract_params)
-    redirect_to_spreadsheet(contract.report_id)
+    redirect_to_monthly_sales(contract.report_id)
   end
 
   def destroy
     contract = Contract.find_by(id: params[:id])
     contract.destroy
-    redirect_to_spreadsheet(contract.report_id)
+    redirect_to_monthly_sales(contract.report_id)
   end
 
   private
 
-  def redirect_to_spreadsheet(id)
+  def redirect_to_monthly_sales(id)
     report = fetch_report_by_id(id)
-    redirect_to controller: 'page', action: 'spreadsheet',
+    redirect_to controller: 'dashboard', action: 'monthly_sales',
                 'report[month]' => report.month, 'report[year]' => report.year
   end
 

@@ -1,17 +1,5 @@
-module ContractData
-  def initialize
-    @contract_data = nil
-    @contract_points = nil
-    @search = nil
-
-    @data = nil
-    @wait = false
-    @user_id = 0
-  end
-
-  def start_contract(data, points, searched_contract)
-    @contract_data = data
-    @contract_points = points
+module ContractDataPoints
+  def start_contract(searched_contract)
     @search = searched_contract
 
     @data = { contract_sum: 0, partial_sum: 0, vendor_names: '',
@@ -25,20 +13,20 @@ module ContractData
     @contract_data
   end
 
-  def fetch_contract_points(days_in_month)
+  def fetch_contract_points
     @contract_points = '[ [1,0]'
 
     @contract_data.each do |contract|
       @contract_points += ', [' + contract[0].to_s +
                           ',' + contract[1].to_s + ']'
     end
-    add_last_day(days_in_month) if @contract_data[-1][0] != days_in_month
+    add_last_day if @contract_data[-1][0] != @days
     @contract_points += ' ]'
   end
 
-  def add_last_day(days_in_month)
+  def add_last_day
     @contract_points +=
-      ', [' + days_in_month.to_s + ',' + @contract_data[-1][1].to_s + ']'
+      ', [' + @days.to_s + ',' + @contract_data[-1][1].to_s + ']'
   end
 
   def add_contract
