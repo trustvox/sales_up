@@ -1,29 +1,13 @@
-html
-  head
-    meta charset="utf-8" /
-    title Sales Up - Login
-    = stylesheet_link_tag "application", media: 'all'
-    = javascript_include_tag "application", media: 'all'
-  body
-    .app.app-header-fixed
-      .container.w-xxl.w-auto-xs ng-controller="SigninFormController" ng-init=("app.settings.container = false;")
-        .m-b-lg
-        .text-center
-		  a href="http://site.trustvox.com.br/"
-		    img src="/assets/img/trustvox-login-logo.png" /
-		  h1 Sales Up
-		  h4 Business Performance Manager
-
-          = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
-            .wrapper.text-center
-              strong Please, fill in all the data below
-              h4.text-danger = alert
-            .list-group.list-group-sm
-              .list-group-item
-                = f.email_field :email, autocomplete: "email", placeholder:"Email", required:"", :class => "form-control no-border"
-              .list-group-item
-                = f.password_field :password, placeholder:"Password", required:"", :class => "form-control no-border"
-            = f.submit "Log in", :class => "btn btn-lg btn-primary btn-block", :where => "graphic"
-            .text-center.m-t.m-b
-              = link_to 'Forgot your password?', forgot_password_path
+= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+  .wrapper.text-center
+    strong Please, fill in all the data below
+    h4.text-danger = alert
+  .list-group.list-group-sm
+    .list-group-item
+      = f.email_field :email, autocomplete: "email", placeholder:"Email", required:"", :class => "form-control no-border"
+    .list-group-item
+      = f.password_field :password, placeholder:"Password", required:"", :class => "form-control no-border"
+  = f.submit "Log in", :class => "btn btn-lg btn-primary btn-block"
+  .text-center.m-t.m-b
+    = link_to 'Forgot your password?', forgot_password_path
 

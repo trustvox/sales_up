@@ -1,21 +1,15 @@
 Rails.application.routes.draw do
-  devise_for :users do
-    get '/users/sign_out' => 'devise/sessions#destroy'
-  end
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  devise_for :users
+  resources :reports, :contracts
 
   root to: 'user#user_home'
-  get '/forgot_password', to: 'user#forgot_password', as: 'forgot_password'
+  get '/forgot_password', to: 'user#forgot_password'
 
-  get '/graphic', to: 'home#graphic'
-  get '/spreadsheet', to: 'home#spreadsheet'
-  get '/search', to: 'home#search'
-  get '/logout', to: 'home#logout'
+  get '/graphic', to: 'page#graphic'
+  get '/spreadsheet', to: 'page#spreadsheet'
+  get '/manager', to: 'page#manager'
+  get '/overview', to: 'page#overview'
+  get '/logout', to: 'page#logout'
 
-  get '/manager', to: 'management#manager'
-  post '/view', to: 'management#view'
-  post '/search_spreedsheet', to: 'management#search_spreadsheet'
-  post '/search_contract', to: 'management#search_contract'
-  post '/delete_spreadsheet', to: 'management#delete_spreadsheet'
-  post '/delete_contract', to: 'management#delete_contract'
+  get '/search', to: 'dashboard#search'
 end
