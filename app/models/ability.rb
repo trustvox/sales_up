@@ -9,9 +9,9 @@ class Ability
     if user.above_spectator?
       can :update, ContractsController
       can :create, ContractsController
+      can :destroy, ContractsController
 
       if user.manager?
-        can :destroy, ContractsController
         can :manager, DashboardController
         can :manage, ReportsController
       end

@@ -8,7 +8,7 @@ body onload="generateOverviewRecordPlot(#{@salesman_points}, #{@usernames}, #{@m
           h3.h3.form-group.text-center.m-b
             = "Overview Report"
           .form-inline
-            = simple_form_for @report, method: :get, url: "/overview_reports", html: { class: "form-group" } do |f|
+            = simple_form_for @report, method: :get, url: overview_reports_path, html: { class: "form-group" } do |f|
               h3.h3.form-group.m-r
                 = "Between: "
                 - @first_list.delete(@last_list[0])

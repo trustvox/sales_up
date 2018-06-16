@@ -8,7 +8,7 @@ body onload="generateOverviewPlot(#{@goal_points}, #{@sum_points}, #{@month_text
           h3.h3.form-group.text-center.m-b
             = "Overview Month"
           .form-inline
-            = simple_form_for @report, method: :get, url: "/overview_months", html: { class: "form-group" } do |f|
+            = simple_form_for @report, method: :get, url: overview_months_path, html: { class: "form-group" } do |f|
               h3.h3.form-group.m-r
                 = "Between: "
                 - @first_list.delete(@last_list[0])
@@ -23,7 +23,7 @@ body onload="generateOverviewPlot(#{@goal_points}, #{@sum_points}, #{@month_text
 
         .panel-body style="font-size: 25px; font-weight: bold;"
           div id="placeholderO" style="height:450px;width:1250px;"
-          = simple_form_for @report, method: :get, url: "/monthly_sales", html: { class: "form-group", id: "formSearch" } do |f|
+          = simple_form_for @report, method: :get, url: monthly_sales_path, html: { class: "form-group", id: "formSearch" } do |f|
             = f.input :month, as: :hidden, input_html: { id: "monthSearch", value: "t"}
             = f.input :year, as: :hidden, input_html: { id: "yearSearch", value: "y"}
 

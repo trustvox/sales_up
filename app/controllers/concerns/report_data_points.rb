@@ -1,4 +1,4 @@
-module ReportData
+module ReportDataPoints
   def initialize
     @contract_data = []
 
@@ -28,18 +28,8 @@ module ReportData
   end
 
   def fetch_report_data
-    report_data = []
-    (@first_date..@last_date).each do |date|
-      report_data << verify_data(date)
-    end
-    report_data
+    (@first_date..@last_date).collect { |date| verify_data(date) }
   end
-
-  # ---------------------------------------------------------------------------
-  # ---------------------------------------------------------------------------
-  # -----------------------fetch_report_points_auxilires-----------------------
-  # ---------------------------------------------------------------------------
-  # ---------------------------------------------------------------------------
 
   def verify_data(date)
     (verify_report_values(date) + verify_contract_values(date))
@@ -82,12 +72,9 @@ module ReportData
   end
 
   def find_weekdays
-    list = []
-    (@first_date..@last_date).each do |date|
-      list << int_to_weekday(date) if date.wday < 6 && date.wday >= 1
-      list << int_to_weekend(date) if date.wday == 6 || date.wday.zero?
+    (@first_date..@last_date).collect do |date|
+      date.wday.between?(1, 5) ? int_to_weekday(date) : int_to_weekend(date)
     end
-    list
   end
 
   def int_to_weekday(date)

@@ -1,20 +1,23 @@
 var colors = ["#fccaf9","#9ceaff","#b7ffc2","#d6ccc8", "#d1c1ee",
               "#fdd2ab","#c1d8ff","#ffc1c1","#dbdfe4", "#ffff99"]
 
-
 function validateMyForm() {
   return confirm("Deseja realizar esta ação?");
 }
 
 function verifyPassword() {
   if (document.getElementById('user_password').value !=
-      document.getElementById('user_confirm_password').value){
-    document.getElementById('alertRegister').innerHTML = "Passwords do not match";
+      document.getElementById('user_confirm_password').value)
+  {
+    document.getElementById('alertRegister').innerHTML =
+      "Passwords do not match";
     return false;
   }
   else if (document.getElementById('user_password').value == "" ||
-           document.getElementById('user_confirm_password').value == ""){
-    document.getElementById('alertRegister').innerHTML = "Password fields are empty";
+           document.getElementById('user_confirm_password').value == "")
+  {
+    document.getElementById('alertRegister').innerHTML =
+      "Password fields are empty";
     return false;
   }
   return true;
@@ -66,10 +69,12 @@ function fillData(id, first, second, third, forth) {
                     document.getElementById(id+second),
                     document.getElementById(id+third),
                     document.getElementById(id+forth)];
+
   var query_list = [document.getElementById(id+first+id),
                     document.getElementById(id+second+id),
                     document.getElementById(id+third+id),
                     document.getElementById(id+forth+id)];
+
   for (var i = 0; i < query_list.length; i++)
     query_list[i].value = param_list[i].value
 }
@@ -79,6 +84,7 @@ function sendData(formName, input) {
   {
     var year = document.getElementById("monthBox");
     var text = year.value.split('/');
+
     document.getElementById("monthSelected").value = text[0];
     year[year.selectedIndex].value = text[1];
   }
@@ -125,6 +131,7 @@ function setTextColor(text) {
     result += "<strong style='background-color: "+colors[colorIndex]+"'>"+
               text[i].substring(2, text[i].length).fontcolor("black")+
               "</strong> - ";
+
     if (colorIndex < colors.length)
       colorIndex++;
     else
@@ -151,8 +158,8 @@ function generateOverviewPlot(goalPoints,sumPoints,monthText) {
         tooltip: true,
         tooltipOpts: { content: 'R$%y.2',  defaultTheme: false,
                         shifts: { x: 0, y: 20 } }
-
   };
+
   $.plot($("#placeholderO"), data, options);
   $("#placeholderO").bind("plotclick", function (event, pos, item) {
     if (item != null) {

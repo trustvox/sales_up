@@ -1,7 +1,6 @@
 class MonthlyController < OverviewController
   include ContractDataPoints
-  include ReportData
-  include ReportPoints
+  include ReportDataPoints
   include RecordDataPoints
 
   layout 'menu'
@@ -54,7 +53,7 @@ class MonthlyController < OverviewController
 
   def init_search_sales_data
     @report_data = []
-    @report_points = '[ '
+    @report_points = []
 
     @contract_data = []
     @contract_points = '[ ]'
@@ -85,6 +84,36 @@ class MonthlyController < OverviewController
   def fetch_report_data_points
     start_data
     @report_data = fetch_report_data
-    @report_points = fetch_report_points
+    fetch_report_points
+  end
+
+  def fetch_report_points
+    last_data = nil
+
+    @report_data.map do |data|
+      !@wait_to_sunday ? add_sunday_to_friday(data) : add_friday_to_sunday(data)
+      last_data = data
+    end
+
+    add_data(last_data) if @report_points[-1][0] != last_data[0]
+  end
+
+  def add_first_data(data)
+    @report_points << [data[0].to_i, data[2].to_f]
+    @wait_to_sunday = true if data[1] == 'Friday' || data[1] == 'Saturday'
+  end
+
+  def add_data(data, wait = false)
+    @report_points << [data[0].to_i, data[2].to_f]
+    @wait_to_sunday = wait
+  end
+
+  def add_sunday_to_friday(data)
+    add_first_data(data) if data[0] == '1'
+    add_data(data, true) if data[1] == 'Friday' && data[0] != '1'
+  end
+
+  def add_friday_to_sunday(data)
+    add_data(data) if data[1] == 'Sunday'
   end
 end
