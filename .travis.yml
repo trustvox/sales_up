@@ -1,0 +1,10 @@
+language: ruby
+rvm:
+  - 2.5.1
+
+addons:
+  firefox: "38.0.5" # Set Firefox Version if needed.
+
+script:
+  - bin/rails db:migrate RAILS_ENV=test
+  - bin/rails test
