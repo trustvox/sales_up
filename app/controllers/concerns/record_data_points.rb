@@ -1,56 +1,114 @@
 module RecordDataPoints
-  def initialize
-    @record_data = []
-  end
-
-  def start_record_data
+  def start_record_data(type)
     @last_day = month_days
+    @which = type == 'AM'
   end
 
-  def fetch_record_data
-    fetch_user_by_priority(1).collect do |user|
-      prepare_data(user.id)
+  def fetch_record_data(type)
+    fetch_user_by_individual_goal(@current_report.id).collect do |user|
+      next fetch_empty_data_array(user) if verify_fetched_data(user.id)
 
-      next if @closed_contracts.empty?
-      create_data_array(user.full_name)
+      @which ? prepare_AM_data(user.id) : prepare_SDR_data(user.id)
+      @day_gap = fetch_gap
+
+      create_data_array(user.full_name, user.id)
     end
   end
 
-  def create_data_array(username)
-    [username, @closed_contracts.count, @sum,
-     (@closed_contracts.count.to_f / @unique_days.count.to_f).round(1),
-     ((@sum / @current_report.goal) * 100).round(1), @day_gap]
+  def verify_fetched_data(user_id)
+    return fetch_closed_contracts(user_id, @current_report.id).empty? if @which
+    fetch_scheduled_meeting(user_id, @current_report.id).empty?
   end
 
-  def prepare_data(user_id)
-    @closed_contracts = fetch_closed_contracts(user_id, @current_report.id)
+  def fetch_empty_data_array(user)
+    @which ? [user.full_name, 0, 0, 0, 0, 0] : [user.full_name, 0, 0, 0, 0]
+  end
 
-    return if @closed_contracts.empty?
+  def prepare_AM_data(user_id)
     @sum = fetch_contract_sum(user_id, @current_report.id)
-    @unique_days = fetch_unique_days(user_id, @current_report.id)
-    @day_gap = calculate_delta_gap.sort[-1]
+    @unique_days = fetch_unique_days_contract(user_id, @current_report.id)
+  end
+
+  def prepare_SDR_data(user_id)
+    @sum = fetch_meeting_sum(user_id, @current_report.id)
+    @unique_days = fetch_unique_days_meeting(user_id, @current_report.id)
+  end
+
+  def fetch_gap
+    @gap_index = 0
+    @result = 0
+    @gap_list = calculate_gap
+
+    @gap_list = verify_first_last_days
+    fetch_gap_without_weekend(@gap_list)
+  end
+
+  def verify_first_last_days
+    if @unique_days[0] != 1 && @unique_days[0] - 1 > @result
+      return [1, @unique_days[0]]
+    end
+
+    last_day = fetch_last_day
+    if @unique_days[-1] != last_day && last_day - @unique_days[-1] > @result
+      return [@unique_days[-1], last_day]
+    end
+
+    @gap_list
+  end
+
+  def calculate_gap
+    @unique_days.each_with_index do |day, i|
+      next if i + 1 == @unique_days.length
+      gap = (day - @unique_days[i + 1]).abs - 1
+
+      if gap > @result
+        @gap_index = i
+        @result = gap
+      end
+    end
+
+    [@unique_days[@gap_index] + 1, @unique_days[@gap_index + 1]]
+  end
+
+  def create_data_array(username, user_id)
+    if @which
+      count = fetch_closed_contracts(user_id, @current_report.id).count
+      [username, count, @sum, (count.to_f / find_business_days.to_f).round(1),
+       ((@sum / @current_report.goal) * 100).round(1), @day_gap]
+    else
+      [username, @sum, (@sum.to_f / find_business_days.to_f).round(1),
+       ((@sum / @current_report.goal) * 100).round(1), @day_gap]
+    end
   end
 
   def start_record_points
     @last_day = month_days
   end
 
-  def fetch_record_points
-    fetch_user_by_priority(1).collect do |user|
+  def fetch_record_points(type)
+    fetch_user_by_individual_goal(@current_report.id).collect do |user|
+      next if verify_fetched_points(user.id)
+
       @list = []
       @sum = 0
 
       prepare_points(user.id)
       organize_data(user.id) unless @unique_days.empty?
 
-      @list unless @unique_days.empty?
+      @list
     end
   end
 
-  def prepare_points(user_id)
-    @unique_days = fetch_unique_days(user_id, @current_report.id)
+  def verify_fetched_points(user_id)
+    @unique_days = if @which
+                     fetch_unique_days_contract(user_id, @current_report.id)
+                   else
+                     fetch_unique_days_meeting(user_id, @current_report.id)
+                   end
+    @unique_days.empty?
+  end
 
-    return if @unique_days.empty?
+  def prepare_points(_user_id)
     @last_day = month_days
     @gap = calculate_delta_gap
   end
@@ -66,45 +124,35 @@ module RecordDataPoints
 
     @unique_days.each_with_index do |day, i|
       add_day_sum(day, user_id, true)
-      add_day_sum(day + @gap[i], user_id) if verify_add_day_sum(i)
-    end
-
-    add_day_sum(@last_day, user_id) if verify_last_day
-  end
-
-  def verify_add_day_sum(index)
-    index < @gap.length && @gap[index] != 0
-  end
-
-  def verify_last_day
-    @unique_days[-1] != @last_day
-  end
-
-  def contract_sum_in_day(day, report_id, user_id)
-    fetch_contracts_by_day_report_user_id(day, report_id, user_id).map do |cont|
-      @sum += cont.value.to_f
+      add_day_sum(day + @gap[i], user_id) if i < @gap.length && @gap[i] != 0
     end
   end
 
   def calculate_delta_gap
-    gap_list = []
+    aux = []
+    length = @unique_days.length
 
-    @unique_days.each_with_index { |day, i| add_gap(gap_list, day, i) }
-    finish_search(gap_list)
+    @unique_days.each_with_index { |day, i| add_gap(aux, day, i) if length > 1 }
+    finish_search(aux)
   end
 
-  def add_day_sum(day, user_id, can_sum = false)
-    contract_sum_in_day(day, @current_report.id, user_id) if can_sum
+  def add_day_sum(day, u_id, can = false, r_id = @current_report.id)
+    search_record_points(day, u_id, r_id) if can
     @list << [day, @sum]
   end
 
   def add_gap(list, day, index, length = @unique_days.length)
-    return if length <= 1
     list << (day - @unique_days[index + 1]).abs - 1 if index + 1 < length
   end
 
+  def search_record_points(day, u_id, r_id)
+    return @sum += fetch_meeting_sum(u_id, r_id, day) unless @which
+    fetch_contracts(day, r_id, u_id).map { |con| @sum += con.value.to_f }
+  end
+
   def finish_search(gap_list)
-    gap_list << (@last_day - @unique_days[-1]) if @unique_days[-1] != @last_day
+    last_day = fetch_last_day
+    gap_list << (last_day - @unique_days[-1]) if @unique_days[-1] != last_day
     gap_list.unshift(@unique_days[0] - 2) if @unique_days[0] != 1
 
     gap_list

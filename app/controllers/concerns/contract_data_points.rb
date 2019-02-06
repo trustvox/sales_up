@@ -9,61 +9,39 @@ module ContractDataPoints
   end
 
   def fetch_contract_data
-    search_data
-    @contract_data
+    search_contract_data
   end
 
   def fetch_contract_points
-    @contract_points = '[ [1,0]'
-
-    @contract_data.each do |contract|
-      @contract_points += ', [' + contract[0].to_s +
-                          ',' + contract[1].to_s + ']'
-    end
-    add_last_day if @contract_data[-1][0] != @days
-    @contract_points += ' ]'
+    @contract_points = fetch_contract_points_list
+    @contract_points.unshift([1, 0]) unless @contract_points[0][0] == 1
   end
 
-  def add_last_day
-    @contract_points +=
-      ', [' + @days.to_s + ',' + @contract_data[-1][1].to_s + ']'
-  end
-
-  def add_contract
-    @contract = Contract.new
-    save_contract(params[:day], params[:store_name], params[:value],
-                  params[:username], params[:report])
-  end
-
-  def alter_contract
-    request = params[:contract_data].split('/-/')
-    @contract = Contract.find_by(id: request[0].to_i)
-
-    save_contract(request[1].to_i, request[2], request[3].to_i,
-                  request[4], @contract.report_id)
+  def fetch_contract_points_list
+    @contract_data.collect { |contract| [contract[0].to_i, contract[1].to_f] }
   end
 
   private
 
-  def search_data
+  def search_contract_data
     @search.each_with_index do |info, i|
       @user_id = info.user_id
-      if proceed_search?(i)
-        set_partial_data(info.value, info.store_name)
+      if proceed_contract_search?(i)
+        set_partial_contract_data(info.value, info.store_name)
       elsif @wait
-        add_partial_data(info.day, info.value, info.store_name)
+        add_partial_contract_data(info.day, info.value, info.store_name)
       else
-        add_full_data(info.day, info.store_name, info.value)
+        add_full_contract_data(info.day, info.store_name, info.value)
       end
     end
   end
 
-  def proceed_search?(index)
+  def proceed_contract_search?(index)
     !@search[index + 1].nil? && @search[index].day == @search[index + 1].day
   end
 
-  def add_partial_data(day, value, store_name)
-    set_partial_data(value, store_name)
+  def add_partial_contract_data(day, value, store_name)
+    set_partial_contract_data(value, store_name)
 
     list = [day, @data[:contract_sum], @data[:store_names],
             @data[:partial_sum], @data[:vendor_names]]
@@ -74,43 +52,27 @@ module ContractDataPoints
     @wait = false
   end
 
-  def set_partial_data(contract_sum, store_name)
+  def set_partial_contract_data(contract_sum, store_name)
     @data[:contract_sum] += contract_sum
     @data[:partial_sum] += contract_sum
 
-    @data[:vendor_names] += create_string(fetch_username_by_id(@user_id))
-    @data[:store_names] += create_string(store_name)
+    @data[:vendor_names] +=
+      create_string_for_AM(fetch_username_by_id(@user_id))
+    @data[:store_names] += create_string_for_AM(store_name)
 
     @data[:value] += 1
     @wait = true
   end
 
-  def add_full_data(day, store_name, value)
+  def add_full_contract_data(day, store_name, value)
     @data[:contract_sum] += value
 
-    list = [day, @data[:contract_sum], store_name,
-            value, fetch_username_by_id(@user_id)]
+    list = [day, @data[:contract_sum], '1-' + store_name + '; ',
+            value, '1-' + fetch_username_by_id(@user_id) + '; ']
     @contract_data << list
   end
 
-  def create_string(text)
+  def create_string_for_AM(text)
     @data[:value].to_s + '-' + text + '; '
-  end
-
-  def save_contract(day, store_name, value, username, report_id)
-    fetch_contract_values(day, store_name, value, username, report_id)
-    @contract.save! if @contract.changed?
-  end
-
-  def fetch_contract_values(day, store_name, value, username, report_id)
-    @contract.day = day
-    @contract.store_name = store_name
-    @contract.value = value
-    @contract.user_id = fetch_user_by_full_name(username)
-    @contract.report_id = report_id
-  end
-
-  def fetch_user_by_full_name(full_name)
-    User.where(full_name: full_name)[0].id
   end
 end

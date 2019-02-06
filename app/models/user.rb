@@ -7,26 +7,42 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable
 
   def admin?
-    priority == 3
+    sub_area == 'admin'
   end
 
   def manager?
-    priority == 2
+    sub_area == 'GG'
+  end
+
+  def overall_manager?
+    area == 'GG'
   end
 
   def regular?
     priority == 1
   end
 
+  def sales?
+    area == 'sales'
+  end
+
+  def AM?
+    sub_area == 'AM'
+  end
+
+  def SDR?
+    sub_area == 'SDR'
+  end
+
   def spectator?
-    priority.zero?
+    sub_area == 'spec'
   end
 
-  def above_spectator?
-    priority.positive?
+  def FN?
+    sub_area == 'FN'
   end
 
-  def new_user?
-    priority.negative?
+  def RA?
+    sub_area == 'RA'
   end
 end

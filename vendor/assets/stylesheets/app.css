@@ -1,4 +1,4 @@
-/* 
+/*
 
 */
 
@@ -765,7 +765,7 @@ body {
 .app-content-body {
   float: left;
   width: 100%;
-  padding-bottom: 50px;
+  padding-bottom: 0px;
 }
 
 .app-footer {

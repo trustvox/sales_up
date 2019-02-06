@@ -2,10 +2,26 @@ class ApplicationController < ActionController::Base
   include DatabaseSearchs
   helper DatabaseSearchs
 
+  before_action do
+    I18n.locale = params[:locale] || I18n.default_locale
+    @notice = params[:notice].nil? ? [[]] : params[:notice]
+  end
+
   protect_from_forgery with: :exception
   before_action :configure_permitted_parameters, if: :devise_controller?
 
   protected
+
+  def verify_authorization(simbol, class_name)
+    authorize! simbol, class_name
+  rescue CanCan::AccessDenied
+    redirect_to overview_months_AM_path
+  end
+
+  def render_menu(type)
+    @partial_path = '/partials/menu_' + type
+    render layout: 'menu'
+  end
 
   def json_maker(user_email, email_subject, email_content)
     { email: user_email, subject: email_subject, content: email_content }
@@ -13,20 +29,15 @@ class ApplicationController < ActionController::Base
 
   def after_sign_in_path_for(resource)
     if user_signed_in?
-      stored_location_for(resource) || overview_months_path
+      stored_location_for(resource) ||
+      resource.SDR? ? monthly_schedules_path : monthly_sales_path
     else
       root_path
     end
   end
 
   def authenticate_user!
-    if user_signed_in?
-      if current_user.new_user?
-        sign_out_and_redirect(current_user)
-      else
-        super
-      end
-    else
+    unless user_signed_in?
       redirect_to root_path, alert: 'You must sign in first'
       ## if you want render 404 page
       ## render :file => File.join(Rails.root, 'public/404'),

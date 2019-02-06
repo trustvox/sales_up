@@ -1,0 +1,350 @@
+pt:
+  home:
+    title: "Sales Up"
+    sub: "Gerenciador de Desempenho Comercial"
+    zapier-success: "Email enviado com sucesso"
+    zapier-invalid: "Falha ao enviar email"
+    zapier-content: "Link para editar a senha"
+    signin:
+      title: "Acessar conta"
+      request: "Por favor, preencha todos os dados abaixo"
+      button: "Entrar"
+    signup:
+      title: "Você não possui uma conta?"
+      button: "Crie uma aqui"
+    password:
+      placeholder: "Senha"
+      button: "Esqueceu sua senha?"
+
+  forgot-password:
+    title: "Coloque seu email para resetar sua senha"
+    link-back: "Lembrei na minha senha"
+    forgot:
+      button: "Enviar"
+
+  edit-password:
+    title: "Troque sua senha"
+    sub: "Coloque sua nova senha"
+    edit:
+      password-placeholder: "Nova senha"
+      conf-password-placeholder: "Confirmar nova senha"
+      button: "Enviar"
+
+  overview:
+    between: "Entre: "
+    and: "E: "
+    compare: "Compare: "
+    with: "Com: "
+    button: "Procurar"
+    AM:
+      all: "Todos os AMs"
+      cs: "Soma dos contratos"
+      cc: "Contratos Fechados"
+      cp: "Percentual sobre a meta"
+    SDR:
+      all: "Todos os SDRs"
+      ms: "Soma das reuniões"
+      mp: "Percentual sobre a meta"
+
+  spreadsheets:
+    report_name: "Nome: "
+    report_goal: "Meta: "
+    report_meeting: " Reuniões"
+    contract:
+      title:
+        main: "Novo Contrato"
+        store_name: "Nome da loja"
+        value: "Valor"
+        month_year_range: "Mês/Ano"
+        first: "Nome do primeiro AM"
+        second: "Nome do segundo AM"
+        percentage: "Percentual(%)"
+        none: "Ninguém"
+        day: "Dia"
+        placeholder: "Novo nome da loja"
+      button:
+        contract: "Contrato"
+        save: "Salvar"
+        close: "Fechar"
+    meeting:
+      title:
+        main: "Nova Reunião"
+        client_name: "Nome do cliente"
+        scheduled_for: "Data da reunião"
+        day: "Dia"
+        month_year_range: "Mês/Ano"
+        SDR_name: "Nome do SDR"
+        AM: "Agendado para"
+        placeholder: "Novo nome do cliente"
+      button:
+        meeting: "Reunião"
+        save: "Salvar"
+        close: "Fechar"
+    spreadsheet:
+      title:
+        AM:
+          day: "Dia"
+          weekday: "Dia de semana"
+          daily_goal: "Meta Diária"
+          contract_sum: "Soma dos Contratos"
+          store_name: "Nome do cliente fechado"
+          contract_value: "Valor dos Contratos"
+          AM: "Nome do AM"
+          observation: "Observação: "
+        SDR:
+          day: "Dia"
+          weekday: "Dia de semana"
+          daily_goal: "Meta Diária"
+          meeting_sum: "Soma das reuniões"
+          client_name: "Nome do cliente"
+          meeting_qtd: "Reuniões marcadas"
+          scheduled_for: "Data da reunião"
+          AM: "Agendado para"
+          SDR_name: "Nome do SDR"
+          meeting: " reunião"
+          meetings: " reuniões"
+        option: "Opções"
+        observation: "Observação: "
+    edit:
+      title:
+        AM:
+          main: "Editar Contrato"
+          day: "Dia"
+          store: "Nome da loja"
+          value: "Valor"
+          AM: "Nome do AM"
+          option: "Opções"
+        SDR:
+          main: "Editar Reunião"
+          day: "Dia"
+          store: "Nome do cliente"
+          scheduled: "Data da reunião"
+          meeting: "Agendado para"
+          SDR: "Nome do SDR"
+          option: "Opções"
+      button:
+        enter: "Editar"
+        save: "Salvar"
+        delete: "Excluir"
+        back: "Voltar"
+
+  report:
+    report_name: "Nome: "
+    report_goal: "Meta: "
+    title:
+      AM: "Nome do AM"
+      SDR: "Nome do SDR"
+      closed_contracts: "Contratos Fechados"
+      contract_sum: "Soma dos Contratos"
+      scheduled_sum: "Reuniões Agendadas"
+      closed_per_day: "Fechamentos por dia ativo"
+      scheduled_per_day: "Agendamentos por dia ativo"
+      goal_percentage: "Percentual sobre a meta"
+      inactive_days: "Máx. dias inativos"
+      observation: "Observação"
+      option: "Opções"
+      none: "Nenhuma"
+      whole: "Mês Inteiro"
+    button:
+      edit: "Editar"
+      create: "Criar"
+      save: "Salvar"
+      close: "Fechar"
+    placeholder:
+      closed: "fechado(s)"
+      scheduled: "agendado(s)"
+      days: "dia(s)"
+
+  manager:
+    table_spreadsheet:
+      title:
+        main: "Gerenciador de Planilhas do "
+        name: "Nome da Planilha"
+        goal: "Meta"
+        month_year_range: "Mês/Ano"
+        observation: "Observação"
+        option: "Opções"
+        none: "Nenhuma"
+      button:
+        add: "Criar Obs"
+        view: "Exibir"
+        edit: "Editar"
+        delete: "Excluir"
+        save: "Salvar"
+        close: "Fechar"
+    new_spreadsheet:
+      title:
+        main: "Nova Planilha"
+        name: "Nome da Planilha"
+        goal: "Meta"
+        scheduled_raise: "Reuniões por dia"
+        month: "Mês"
+        year: "Ano"
+        observation: "Observação"
+        placeholder:
+          name: "Novo nome da planilha"
+          observation: "Coloque sua observação aqui"
+      button:
+        create: "Planilha"
+        save: "Salvar Alterações"
+        close: "Fechar"
+    new_user:
+      title:
+        main: "Novos usuários registrados"
+        name: "Nome Completo"
+        email: "Email"
+        permission: "Permissão"
+        area: "Área"
+        option: "Opções"
+      permission_options:
+        spector: "Espectador"
+        normal: "Normal"
+        manager: "Gerente"
+        AM: "AM"
+        SDR: "SDR"
+        all: "Todas"
+      button:
+        allow: "Permitir"
+        deny: "Negar"
+
+  menu:
+    currency: "R"
+    report_AM: "Desempenho dos AMs"
+    report_SDR: "Desempenho dos SDRs"
+    monthly_sales: "Desempenho mensal"
+    monthly_schedules: "Desempenho mensal"
+    overview_reports_AM: "Gráfico geral dos AMs"
+    overview_reports_SDR: "Gráfico geral dos SDRs"
+    overview_months_AM: "Gráfico geral das metas de AM"
+    overview_months_SDR: "Gráfico geral das metas de SDR"
+    manager_settings: "Configuração"
+    sales_side: "Comercial"
+    AM_side: "AM"
+    SDR_side: "SDR"
+    spreadsheet:
+      Sunday: "Domingo"
+      Monday: "Segunda"
+      Tuesday: "Terça"
+      Wednesday: "Quarta"
+      Thursday: "Quinta"
+      Friday: "Sexta"
+      Saturday: "Sabado"
+    search:
+      January: "Janeiro"
+      February: "Fevereiro"
+      March: "Março"
+      April: "Abril"
+      May: "Maio"
+      June: "Junho"
+      July: "Julho"
+      August: "Agosto"
+      September: "Setembro"
+      October: "Outubro"
+      November: "Novembro"
+      December: "Dezembro"
+    button:
+      overview:
+        title: "Gráficos"
+        month: "Metas"
+        report_c: "AMs"
+        report_h: "SDR"
+      monthly:
+        title: "Desempenho"
+        sales: "Mensal"
+        report_c: "AMs"
+        report_h: "SDR"
+      commission: "Comissão"
+      settings: "Opções"
+      logout: "Sair"
+
+  graphic:
+    currency: "R$"
+    contract: "Contrato(s)"
+    meeting: "Reunião(ões)"
+
+  date:
+    abbr_day_names:
+    - Dom
+    - Seg
+    - Ter
+    - Qua
+    - Qui
+    - Sex
+    - Sáb
+    abbr_month_names:
+    -
+    - Jan
+    - Fev
+    - Mar
+    - Abr
+    - Mai
+    - Jun
+    - Jul
+    - Ago
+    - Set
+    - Out
+    - Nov
+    - Dez
+    day_names:
+    - Domingo
+    - Segunda-feira
+    - Terça-feira
+    - Quarta-feira
+    - Quinta-feira
+    - Sexta-feira
+    - Sábado
+    formats:
+      default: "%d/%m/%Y"
+      long: "%d de %B de %Y"
+      short: "%d de %B"
+    month_names:
+    -
+    - Janeiro
+    - Fevereiro
+    - Março
+    - Abril
+    - Maio
+    - Junho
+    - Julho
+    - Agosto
+    - Setembro
+    - Outubro
+    - Novembro
+    - Dezembro
+    order:
+    - :day
+    - :month
+    - :year
+  activerecord:
+    errors:
+      models:
+        report:
+          attributes:
+            report_name:
+              blank: "Nome da Planilha não pode estar em branco"
+            goal:
+              blank: "Meta não pode estar em branco"
+              not_a_number: "Meta deve ser um número"
+            month:
+              blank: "Mês não pode estar em branco"
+            month_numb:
+              inclusion: "Número do mês não existe"
+        contract:
+          attributes:
+            store_name:
+              blank: "Nome do Cliente não pode estar em branco"
+            value:
+              blank: "Valor do Contrato não pode estar em branco"
+              not_a_number: "Valor do Contrato deve ser um número"
+            day:
+              blank: "Dia não pode estar em branco"
+              not_a_number: "Dia deve ser um número"
+        meeting:
+          attributes:
+            client_name:
+              blank: "Nome do Cliente não pode estar em branco"
+            day:
+              blank: "Dia não pode estar em branco"
+              not_a_number: "Dia deve ser um número"
+            scheduled_for:
+              blank: "Data da Reunião não pode estar em branco"
