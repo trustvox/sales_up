@@ -1,33 +1,259 @@
-# Files in the config/locales directory are used for internationalization
-# and are automatically loaded by Rails. If you want to use locales other
-# than English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t 'hello'
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t('hello') %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# The following keys must be escaped otherwise they will not be retrieved by
-# the default I18n backend:
-#
-# true, false, on, off, yes, no
-#
-# Instead, surround them with single quotes.
-#
-# en:
-#   'true': 'foo'
-#
-# To learn more, please read the Rails Internationalization guide
-# available at http://guides.rubyonrails.org/i18n.html.
-
 en:
-  hello: "Hello world"
+  home:
+    title: "Sales Up"
+    sub: "Business Performance Manager"
+    zapier-success: "Email successfully sent"
+    zapier-invalid: "Failed to send email"
+    zapier-content: "Edit password link"
+    signin:
+      title: "Sign In"
+      request: "Please, fill in all the data below"
+      button: "Log in"
+    signup:
+      title: "You don't have an account?"
+      button: "Create one here"
+    password:
+      placeholder: "Password"
+      button: "Forgot your password?"
+
+  forgot-password:
+    title: "Enter your email to reset your password"
+    link-back: "I remember my password"
+    forgot:
+      button: "Send"
+
+  edit-password:
+    title: "Edit your password"
+    sub: "Enter your new password"
+    edit:
+      password-placeholder: "New Password"
+      conf-password-placeholder: "Confirm New Password"
+      button: "Send"
+
+  overview:
+    between: "Between: "
+    and: "And: "
+    compare: "Compare: "
+    with: "With: "
+    button: "Search"
+    AM:
+      all: "All AMs"
+      cs: "Contract Sum"
+      cc: "Contracts Closed"
+      cp: "Goal's Percentage"
+    SDR:
+      all: "All AMs"
+      ms: "Meeting Sum"
+      mp: "Goal's Percentage"
+
+  spreadsheets:
+    report_name: "Name: "
+    report_goal: "Goal: "
+    report_meeting: " Meetings"
+    contract:
+      title:
+        main: "New Contract"
+        store_name: "Store name"
+        value: "Value"
+        month_year_range: "Month/Year"
+        first: "First AM's Name"
+        second: "Second AM's Name"
+        percentage: "Percentage(%)"
+        none: "Nobody"
+        day: "Day"
+        placeholder: "New store name"
+      button:
+        contract: "Contract"
+        save: "Save changes"
+        close: "Close"
+    meeting:
+      title:
+        main: "New Meeting"
+        client_name: "Client Name"
+        scheduled_for: "Scheduled for"
+        day: "Day"
+        month_year_range: "Month/Year"
+        SDR_name: "SDR name"
+        AM: "Meeting for"
+        placeholder: "New client name"
+      button:
+        meeting: "Meeting"
+        save: "Save changes"
+        close: "Close"
+    spreadsheet:
+      title:
+        AM:
+          day: "Day"
+          weekday: "Weekdays"
+          daily_goal: "Daily Goal"
+          contract_sum: "Contract Sum"
+          store_name: "Store Name"
+          contract_value: "Contract Values"
+          AM: "AM"
+        SDR:
+          day: "Day"
+          weekday: "Weekdays"
+          daily_goal: "Daily Goal"
+          meeting_sum: "Meeting Sum"
+          client_name: "Client Name"
+          meeting_qtd: "Scheduled Meetings"
+          scheduled_for: "Scheduled for"
+          AM: "Meeting for"
+          SDR_name: "SDR Name"
+          meeting: " meeting"
+          meetings: " meetings"
+        option: "Options"
+        observation: "Observation: "
+    edit:
+      title:
+        AM:
+          main: "Edit Contract"
+          day: "Day"
+          store: "Store Name"
+          value: "Value"
+          AM: "AM"
+          option: "Options"
+        SDR:
+          main: "Edit Meeting"
+          day: "Day"
+          store: "Client Name"
+          scheduled: "Scheduled for"
+          meeting: "Meeting for"
+          SDR: "SDR name"
+          option: "Options"
+      button:
+        enter: "Edit"
+        save: "Save"
+        delete: "Delete"
+        back: "Back"
+
+  report:
+    report_name: "Name: "
+    report_goal: "Goal: "
+    title:
+      AM: "AM"
+      closed_contracts: "Contracts Closed"
+      contract_sum: "Contract Sum"
+      scheduled_sum: "Scheduled Meetings"
+      closed_per_day: "Closed Per Active Day"
+      scheduled_per_day: "Scheduled Per Active Day"
+      goal_percentage: "Goal's Percentage"
+      inactive_days: "Most Inactive Days"
+      observation: "Observation"
+      option: "Options"
+      none: "None"
+      whole: "Whole Month"
+    button:
+      edit: "Edit"
+      create: "Create"
+      save: "Save"
+      close: "Close"
+    placeholder:
+      closed: "closed"
+      scheduled: "scheduled(s)"
+      days: "day(s)"
+
+  manager:
+    table_spreadsheet:
+      title:
+        main: "Spreadsheet Manager for "
+        name: "Spreadsheet Name"
+        goal: "Goal"
+        month_year_range: "Month/Year"
+        observation: "Observation"
+        option: "Options"
+        none: "None"
+      button:
+        add: "Add Obs"
+        view: "View"
+        edit: "Edit"
+        delete: "Delete"
+        save: "Save"
+        close: "Close"
+    new_spreadsheet:
+      title:
+        main: "New Spreadsheet"
+        name: "Spreadsheet name"
+        goal: "Goal"
+        month: "Month"
+        year: "Year"
+        observation: "Observation"
+        placeholder:
+          name: "New spreadsheet name"
+          observation: "Put your observation here"
+      button:
+        create: "Spreadsheet"
+        save: "Save changes"
+        close: "Close"
+    new_user:
+      title:
+        main: "New Registered Users"
+        name: "Full name"
+        email: "Email"
+        permission: "Permission"
+        area: "Area"
+        option: "Options"
+      permission_options:
+        spector: "Spector"
+        normal: "Normal"
+        manager: "Manager"
+        AM: "AM"
+        SDR: "SDR"
+        all: "All"
+      button:
+        allow: "Allow"
+        deny: "Deny"
+
+  menu:
+    currency: ""
+    report_AM: "AM Report"
+    report_SDR: "SDR Report"
+    monthly_sales: "Monthly Sales"
+    monthly_schedules: "Monthly Schedules"
+    overview_reports_AM: "Overview Report from AM"
+    overview_reports_SDR: "Overview Report from SDR"
+    overview_months: "Overview Month"
+    manager_settings: "Manager Settings"
+    sales_side: "Sales"
+    AM_side: "AM"
+    SDR_side: "SDR"
+    spreadsheet:
+      Sunday: "Sunday"
+      Monday: "Monday"
+      Tuesday: "Tuesday"
+      Wednesday: "Wednesday"
+      Thursday: "Thursday"
+      Friday: "Friday"
+      Saturday: "Saturday"
+    search:
+      January: "January"
+      February: "February"
+      March: "March"
+      April: "April"
+      May: "May"
+      June: "June"
+      July: "July"
+      August: "August"
+      September: "September"
+      October: "October"
+      November: "November"
+      December: "December"
+    button:
+      overview:
+        title: "Overview"
+        month: "Months"
+        report_c: "AMs"
+        report_h: "SDR"
+      monthly:
+        title: "Monthly"
+        sales: "Sales"
+        report_c: "AMs"
+        report_h: "SDR"
+      commission: "Commission"
+      settings: "Settings"
+      logout: "Logout"
+
+  graphic:
+    currency: "$"
+    contract: "Contract(s)"
+    meeting: "Meeting(s)"
