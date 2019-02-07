@@ -1,0 +1,147 @@
+head
+  title Sales Up - Management
+body
+  .row.wrapper-md style="margin-top: -30px"
+    -@spreadsheets.each_with_index do |report_list, j|
+      -@users = fetch_user_by_sub_area(report_list[0])
+      .panel.panel-default
+        div.panel-default.panel-heading.form-inline
+          h2.h2.font-thin.form-group = t('manager.table_spreadsheet.title.main') + t('menu.' + report_list[0] + '_side')
+          = simple_form_for @report, method: :get, url: manager_path, html: { class: "form-group m-l-xl", id: "formSelectBoxYear" } do |f|
+            = f.input :side, as: :hidden, input_html: { value: @page_title[2] }
+            = f.input :type, as: :hidden, input_html: { value: report_list[0] }
+            = f.input :years, as: :hidden, input_html: { value: "" }
+            = f.input :year, label: false, :collection => @unique_years[j], :prompt => "Year", input_html: { class: "form-control", id: "monthBox",  :onchange => "sendData('formSelectBoxYear', 1, #{@spreadsheets.length})", name: j.to_s + "_year"}
+          - if !@notice[0].blank? && report_list[0] == @notice[-1][0]
+            button.btn.btn-primary.btn-addon.btn-danger.btn-lg.margin.form-group.m-l-md data-target="#exampleModal#{j}n" data-toggle="modal" type="button"
+              i.fa.fa-plus
+              | #{t('manager.new_spreadsheet.button.create') + " " + t('menu.' + report_list[0] + '_side')}
+          -else
+            button.btn.btn-primary.btn-addon.btn-lg.margin.form-group.m-l-md data-target="#exampleModal#{j}n" data-toggle="modal" type="button"
+              i.fa.fa-plus
+              | #{t('manager.new_spreadsheet.button.create') + " " + t('menu.' + report_list[0] + '_side')}
+          .modal.fade id="exampleModal#{j}n" aria-hidden="true" aria-labelledby="exampleModalLabel" role="dialog" tabindex="-1"
+            .modal-dialog role="document" style="width: 470px;"
+              .modal-content
+                .modal-header.form-inline
+                  h3.h3.modal-title.form-group = t('manager.new_spreadsheet.title.main')
+                  button.close.form-group aria-label="Close" data-dismiss="modal" type="button" onclick="cleanDataSpreadsheet('#{fetch_last_year}')"
+                    span aria-hidden="true"
+                    | &times;
+                = simple_form_for @report, method: :post, url: reports_path, default: { input_html: { class: "form-control" } } do |f|
+                  .modal-body
+                    - if report_list[0] == @notice[-1][0]
+                      .form-inline.m-b
+                        - @notice.each do |msg_list|
+                          - msg_list.each do |msg|
+                            h4.h4.text-danger = msg if msg != @notice[-1][0]
+                    .form-inline.m-b
+                      h4.h4 = t('manager.new_spreadsheet.title.name')
+                      = f.input :report_name, label: false, input_html: { style: "width:420px;", placeholder: t('manager.new_spreadsheet.title.placeholder.name'), id: "report_name_n" }
+                    .form-inline.m-b
+                      - @users += fetch_user_by_sub_area('AM') if report_list[0] == 'SDR'
+                      - @users.each_with_index do |user, k|
+                        .form-group
+                          h4.h4 = user.full_name
+                          = f.input user.id.to_s, as: :string, label: false, input_html: { value: report_list[0] == 'AM' ? "4500" : "3", id: 'goal'+k.to_s, style: "width: 130px", class: "m-r"}
+                    .form-inline.m-b
+                      .form-group
+                        h4.h4 = t('manager.new_spreadsheet.title.month')
+                        = f.input :month_numb, label: false, :collection => (1..12).map { |m| [ t('menu.search.' + Date::MONTHNAMES[m]), m] }, input_html: { id: "month_n" }, prompt: false
+                      .form-group.m-l
+                        h4.h4 = t('manager.new_spreadsheet.title.year')
+                        = f.input :year, as: :integer, label: false, input_html: { min: "2010", max: @unique_years[0], id: "year_n", style: "width:120px;", value: fetch_last_year }
+                    .form-inline
+                      .form-group
+                        h4.h4 = t('manager.new_spreadsheet.title.observation')
+                        = f.input :observation, as: :string, label: false, input_html: { id: "obs_n", style: "width:420px;", value: "", placeholder: t('manager.new_spreadsheet.title.placeholder.observation') }
+                        = f.input :goal_type, as: :hidden, label: false, input_html: { value: report_list[0] }
+                        = f.input :side, as: :hidden, input_html: { value: @page_title[2] }
+                  .modal-footer
+                    = f.button :submit, t('manager.new_spreadsheet.button.save'), class: "btn btn-primary"
+                    = f.button :button, t('manager.new_spreadsheet.button.close'), class: "btn btn-danger", :'data-dismiss' => "modal", :onclick => "cleanDataSpreadsheet('#{fetch_last_year}'')"
+
+        table.table.table-bordered.table-hover.table-condensed.bg-white-only
+          tbody
+            tr style=("font-weight: bold;")
+              td style="width:20%" = t('manager.table_spreadsheet.title.name')
+              td style="width:10%" = t('manager.table_spreadsheet.title.goal')
+              - if report_list[0] == 'SDR'
+                td style="width:13%" = "Reunioes por dia"
+              td style="width:20%" = t('manager.table_spreadsheet.title.month_year_range')
+              td style="width:15%" = t('manager.table_spreadsheet.title.observation')
+              td style="width:25%" = t('manager.table_spreadsheet.title.option')
+            -report_list.each_with_index do |report, i|
+              - next if i == 0
+              tr
+                td.v-middle
+                  label id="#{report.id}l_report_name" = report['report_name']
+                td.v-middle
+                  label id="#{report.id}l_goal" = (report_list[0] == 'SDR' ? report['goal'].to_i.to_s + t('spreadsheets.spreadsheet.title.SDR.meetings') : t('menu.currency') + number_to_currency(report['goal']).to_s)
+                - if report_list[0] == 'SDR'
+                  td.v-middle
+                    label id="#{report.id}l_scheduled_raise" = report['scheduled_raise'].to_s + t('spreadsheets.spreadsheet.title.SDR.meetings')
+                td.v-middle
+                  label id="#{report.id}l_month_year" = t('menu.search.' + report['month']) + "/" + report['year'].to_s
+                td.v-middle
+                  - obs = t('manager.table_spreadsheet.title.none')
+                  - unless report.observation.nil? || report.observation == ""
+                    - obs = report.observation
+                  label id="#{report.id}l_obs" = obs
+                td
+                  div.form-inline id="#{report.id}divR1"
+                    = simple_form_for @report, method: :get, url: (report_list[0] == 'SDR' ? monthly_schedules_path : monthly_sales_path), html: { class: "form-group" } do |f|
+                      = f.input :month, as: :hidden, input_html: { value: "#{report.month}" }
+                      = f.input :year, as: :hidden, input_html: { value: "#{report.year}" }
+                      = f.input :report_name, as: :hidden, input_html: { value: "g" }
+                      = f.button :submit, t('manager.table_spreadsheet.button.view'), class: "btn btn-info"
+
+                    button.btn.btn-info.m-l id="#{report.id}editR" data-target="#exampleModal#{report.id}e" data-toggle="modal" = t('manager.table_spreadsheet.button.edit')
+
+                    .modal.fade id="exampleModal#{report.id}e" aria-hidden="true" aria-labelledby="exampleModalLabel" role="dialog" tabindex="-1"
+                      .modal-dialog role="document" style="width: 830px;"
+                        .modal-content
+                          .modal-header.form-inline
+                            h3.h3.modal-title.form-group Editar Planilha
+                            button.close.form-group aria-label="Close" data-dismiss="modal" type="button"
+                              span aria-hidden="true"
+                              | &times;
+                          = simple_form_for @report, method: :put, url: reports_path+"/"+report.id.to_s, default: { input_html: { class: "form-control" } } do |f|
+                            .modal-body
+                              table.table.table-bordered.table-hover.table-condensed.bg-white-only
+                                tbody
+                                  tr style=("font-weight: bold;")
+                                    td style="width:20%" = t('manager.table_spreadsheet.title.name')
+                                    td style="width:20%" = t('manager.table_spreadsheet.title.month_year_range')
+                                    td style="width:15%" = t('manager.table_spreadsheet.title.observation')
+                                    td style="width:25%" = t('manager.table_spreadsheet.title.option')
+                                  tr
+                                    td.v-middle
+                                      = f.input :report_name, label: false, input_html: { style: "width:270px;font-size: 16px", value: report['report_name'] }
+                                    td.v-middle
+                                      = f.input :month_numb, label: false, input_html: { style: "width:60px;font-size: 16px", class: "m-r-xs", value: report['month_numb'] }
+                                      = f.input :year, label: false, input_html: { style: "width:80px;font-size: 16px", value: report['year'] }
+                                    td.v-middle
+                                      = f.input :observation, label: false, input_html: { style: "width:200px;font-size: 16px", value: report['observation'] }
+                                      = f.input :side, as: :hidden, input_html: { value: @page_title[2] }
+                                      = f.input :goal_type, as: :hidden, label: false, input_html: { value: report_list[0] }
+                                    td.v-middle
+                                      = f.button :submit, t('spreadsheets.edit.button.save'), class: "btn btn-success form-group"
+                                tbody
+                                  tr style=("font-weight: bold;")
+                                    td style="width:20%" = t('manager.new_user.title.name')
+                                    td style="width:20%" = t('manager.table_spreadsheet.title.goal')
+                                  - goals = fetch_individual_goal_by_id(report.id)
+                                  - goals.each_with_index do |user, k|
+                                    - next if k.odd?
+                                    tr
+                                      td.v-middle
+                                        label = user
+                                      td.v-middle
+                                        = f.input fetch_id_by_username(user).to_s, as: :string, label: false, input_html: { value: goals[k+1], id: 'goal'+k.to_s, style: "width: 130px;font-size: 16px", class: "m-r"}
+                            .modal-footer
+                              button.btn.btn-info data-dismiss="modal" type="button" = t('spreadsheets.edit.button.back')
+
+                    = simple_form_for @report, method: :delete, url: reports_path+"/"+report.id.to_s, html: { class: "form-group", :onsubmit => "if(!validateMyForm()){event.preventDefault();}" } do |f|
+                      = f.input :side, as: :hidden, input_html: { value: @page_title[2] }
+                      = f.button :submit, t('manager.table_spreadsheet.button.delete'), class: "btn btn-danger m-l"

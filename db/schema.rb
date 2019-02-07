@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180524202301) do
+ActiveRecord::Schema.define(version: 20190205171951) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,28 @@ ActiveRecord::Schema.define(version: 20180524202301) do
     t.index ["user_id"], name: "index_contracts_on_user_id"
   end
 
+  create_table "meetings", force: :cascade do |t|
+    t.integer "day", default: 0, null: false
+    t.string "client_name", default: "", null: false
+    t.datetime "scheduled_for"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "report_id"
+    t.bigint "user_id"
+    t.string "meeting_for", default: ""
+    t.index ["report_id"], name: "index_meetings_on_report_id"
+    t.index ["user_id"], name: "index_meetings_on_user_id"
+  end
+
+  create_table "report_observations", force: :cascade do |t|
+    t.string "observation"
+    t.string "part_number"
+    t.bigint "user_id"
+    t.bigint "report_id"
+    t.index ["report_id"], name: "index_report_observations_on_report_id"
+    t.index ["user_id"], name: "index_report_observations_on_user_id"
+  end
+
   create_table "reports", force: :cascade do |t|
     t.string "report_name", default: "", null: false
     t.decimal "goal", default: "0.0", null: false
@@ -35,6 +57,10 @@ ActiveRecord::Schema.define(version: 20180524202301) do
     t.integer "month_numb", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "observation", default: ""
+    t.string "goal_type", default: ""
+    t.float "scheduled_raise", default: 0.0
+    t.string "individual_goal", default: ""
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -65,7 +91,8 @@ ActiveRecord::Schema.define(version: 20180524202301) do
     t.datetime "last_sign_in_at"
     t.inet "current_sign_in_ip"
     t.inet "last_sign_in_ip"
-    t.integer "priority", default: 0
+    t.string "area", default: ""
+    t.string "sub_area", default: ""
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
