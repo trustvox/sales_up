@@ -1,50 +1,58 @@
 module ReportSearchs
-  def fetch_last_report
-    Report.where(month_numb: fetch_last_month, year: fetch_last_year)[0]
+  RANGE_MONTHS = 12
+
+  def fetch_last_report(type)
+    Report.where(month_numb: fetch_last_month(type),
+                 year: fetch_last_year_with_type(type), goal_type: type)[0]
   end
 
   def fetch_last_year
     Report.distinct.order('year').pluck(:year)[-1]
   end
 
-  def fetch_last_month
-    Report.distinct.where(year: Time.current.year)
-          .order('month_numb').pluck(:month_numb)[-1]
+  def fetch_last_year_with_type(type)
+    Report.distinct.where(goal_type: type).order('year').pluck(:year)[-1]
   end
 
-  def fetch_report(month, year)
-    Report.where(month: month, year: year.to_i)[0]
+  def fetch_last_month(type)
+    Report.distinct.where(year: fetch_last_year_with_type(type),
+                          goal_type: type).order('month_numb')
+          .pluck(:month_numb)[-1]
+  end
+
+  def fetch_report(month, year, type)
+    Report.where(month: month, year: year.to_i, goal_type: type)[0]
   rescue StandardError
     nil
   end
 
   def prepare_fetch_reports_by_month_range(report)
     @i = 1
-    @first_month = report.month_numb
-    @first_year = report.year
+    @first_m = report.month_numb
+    @first_y = report.year
   end
 
-  def fetch_reports_by_month_range(current_report, quantity = 1)
+  def fetch_reports_by_month_range(current_report, type, month = RANGE_MONTHS)
     prepare_fetch_reports_by_month_range(current_report)
 
-    while @i < quantity
-      @first_month -= 1
-      if @first_month.zero?
-        @first_month = 12
-        @first_year -= 1
+    while @i < month
+      @first_m -= 1
+      if @first_m.zero?
+        @first_m = 12
+        @first_y -= 1
       end
       @i += 1
     end
 
-    Report.where(month_numb: @first_month, year: @first_year)[0]
+    Report.where(month_numb: @first_m, year: @first_y, goal_type: type)[0]
   end
 
-  def fetch_report_by_next_month(current_report)
+  def fetch_report_by_next_month(current_report, type)
     if current_report.month_numb + 1 > 12
-      fetch_report('January', (current_report.year + 1))
+      fetch_report('January', (current_report.year + 1), type)
     else
       Report.where(month_numb: current_report.month_numb + 1,
-                   year: current_report.year)[0]
+                   year: current_report.year, goal_type: type)[0]
     end
   rescue StandardError
     nil
@@ -54,18 +62,22 @@ module ReportSearchs
     Report.distinct.order('year').pluck(:year).reverse
   end
 
-  def fetch_reports_by_year(year)
-    Report.where(year: year).order('month_numb').reverse
+  def fetch_reports_by_year(year, type)
+    Report.where(year: year, goal_type: type).order('month_numb').reverse
   end
 
   def fetch_reports_by_current_year
     Report.where(year: fetch_last_year).order('month_numb').reverse
   end
 
-  def fetch_report_by_unique_years(same_year = nil)
-    list = Report.distinct.pluck(:year).reverse
+  def fetch_report_by_unique_years(type, same_year = nil)
+    list = Report.distinct.where(goal_type: type).pluck(:year).reverse
     list.delete(same_year)
     list.unshift(same_year)
+  end
+
+  def fetch_report_by_unique_types
+    Report.distinct.order('goal_type').pluck(:goal_type)
   end
 
   def fetch_report_by_id(id)
@@ -73,6 +85,31 @@ module ReportSearchs
   end
 
   def fetch_goal_by_id(id)
-    Report.find_by(id: id).goal
+    Report.find_by(id: id).goal.to_f
+  end
+
+  def fetch_report_count_by_type(type)
+    Report.where(goal_type: type).count
+  end
+
+  def fetch_individual_goal_by_id(id)
+    goals = fetch_report_by_id(id).individual_goal.split('-')
+
+    goals.each_with_index do |goal, i|
+      next if i.odd?
+      goals[i] = fetch_username_by_id(goal.to_i)
+      goals[i + 1] = goals[i + 1].to_f
+    end
+
+    goals
+  end
+
+  def fetch_user_by_individual_goal_with_id(id)
+    goals = []
+    list = fetch_report_by_id(id).individual_goal.split('-')
+
+    list.each_with_index { |goal, i| goals << goal.to_i unless i.odd? }
+
+    goals
   end
 end
