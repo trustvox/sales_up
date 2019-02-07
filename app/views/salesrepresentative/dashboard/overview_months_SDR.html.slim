@@ -1,0 +1,29 @@
+head
+  title Sales Up - Overview Month
+body onload="generateOverviewPlot(#{@goal_points}, #{@sum_points}, #{@month_text}, false)"
+  div style="margin-top: -30px;"
+    .row.wrapper-md
+      .panel.panel-default
+        .panel-heading
+          .form-inline
+            = simple_form_for @report, method: :get, url: overview_months_SDR_path, html: { class: "form-group" } do |f|
+              h3.h3.form-group.m-r
+                = t('overview.between')
+                - @first_list.delete(@last_list[0])
+                = f.input :month, label: false, :collection => @first_list.map { |report| [ t('menu.search.'+report.month)+"/"+report.year.to_s, report.month+"/"+report.year.to_s] }, :prompt => false, input_html: { class: "form-control", id: "monthBox", align: "central"}
+
+              h3.h3.form-group.m-r
+                = t('overview.and')
+                - @last_list.delete(@first_list[0])
+                = f.input :year, label: false, :collection => @last_list.map { |report| [ t('menu.search.'+report.month)+"/"+report.year.to_s, report.month+"/"+report.year.to_s] }, :prompt => false, input_html: { class: "form-control", id: "monthBox", align: "central"}
+
+              = f.button :submit, t('overview.button'), class: "btn btn-primary btn-addon btn-lg margin m-l"
+
+        .panel-body style="font-size: 25px; font-weight: bold;"
+          div id="placeholderO" style="height:450px;width:1250px;"
+          = simple_form_for @report, method: :get, url: monthly_schedules_path, html: { class: "form-group", id: "formSearch" } do |f|
+            = f.input :month, as: :hidden, input_html: { id: "monthSearch"}
+            = f.input :year, as: :hidden, input_html: { id: "yearSearch"}
+
+
+
