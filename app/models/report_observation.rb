@@ -1,0 +1,3 @@
+class ReportObservation < ApplicationRecord
+  belongs_to :user
+end

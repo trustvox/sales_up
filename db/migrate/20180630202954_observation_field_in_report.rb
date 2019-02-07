@@ -1,0 +1,5 @@
+class ObservationFieldInReport < ActiveRecord::Migration[5.1]
+  def change
+    add_column :reports, :observation, :string
+  end
+end
