@@ -1,13 +1,25 @@
 source 'https://rubygems.org'
 
+# Instead of gem 'rails', '~> 5.1.5'
+gem "activerecord"
+gem "activemodel"
+gem "actionpack"
+gem "actionview"
+gem "actionmailer"
+gem "activejob"
+gem "activesupport"
+gem "railties"
+gem "sprockets-rails"
+
+# Basic gems for the application
 gem 'coffee-rails', '~> 4.2'
 gem 'jbuilder', '~> 2.5'
 gem 'puma', '~> 3.7'
-gem 'rails', '~> 5.1.5'
 gem 'sass-rails', '~> 5.0'
 gem 'turbolinks', '~> 5'
 gem 'uglifier', '>= 1.3.0'
 
+# Additional gems for database, test and views
 gem 'activerecord-session_store'
 gem 'backup'
 gem 'cancancan'
