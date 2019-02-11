@@ -20,7 +20,7 @@ end
 
 Rails.application.routes.draw do
   scope ':locale' do
-    scope :accountmanager, module: 'accountmanager' do
+    scope :account_manager, module: 'account_manager' do
       resources :contracts, :report_observations
 
       get '/monthly_sales', to: 'dashboard#monthly_sales'
@@ -32,7 +32,7 @@ Rails.application.routes.draw do
       get '/logout', to: 'dashboard#logout'
     end
 
-    scope :salesrepresentative, module: 'salesrepresentative' do
+    scope :sales_representative, module: 'sales_representative' do
       resources :meetings
 
       get '/monthly_schedules', to: 'dashboard#monthly_schedules'
