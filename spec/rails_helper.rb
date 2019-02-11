@@ -5,7 +5,7 @@ require 'simplecov'
 SimpleCov.configure do
   coverage_dir File.join('.', 'tmp', 'code_analysis', 'coverage')
 
-  minimum_coverage 60
+  minimum_coverage 1
 end
 
 SimpleCov.start 'rails' do
