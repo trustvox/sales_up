@@ -4,8 +4,8 @@ module Admin
     before_action :prepare_month_goal_param, only: :update
 
     def create
-
       @report.save!
+
       redirect_to_manager
     end
 
@@ -14,12 +14,14 @@ module Admin
       init_report_goals
 
       @report.update(report_params)
+
       redirect_to_manager
     end
 
     def destroy
       @report = Report.find_by(id: params[:id])
       @report.destroy
+
       redirect_to_manager
     end
 
@@ -28,6 +30,7 @@ module Admin
     def redirect_to_manager
       message = @report.errors.messages.map { |msg| msg[1] }
       result = message + [[@report.goal_type]] unless message.empty?
+      
       redirect_to controller: 'manager', action: 'manager_settings',
                   'report[year]' => @report.year,
                   'report[side]' => params[:report][:side],

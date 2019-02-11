@@ -17,12 +17,14 @@ module AccountManager
     def search_AM
       init_month_year_list
       init_search_AM_data
+
       fetch_data_and_points
     end
 
     def search_recods(type)
       init_month_year_list
       init_search_record_data
+
       fetch_record_data_and_points(type)
     end
 
@@ -96,6 +98,7 @@ module AccountManager
     def fetch_report_AM_data_points
       start_data(@contract_data)
       @report_data = fetch_report_data
+      
       fetch_report_points
     end
   end

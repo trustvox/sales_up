@@ -58,11 +58,13 @@ module ReportDataPoints
 
   def fetch_value_raise
     return @goal * @factor if @current_report.scheduled_raise.zero?
+
     @factor * @current_report.scheduled_raise
   end
 
   def verify_data_values
     return [0, '-', 0, '-'] if @current_report.scheduled_raise.nil?
+
     [0, 0, '-', 0, '-', '-', '-']
   end
 
@@ -70,6 +72,7 @@ module ReportDataPoints
     return verify_data_values if date.nil?
 
     value = @cont_meet_data[@index]
+
     if !value.nil? && value[0] == date.mday
       increase_index
       list = []
@@ -86,6 +89,7 @@ module ReportDataPoints
 
   def day_value_by_index
     return 0 if @index.zero?
+    
     @cont_meet_data[@index - 1][1]
   end
 

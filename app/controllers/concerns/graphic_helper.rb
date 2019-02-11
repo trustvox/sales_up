@@ -5,6 +5,7 @@ module GraphicHelper
 
   def wday_text_generator
     date = Date.new(@current_report.year, @current_report.month_numb, 1) - 1
+
     (1..month_days).collect do |day|
       date += 1
       [day, t('menu.spreadsheet.' + Date::DAYNAMES[date.wday])[0]]
@@ -15,11 +16,13 @@ module GraphicHelper
     @month_text = []
     report = @first_report
     i = 1
+
     while proceed?(report)
       add_month_text(i, report)
       report = fetch_report_by_next_month(report, type)
       i += 1
     end
+
     add_month_text(i, report)
   end
 
@@ -41,6 +44,7 @@ module GraphicHelper
              [[t('overview.SDR.ms'), 'MS'],
               [t('overview.SDR.mp'), 'MP']]
            end
+
     create_options_list(type, list)
   end
 
@@ -54,6 +58,7 @@ module GraphicHelper
   def verify_filter
     @filter_options.each do |op|
       next unless op[1] == params[:report][:goal]
+
       @filter_options.delete(op)
       @filter_options.unshift(op)
     end
@@ -62,6 +67,7 @@ module GraphicHelper
   def verify_user
     @user_options.each do |op|
       next unless op[1] == params[:report][:report_name]
+
       @user_options.delete(op)
       @user_options.unshift(op)
     end
@@ -71,6 +77,7 @@ module GraphicHelper
     verify_filter
 
     return if params[:report][:report_name] == 'All'
+
     verify_user
   end
 
@@ -84,6 +91,7 @@ module GraphicHelper
     return 'Wednesday' if date.wednesday?
     return 'Thursday' if date.thursday?
     return 'Friday' if date.friday?
+    
     verify_weekend(date)
   end
 

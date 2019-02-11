@@ -10,6 +10,7 @@ module Admin
 
     def manager_settings
       start_page_title
+
       render_menu(@page_title[2])
     end
 
@@ -64,8 +65,7 @@ module Admin
 
       %w[AM SDR].each_with_index do |data, i|
         add_manager_data(
-          data,
-          report_year.nil? ? fetch_last_year_with_type(data) : year[i]
+          data, report_year.nil? ? fetch_last_year_with_type(data) : year[i]
         )
       end
     end

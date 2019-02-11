@@ -28,6 +28,7 @@ module SalesRepresentative
       search_overview_months('SDR')
 
       @month_text = month_text_generator('SDR')
+
       render_menu('SDR')
     end
 
@@ -36,8 +37,8 @@ module SalesRepresentative
 
       init_overview_options_list('SDR')
       verify_options unless params[:report].nil?
-
       @month_text = month_text_generator('SDR')
+
       render_menu('SDR')
     end
 

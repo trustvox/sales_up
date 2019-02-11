@@ -37,10 +37,12 @@ module ReportSearchs
 
     while @i < month
       @first_m -= 1
+
       if @first_m.zero?
         @first_m = 12
         @first_y -= 1
       end
+
       @i += 1
     end
 
@@ -97,6 +99,7 @@ module ReportSearchs
 
     goals.each_with_index do |goal, i|
       next if i.odd?
+
       goals[i] = fetch_username_by_id(goal.to_i)
       goals[i + 1] = goals[i + 1].to_f
     end
@@ -107,7 +110,7 @@ module ReportSearchs
   def fetch_user_by_individual_goal_with_id(id)
     goals = []
     list = fetch_report_by_id(id).individual_goal.split('-')
-
+    
     list.each_with_index { |goal, i| goals << goal.to_i unless i.odd? }
 
     goals

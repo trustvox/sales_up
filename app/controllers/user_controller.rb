@@ -24,6 +24,7 @@ class UserController < ApplicationController
              else
                t('home.zapier-invalid')
              end
+
     redirect_to root_path, notice: result
   end
 
@@ -44,6 +45,7 @@ class UserController < ApplicationController
 
   def verify_user_status
     redirect_to overview_months_AM_path(locale: :pt) if user_signed_in?
+    
     @user = User.new
   end
 end

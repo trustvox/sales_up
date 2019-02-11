@@ -32,6 +32,7 @@ module AccountManager
       search_overview_months('AM')
 
       @month_text = month_text_generator('AM')
+
       render_menu('AM')
     end
 
@@ -40,8 +41,8 @@ module AccountManager
 
       init_overview_options_list('AM')
       verify_options unless params[:report].nil?
-
       @month_text = month_text_generator('AM')
+
       render_menu('AM')
     end
 
@@ -56,6 +57,7 @@ module AccountManager
                            AccountManager::DashboardController)
       @page_title = [t('menu.' + action_name), t('menu.sales_side') + '-' +
         t('menu.AM_side'), 'AM']
+        
       fetch_view_form_variables
     end
 

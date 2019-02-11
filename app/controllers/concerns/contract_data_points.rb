@@ -26,6 +26,7 @@ module ContractDataPoints
   def search_contract_data
     @search.each_with_index do |info, i|
       @user_id = info.user_id
+
       if proceed_contract_search?(i)
         set_partial_contract_data(info.value, info.store_name)
       elsif @wait
@@ -69,6 +70,7 @@ module ContractDataPoints
 
     list = [day, @data[:contract_sum], '1-' + store_name + '; ',
             value, '1-' + fetch_username_by_id(@user_id) + '; ']
+            
     @contract_data << list
   end
 

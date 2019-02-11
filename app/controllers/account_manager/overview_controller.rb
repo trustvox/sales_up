@@ -7,12 +7,12 @@ module AccountManager
       init_overview_search_months(type)
 
       start_overview_search(type)
+
       overview_data('m', type)
     end
 
     def search_overview_reports(type)
       init_overview_search_reports(type)
-
       start_overview_search(type)
       @AM_points = overview_data('r', type)
     end
@@ -28,8 +28,8 @@ module AccountManager
 
     def init_overview_search_reports(type)
       params[:report].nil? ? default_search(type) : custom_search(type)
-
       @AM_points = []
+
       init_overview_search_bar(type)
     end
 
@@ -49,6 +49,7 @@ module AccountManager
 
     def start_overview_search(type)
       return init_overview_data(type, nil, nil) if params[:report].nil?
+
       init_overview_data(type, params[:report][:month].split('/'),
                          params[:report][:year].split('/'))
     end
@@ -56,6 +57,7 @@ module AccountManager
     def default_search(type)
       @users = fetch_user_by_sub_area(type)
       @usernames = fetch_username_by_sub_area(type)
+
       if type == 'AM'
         @filter = 'CS'
         @simbol = t('graphic.currency') + ' %y.2'
@@ -67,6 +69,7 @@ module AccountManager
 
     def custom_search(type)
       @filter = params[:report][:goal]
+      
       if params[:report][:report_name] == 'All'
         start_default_values(type)
       else

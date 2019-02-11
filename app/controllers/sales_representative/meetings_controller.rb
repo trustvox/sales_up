@@ -7,22 +7,22 @@ module SalesRepresentative
     def create
       @meeting.user_id = fetch_id_by_username(params[:SDRname])
       @meeting.meeting_for = params[:meeting_for]
-
       @meeting.save!
+
       redirect_to_monthly_schedules
     end
 
     def update
       @meeting = Meeting.find_by(id: params[:id])
-
       @meeting.update(meeting_params)
+
       redirect_to_monthly_schedules
     end
 
     def destroy
       @meeting = Meeting.find_by(id: params[:id])
-
       @meeting.destroy
+
       redirect_to_monthly_schedules
     end
 
@@ -31,6 +31,7 @@ module SalesRepresentative
     def redirect_to_monthly_schedules(action = nil)
       report = fetch_report_by_id(@meeting.report_id)
       message = @meeting.errors.messages.map { |msg| msg[1] }
+
       redirect_to controller: 'dashboard', action: 'monthly_schedules',
                   'report[month]' => report.month, 'report[year]' => report.year,
                   notice: message + [[action]]
@@ -38,6 +39,7 @@ module SalesRepresentative
 
     def valid_params(action)
       @meeting = Meeting.new(meeting_params)
+      
       redirect_to_monthly_schedules(action) unless @meeting.valid?
     end
 

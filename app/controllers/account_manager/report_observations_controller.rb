@@ -3,18 +3,21 @@ module AccountManager
     def create
       obs = ReportObservation.new(report_obs_params)
       obs.save!
+
       redirect_to_report(obs.report_id)
     end
 
     def update
       obs = ReportObservation.find_by(id: params[:id])
       obs.update(report_obs_params)
+
       obs.observation == '' ? destroy : redirect_to_report(obs.report_id)
     end
 
     def destroy
       obs = ReportObservation.find_by(id: params[:id])
       obs.destroy
+      
       redirect_to_report(obs.report_id)
     end
 

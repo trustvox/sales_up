@@ -27,6 +27,7 @@ module MeetingDataPoints
   def search_meeting_data
     @search.each_with_index do |info, i|
       @user_id = info.user_id
+      
       if proceed_meeting_search?(i)
         partial_meeting_data(info)
       elsif @wait

@@ -15,9 +15,8 @@ module UserSearchs
     User.find_by(full_name: full_name).id
   end
 
-  def fetch_username_by_types(sub_area1, sub_area2)
-    User.where('sub_area = ? OR sub_area = ?', sub_area1, sub_area2)
-                    .order('full_name')
+  def fetch_username_by_types(sub1, sub2)
+    User.where('sub_area = ? OR sub_area = ?', sub1, sub2).order('full_name')
   end
 
   def fetch_user_by_area(type)

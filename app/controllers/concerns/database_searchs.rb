@@ -11,6 +11,7 @@ module DatabaseSearchs
 
   def fetch_last_day
     today = Time.current
+
     @current_report.month_numb != today.month ? month_days : today.day
   end
 
@@ -30,6 +31,7 @@ module DatabaseSearchs
     (@first_date..@last_date).each do |date|
       business_days += 1 unless date.saturday? || date.sunday?
     end
+
     business_days
   end
 
@@ -48,6 +50,7 @@ module DatabaseSearchs
     (@first_date..@last_date).each do |date|
       business_days += 1 unless date.saturday? || date.sunday?
     end
+
     business_days
   end
 
@@ -74,6 +77,7 @@ module DatabaseSearchs
     (@first_date..@last_date).each do |date|
       gap -= 1 if date.saturday? || date.sunday?
     end
+    
     gap
   end
 

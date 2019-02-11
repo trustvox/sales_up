@@ -19,6 +19,7 @@ module MeetingSearchs
     if day.zero?
       return Meeting.where(user_id: user_id, report_id: report_id).order('day')
     end
+    
     Meeting.where(day: day, user_id: user_id, report_id: report_id).order('day')
   end
 

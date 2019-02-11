@@ -17,6 +17,7 @@ module RecordDataPoints
 
   def verify_fetched_data(user_id)
     return fetch_closed_contracts(user_id, @current_report.id).empty? if @which
+
     fetch_scheduled_meeting(user_id, @current_report.id).empty?
   end
 
@@ -38,8 +39,8 @@ module RecordDataPoints
     @gap_index = 0
     @result = 0
     @gap_list = calculate_gap
-
     @gap_list = verify_first_last_days
+
     fetch_gap_without_weekend(@gap_list)
   end
 
@@ -133,11 +134,13 @@ module RecordDataPoints
     length = @unique_days.length
 
     @unique_days.each_with_index { |day, i| add_gap(aux, day, i) if length > 1 }
+
     finish_search(aux)
   end
 
   def add_day_sum(day, u_id, can = false, r_id = @current_report.id)
     search_record_points(day, u_id, r_id) if can
+
     @list << [day, @sum]
   end
 
@@ -147,6 +150,7 @@ module RecordDataPoints
 
   def search_record_points(day, u_id, r_id)
     return @sum += fetch_meeting_sum(u_id, r_id, day) unless @which
+    
     fetch_contracts(day, r_id, u_id).map { |con| @sum += con.value.to_f }
   end
 

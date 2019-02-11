@@ -25,9 +25,7 @@ module OverviewHelper
     @first_list.unshift(
       @first_list.delete(fetch_report(@first[0], @first[1], type))
     )
-    @last_list.unshift(@last_list.delete(
-                         fetch_report(@last[0], @last[1], type)
-    ))
+    @last_list.unshift(@last_list.delete(fetch_report(@last[0], @last[1], type)))
   end
 
   def greater_month

@@ -65,9 +65,7 @@ module OverviewPoints
     sum = 0
 
     if @type == 'AM'
-      fetch_contract_by_report_id(id).each do |contract|
-        sum += contract.value.to_f
-      end
+      fetch_contract_by_report_id(id).each do |cont| {sum += cont.value.to_f }
     else
       fetch_meeting_by_report_id(id).each { |_meeting| sum += 1 }
     end
@@ -78,6 +76,7 @@ module OverviewPoints
   def overview_report_data
     @users.collect do |user|
       list = []
+      
       while acceptable?
         list << verify_filter_option(user.id)
         verify_next_month
@@ -85,6 +84,7 @@ module OverviewPoints
 
       list << verify_filter_option(user.id)
       prepare_overview_data
+
       list
     end
   end
