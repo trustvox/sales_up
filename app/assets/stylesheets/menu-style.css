@@ -1,0 +1,113 @@
+.menu {
+	padding: 5px;
+}
+
+.margin {
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+.numbers {
+  width: 100px;
+}
+
+.text {
+  width: 300px;
+}
+
+.day {
+  width: 35px;
+}
+
+.page-title {
+  position: relative;
+  left: 43%;
+}
+
+.sidenav {
+  height: 100%;
+  left: 0;
+  overflow-x: hidden;
+  padding-top: 60px;
+  position: fixed;
+  top: 0;
+  transition: 0.5s;
+  width: 0;
+  z-index: 1;
+}
+
+.sidenav a {
+  color: #818181;
+  display: block;
+  font-size: 25px;
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+  font-size: 30px;
+  margin-left: 50px;
+  position: absolute;
+  right: 25px;
+  top: 0;
+}
+
+.options {
+  font-size: 30px;
+  position: absolute;
+  top: 5;
+}
+
+.icons-text {
+  margin-left: 35px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {
+    padding-top: 15px;
+  }
+  .sidenav a {
+    font-size: 18px;
+  }
+}
+
+#icons {
+  float: none;
+  line-height: 75px;
+  position: absolute;
+}
+
+#monthBox {
+  font-size: 18px;
+  height: auto;
+}
+
+#menu-logo {
+  left: 25px;
+	position: relative;
+	width: 40%;
+}
+
+#menu-search {
+  left: 3%;
+	position: relative;
+}
+
+#menu-options {
+  left: 7%;
+	position: relative;
+}
+
+#menu-logout {
+  left: 35%;
+	position: relative;
+}
+
+#left-menu {
+  z-index: -1;
+}
