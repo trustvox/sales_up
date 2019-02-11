@@ -1,0 +1,28 @@
+version: '3'
+
+volumes:
+  pg-data:
+
+services:
+  db:
+    image: postgres:alpine
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: root
+    ports:
+      - '5432'
+    volumes:
+      - pg-data:/var/lib/postgresql
+
+  web:
+    build: .
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    volumes:
+      - .:/sales_up
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - db
