@@ -1,6 +1,11 @@
 class ApplicationController < ActionController::Base
   include DatabaseSearchs
+  include ViewHelper
+  
   helper DatabaseSearchs
+  helper OverviewHelper
+  helper GraphicHelper
+  helper ViewHelper
 
   before_action do
     I18n.locale = params[:locale] || I18n.default_locale
