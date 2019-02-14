@@ -2,8 +2,6 @@ module ReportDataPoints
   include GraphicHelper
 
   def initialize
-    @cont_meet_data = []
-
     @first = nil
     @last = nil
     @weekdays = nil
@@ -12,35 +10,36 @@ module ReportDataPoints
     @value = 0
     @factor = 0
     @index = 0
+    @overall_data = nil
   end
 
-  def start_data(data_list)
-    fetch_date_values(@days, @current_report)
+  def start_data
+    fetch_date_values(@current_report)
     fetch_data_values
 
-    @cont_meet_data = data_list
     @index = 0
   end
 
   def fetch_data_values
+    @goal = (@current_report.goal / find_business_days).round(2)
+
     if @first.mday == 1 && @first.on_weekend?
       @factor = 1
-      @goal = (@current_report.goal / find_business_days).round(2)
       @value = 0
     else
       @factor = 2
-      @goal = (@current_report.goal / find_business_days).round(2)
       @value = @goal.to_i
     end
   end
 
-  def fetch_date_values(day, report)
+  def fetch_date_values(report)
     @first = Date.parse(report.year.to_s + '-' + report.month + '-1')
-    @last = @first + day - 1
+    @last = @first + month_days - 1
     @weekdays = find_weekdays
   end
 
-  def fetch_report_data
+  def fetch_report_data(data)
+    @overall_data = data
     (@first..@last).collect { |date| verify_data(date) }
   end
 
@@ -71,12 +70,13 @@ module ReportDataPoints
   def verify_contract_values(date)
     return verify_data_values if date.nil?
 
-    value = @cont_meet_data[@index]
+    value = @overall_data[@index]
 
     if !value.nil? && value[0] == date.mday
       increase_index
       list = []
       value.each_with_index { |data, i| i.zero? ? next : list << data }
+
       return list
     end
 
@@ -84,23 +84,23 @@ module ReportDataPoints
   end
 
   def increase_index
-    @index += 1 if @index < @cont_meet_data.size
+    @index += 1 if @index < @overall_data.size
   end
 
   def day_value_by_index
     return 0 if @index.zero?
     
-    @cont_meet_data[@index - 1][1]
+    @overall_data[@index - 1][1]
   end
 
   def fetch_report_points
     last_data = nil
-
+    
     @report_data.map do |data|
       !@wait_to_sunday ? add_sun_to_fri(data) : add_fri_to_sun(data)
       last_data = data
     end
-
+    
     add_data(last_data) if @report_points[-1][0] != last_data[0]
   end
 
