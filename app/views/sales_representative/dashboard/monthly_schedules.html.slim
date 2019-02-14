@@ -1,6 +1,6 @@
 head
   title Sales Up - Monthly Sales
-body onload="generateGraphicPlot(#{@report_points}, #{@meeting_points}, #{@day_text}, #{@wday_text}, false, #{month_days})"
+body onload="generateGraphicPlot(#{@report_points}, #{@meeting_points}, #{day_text_generator}, #{wday_text_generator}, false, #{month_days})"
   .row.wrapper-md
     .panel.panel-default style="margin-top: -30px;"
       .panel-heading
@@ -40,7 +40,7 @@ body onload="generateGraphicPlot(#{@report_points}, #{@meeting_points}, #{@day_t
               button.close.form-group aria-label="Close" data-dismiss="modal" type="button" onclick="cleanDataMeeting(#{text}, '#{@users[0].id}')"
                 span aria-hidden="true"
                 | &times;
-            = simple_form_for @meeting, method: :post, url: meetings_path do |f|
+            = simple_form_for Meeting.new, method: :post, url: meetings_path do |f|
               .modal-body
                 - if !@notice[0].blank? && @notice[-1][0] == 'create'
                   .form-inline.m-b
@@ -61,7 +61,7 @@ body onload="generateGraphicPlot(#{@report_points}, #{@meeting_points}, #{@day_t
                     = f.input :day, as: :integer, label: false, id: "day", input_html: { style: "width:65px;", value: today.day, class: "form-control", min: "1", max: "31" }
                   .form-group.m-l
                     h4.h4 = t('spreadsheets.meeting.title.month_year_range')
-                    = f.input :report_id, label: false, id: "report", prompt: false, collection: @month_year_list.map { |report| [t('menu.search.'+report.month)+"/"+report.year.to_s, report.id] } , input_html: { class: "form-control" }
+                    = f.input :report_id, label: false, id: "report", prompt: false, collection: init_month_year_list.map { |report| [t('menu.search.'+report.month)+"/"+report.year.to_s, report.id] } , input_html: { class: "form-control" }
                 .form-inline.m-b
                   = f.input :user_id, as: :hidden, label: false, id: "user_id", input_html: { value: @users[0].id }
                   .checkbox
@@ -178,7 +178,7 @@ body onload="generateGraphicPlot(#{@report_points}, #{@meeting_points}, #{@day_t
                                           - next if user.id == meeting.user_id
                                           option value="#{user.id}" = user.full_name
                                     td.v-middle.form-inline
-                                      = simple_form_for @meeting, method: :put, url: meetings_path+"/"+meeting.id.to_s, html: { class: "form-group" }, onsubmit: "if(!validateMyForm()){event.preventDefault();}" do |f|
+                                      = simple_form_for Meeting.new, method: :put, url: meetings_path+"/"+meeting.id.to_s, html: { class: "form-group" }, onsubmit: "if(!validateMyForm()){event.preventDefault();}" do |f|
                                         = f.input :day, as: :hidden, input_html: { value: "m", id: meeting.id.to_s+"day"+meeting.id.to_s }
                                         = f.input :client_name, as: :hidden, input_html: { value: "m", id: meeting.id.to_s+"client_name"+meeting.id.to_s }
                                         = f.input :scheduled_for, as: :hidden, input_html: { value: "m", id: meeting.id.to_s+"scheduled_for"+meeting.id.to_s }
@@ -187,7 +187,7 @@ body onload="generateGraphicPlot(#{@report_points}, #{@meeting_points}, #{@day_t
                                         = f.input :report_id, as: :hidden, input_html: { value: @current_report.id }
                                         = f.button :submit, t('spreadsheets.edit.button.save'), id: meeting.id.to_s+'editMeeting', class: "btn btn-success form-group", :onclick => "fillData(#{meeting.id}, 'day', 'client_name', 'scheduled_for', 'meeting_for', 'user_id', 'none')"
                                       - if can?(:destroy, SalesRepresentative::MeetingsController)
-                                        = simple_form_for @meeting, method: :delete, url: meetings_path+"/"+meeting.id.to_s, html: { class: "form-group", :onsubmit => "if(!validateMyForm()){event.preventDefault();}" } do |f|
+                                        = simple_form_for Meeting.new, method: :delete, url: meetings_path+"/"+meeting.id.to_s, html: { class: "form-group", :onsubmit => "if(!validateMyForm()){event.preventDefault();}" } do |f|
                                           = f.button :submit, t('spreadsheets.edit.button.delete'), class: "btn btn-danger m-l-xs form-group"
 
                           .modal-footer

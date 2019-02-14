@@ -1,6 +1,6 @@
 head
   title Sales Up - SDR Report
-body onload="generateRecordPlot(#{@record_points}, #{@line_names}, #{@graphic_text}, #{@wday_text}, false)"
+body onload="generateRecordPlot(#{@record_point}, #{fetch_line_name}, #{day_text_generator}, #{wday_text_generator}, false)"
   .row.wrapper-md
     .panel.panel-default style="margin-top: -30px;"
       .panel-heading
@@ -65,7 +65,7 @@ body onload="generateRecordPlot(#{@record_points}, #{@line_names}, #{@graphic_te
                         button.btn.btn-info.form-group onclick="obsVisibility(#{id}, true, 'create');" = t('report.button.edit')
 
                       .form-inline hidden="" id="#{id}form_create" style="width: 135px;"
-                        = simple_form_for @observation, method: :post, url: report_observations_path, html: { class: "form-group", :onsubmit => "if(!validateMyForm()){event.preventDefault();}" } do |f|
+                        = simple_form_for ReportObservation.new, method: :post, url: report_observations_path, html: { class: "form-group", :onsubmit => "if(!validateMyForm()){event.preventDefault();}" } do |f|
                           = f.input :observation, as: :hidden, input_html: { value: "p", id: id.to_s+"c_observation" }
                           = f.input :user_id, as: :hidden, input_html: { value: id }
                           = f.input :report_id, as: :hidden, input_html: { value: @current_report.id }
@@ -78,7 +78,7 @@ body onload="generateRecordPlot(#{@record_points}, #{@line_names}, #{@graphic_te
                         button.btn.btn-info.form-group onclick="obsVisibility(#{id}, true, 'edit');" = t('report.button.edit')
 
                       .form-inline hidden="" id="#{id}form_edit" style="width: 135px;"
-                        = simple_form_for @observation, method: :put, url: report_observations_path + "/" + obs.id.to_s, html: { class: "form-group", :onsubmit => "if(!validateMyForm()){event.preventDefault();}" } do |f|
+                        = simple_form_for ReportObservation.new, method: :put, url: report_observations_path + "/" + obs.id.to_s, html: { class: "form-group", :onsubmit => "if(!validateMyForm()){event.preventDefault();}" } do |f|
                           = f.input :observation, as: :hidden, input_html: { value: "p", id: id.to_s+"e_observation" }
                           = f.input :user_id, as: :hidden, input_html: { value: id }
                           = f.input :report_id, as: :hidden, input_html: { value: @current_report.id }

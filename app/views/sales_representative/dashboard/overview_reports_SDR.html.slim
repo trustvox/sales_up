@@ -1,29 +1,33 @@
 head
   title Sales Up - Overview Report
-body onload="generateOverviewRecordPlot(#{@AM_points}, #{@usernames}, #{@month_text}, '#{@simbol}')"
+  - first_list = fetch_overview_search_bar_list('first', 'SDR')
+  - last_list = fetch_overview_search_bar_list('last', 'SDR')
+  - last_list.shift if last_list[0] == first_list[0]
+
+  - user_options = init_user_options('SDR')
+  - filter_options = init_filter_options('SDR')
+body onload="generateOverviewRecordPlot(#{@AM_points}, #{init_username_data('SDR')}, #{month_text_generator(first_list[-1], last_list[0], 'SDR')}, '#{init_simbol_with_filter('SDR')}')"
   div style="margin-top: -30px;"
     .row.wrapper-md
       .panel.panel-default
         .panel-heading
           .form-inline
-            = simple_form_for @report, method: :get, url: overview_reports_SDR_path, html: { class: "form-group" } do |f|
+            = simple_form_for Report.new, method: :get, url: overview_reports_SDR_path, html: { class: "form-group" } do |f|
               h3.h3.form-group.m-r
                 = t('overview.between')
-                - @first_list.delete(@last_list[0])
-                = f.input :month, label: false, :collection => @first_list.map { |report| [ t('menu.search.'+report.month)+"/"+report.year.to_s, report.month+"/"+report.year.to_s] }, :prompt => false, input_html: { class: "form-control", id: "monthBox", align: "central"}
+                = f.input :month, label: false, :collection => first_list.map { |report| [ t('menu.search.'+report.month)+"/"+report.year.to_s, report.month+"/"+report.year.to_s] }, :prompt => false, input_html: { class: "form-control", id: "monthBox", align: "central"}
 
               h3.h3.form-group.m-r
                 = t('overview.and')
-                - @last_list.delete(@first_list[0])
-                = f.input :year, label: false, :collection => @last_list.map { |report| [ t('menu.search.'+report.month)+"/"+report.year.to_s, report.month+"/"+report.year.to_s] }, :prompt => false, input_html: { class: "form-control", id: "monthBox", align: "central"}
+                = f.input :year, label: false, :collection => last_list.map { |report| [ t('menu.search.'+report.month)+"/"+report.year.to_s, report.month+"/"+report.year.to_s] }, :prompt => false, input_html: { class: "form-control", id: "monthBox", align: "central"}
 
               h3.h3.form-group.m-r
                 = t('overview.compare')
-                = f.input :report_name, label: false, :collection => @user_options, :prompt => false, input_html: { class: "form-control", id: "monthBox" }
+                = f.input :report_name, label: false, :collection => init_user_options('SDR'), :prompt => false, input_html: { class: "form-control", id: "monthBox" }
 
               h3.h3.form-group.m-r
                 = t('overview.with')
-                = f.input :goal, label: false, :collection => @filter_options, :prompt => false, input_html: { class: "form-control", id: "monthBox" }
+                = f.input :goal, label: false, :collection => init_filter_options('SDR'), :prompt => false, input_html: { class: "form-control", id: "monthBox" }
 
               = f.button :submit, t('overview.button'), class: "btn btn-primary btn-addon btn-lg margin m-l"
 
