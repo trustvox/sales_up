@@ -7,22 +7,21 @@ module AccountManager
     def create
       set_contracts_params unless params[:contract][:user].to_i.zero?
 
-      @second_contract.save! unless @second_contract.nil?
-      @contract.save!
+      @contracts.save!
 
       redirect_to_monthly_sales
     end
 
     def update
-      @contract = Contract.find_by(id: params[:id])
-      @contract.update(contract_params)
+      @contracts = Contract.find_by(id: params[:id])
+      @contracts.update(contract_params)
 
       redirect_to_monthly_sales
     end
 
     def destroy
-      @contract = Contract.find_by(id: params[:id])
-      @contract.destroy
+      @contracts = Contract.find_by(id: params[:id])
+      @contracts.destroy
 
       redirect_to_monthly_sales
     end
@@ -30,8 +29,8 @@ module AccountManager
     private
 
     def redirect_to_monthly_sales(action = nil)
-      report = fetch_report_by_id(@contract.report_id)
-      message = @contract.errors.messages.map { |msg| msg[1] }
+      report = fetch_report_by_id(@contracts.report_id)
+      message = @contracts.errors.messages.map { |msg| msg[1] }
 
       redirect_to controller: 'dashboard', action: 'monthly_sales',
                   'report[month]' => report.month, 'report[year]' => report.year,
@@ -39,17 +38,18 @@ module AccountManager
     end
 
     def valid_params(action)
-      @contract = Contract.new(contract_params)
+      @contracts = Contract.new(contract_params)
 
-      redirect_to_monthly_sales(action) unless @contract.valid?
+      redirect_to_monthly_sales(action) unless @contracts.valid?
     end
 
     def set_contracts_params
-      @contract.value *= (params[:contract][:value_1].to_f/100)
-      
-      @second_contract = Contract.new(contract_params)
-      @second_contract.value *= (params[:contract][:value_2].to_f/100)
-      @second_contract.user_id = params[:contract][:user].to_i
+      @contracts.value *= (params[:contract][:value_1].to_f/100)
+      @contracts.save!
+
+      @contracts = Contract.new(contract_params)
+      @contracts.value *= (params[:contract][:value_2].to_f/100)
+      @contracts.user_id = params[:contract][:user].to_i
     end
 
     def contract_params

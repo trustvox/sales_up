@@ -1,26 +1,26 @@
 module Admin
   class ReportsController < ApplicationController
-    before_action :valid_params, only: :create
-    before_action :prepare_month_goal_param, only: :update
-
     def create
-      @report.save!
+      @reports = Report.new(report_params)
+
+      valid_params
+      @reports.save!
 
       redirect_to_manager
     end
 
     def update
-      @report = Report.find_by(id: params[:id])
-      init_report_goals
+      @reports = Report.find_by(id: params[:id])
 
-      @report.update(report_params)
+      valid_params
+      @reports.update(report_params)
 
       redirect_to_manager
     end
 
     def destroy
-      @report = Report.find_by(id: params[:id])
-      @report.destroy
+      @reports = Report.find_by(id: params[:id])
+      @reports.destroy
 
       redirect_to_manager
     end
@@ -28,69 +28,66 @@ module Admin
     private
 
     def redirect_to_manager
-      message = @report.errors.messages.map { |msg| msg[1] }
-      result = message + [[@report.goal_type]] unless message.empty?
+      message = @reports.errors.messages.map { |msg| msg[1] }
+      result = message + [[@reports.goal_type]] unless message.empty?
       
       redirect_to controller: 'manager', action: 'manager_settings',
-                  'report[year]' => @report.year,
+                  'report[year]' => @reports.year,
                   'report[side]' => params[:report][:side],
                   notice: result
     end
 
     def valid_params
+      @reports.goal = 0
+      @reports.individual_goal = ''
+
       prepare_month_goal_param
+      @reports.individual_goal = @reports.individual_goal[0...-1]
 
-      @report = Report.new(report_params)
-      init_report_goals
-
-      redirect_to_manager unless @report.valid?
+      redirect_to_manager unless @reports.valid?
     end
 
     def prepare_month_goal_param
       prepare_goal_param
 
-      params[:report][:month] =
-        Date::MONTHNAMES[params[:report][:month_numb].to_i]
+      @reports.month = Date::MONTHNAMES[params[:report][:month_numb].to_i]
 
-      verify_scheduled_raise unless params[:report][:scheduled_raise].nil?
-    end
-
-    def init_report_goals
-      @report.individual_goal = @individual_goal[0...-1]
-      @report.goal = @goal
-    end
-
-    def init_goal_params
-      @goal = 0
-      @individual_goal = ''
-      @which = params[:report][:goal_type]
-      @is_SDR = @which == 'SDR'
-
-      params[:report][:scheduled_raise] = 0 if @is_SDR
+      verify_scheduled_raise unless @reports.scheduled_raise.zero?
     end
 
     def prepare_goal_param
-      init_goal_params
-      users = fetch_user_by_sub_area('AM')
-      users += fetch_user_by_sub_area('SDR') if params[:report][:goal_type] == 'SDR'
+      is_SDR = params[:report][:goal_type] == 'SDR'
+      @reports.scheduled_raise = 0
 
-      users.each do |user|
+      init_users_data_for_report.each do |user|
         param = params[:report][user.id.to_s]
-        goal = param.nil? ? '0' : param.tr(",", ".")
-        change_goal_param(goal.to_f, user.id.to_s)
+        user_goal = param.nil? ? '0' : param.tr(",", ".")
+
+        change_goal_param(user_goal.to_f, is_SDR)
+        change_individual_goal_param(user_goal.to_f, user.id.to_s)
       end
     end
 
-    def change_goal_param(goal, id)
-      @individual_goal += id + '-' + goal.to_s + '-'
-      @is_SDR ? params[:report][:scheduled_raise] += goal : @goal += goal
+    def init_users_data_for_report
+      users = fetch_user_by_sub_area('AM')
+      users += fetch_user_by_sub_area('SDR') if params[:report][:goal_type] == 'SDR'
+
+      users
+    end
+
+    def change_goal_param(goal, is_SDR)
+      is_SDR ? @reports.scheduled_raise += goal : @reports.goal += goal
+    end
+
+    def change_individual_goal_param(goal, id)
+      @reports.individual_goal += id + '-' + goal.to_s + '-'
     end
 
     def verify_scheduled_raise
       days = find_business_days_without_report(
         params[:report][:month_numb], params[:report][:year]
       )
-      @goal = params[:report][:scheduled_raise].to_f * days
+      @reports.goal = @reports.scheduled_raise.to_f * days
     end
 
     def report_params

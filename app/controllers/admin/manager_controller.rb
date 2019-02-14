@@ -9,8 +9,7 @@ module Admin
     before_action :authenticate_user!
 
     def manager_settings
-      start_page_title
-
+      @page_title = init_page_title(params[:report][:side])
       render_menu(@page_title[2])
     end
 
@@ -21,13 +20,6 @@ module Admin
     end
 
     private
-
-    def start_page_title
-      side = params[:report][:side]
-      @page_title =
-        [t('menu.' + action_name), t('menu.sales_side') + '-' + t('menu.' +
-         side + '_side'), side]
-    end
 
     def verify_priority_and_type(user_id, new_priority, new_priority_type)
       user = fetch_user_by_id(user_id)

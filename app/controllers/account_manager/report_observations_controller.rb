@@ -1,37 +1,37 @@
 module AccountManager
   class ReportObservationsController < ApplicationController
     def create
-      obs = ReportObservation.new(report_obs_params)
-      obs.save!
+      @observation = ReportObservation.new(report_observation_params)
+      @observation.save!
 
-      redirect_to_report(obs.report_id)
+      redirect_to_report
     end
 
     def update
-      obs = ReportObservation.find_by(id: params[:id])
-      obs.update(report_obs_params)
+      @observation = ReportObservation.find_by(id: params[:id])
+      @observation.update(report_observation_params)
 
-      obs.observation == '' ? destroy : redirect_to_report(obs.report_id)
+      @observation.observation == '' ? destroy : redirect_to_report
     end
 
     def destroy
-      obs = ReportObservation.find_by(id: params[:id])
-      obs.destroy
+      @observation = ReportObservation.find_by(id: params[:id])
+      @observation.destroy
       
-      redirect_to_report(obs.report_id)
+      redirect_to_report
     end
 
     private
 
-    def redirect_to_report(report_id)
-      report = fetch_report_by_id(report_id)
-      side = params[:report_observation][:side]
+    def redirect_to_report
+      report = fetch_report_by_id(@observation.report_id)
+      side = params[:report_observation][:side].split('/')
 
-      redirect_to controller: side + '/dashboard', action: 'report_' + side,
+      redirect_to controller: side[0] + '/dashboard', action: 'report_' + side[1],
                   'report[month]' => report.month, 'report[year]' => report.year
     end
 
-    def report_obs_params
+    def report_observation_params
       params.require(:report_observation).permit(:observation, :user_id,
                                                  :report_id)
     end
