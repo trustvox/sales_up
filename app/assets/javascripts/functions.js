@@ -1,6 +1,10 @@
 var colors = ["#fccaf9","#9ceaff","#b7ffc2","#d6ccc8", "#d1c1ee",
               "#fdd2ab","#c1d8ff","#ffc1c1","#dbdfe4", "#ffff99"]
 
+function redirectToPipefy() {
+  window.open("https://app.pipefy.com/public/form/7l-zU6Rx");
+}
+
 function verifyMousePosition(event) {
   var x = event.clientX;
   if (x < 16 && x > -1)

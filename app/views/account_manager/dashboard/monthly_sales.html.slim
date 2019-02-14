@@ -76,7 +76,7 @@ body onload="generateGraphicPlot(#{@report_points}, #{@contract_point}, #{day_te
                     h4.h4 = t('spreadsheets.contract.title.percentage')
                     = f.input :value_2, as: :float, label: false, id: "value2", input_html: { style: "width:100px;", value: "", placeholder: "40", class: "form-control" }
               .modal-footer
-                = f.button :submit, t('spreadsheets.contract.button.save'), class: "btn btn-primary"
+                = f.button :submit, t('spreadsheets.contract.button.save'), class: "btn btn-primary", :onclick => "redirectToPipefy();"
                 = f.button :button, t('spreadsheets.contract.button.close'), class: "btn btn-danger", :'data-dismiss' => "modal", :onclick => "cleanDataContract('#{@user[0].id}')"
 
       .panel-body style="font-size: 25px; font-weight: bold;"
