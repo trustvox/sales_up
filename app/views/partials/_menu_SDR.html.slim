@@ -4,9 +4,9 @@
     - path = monthly_schedules_path
 
   - unless current_page?(controller: '/admin/manager', action: 'manager_settings') || current_page?(controller: '/sales_representative/dashboard', action: 'overview_months_SDR') || current_page?(controller: '/sales_representative/dashboard', action: 'overview_reports_SDR')
-    = simple_form_for @report, method: :get, url: path, html: { class: "form-group", id: "formSelectBox" } do |f|
+    = simple_form_for Report.new, method: :get, url: path, html: { class: "form-group", id: "formSelectBox" } do |f|
       = f.input :month, as: :hidden, input_html: { value: "p", id: "monthSelected" }
-      = f.input :year, label: false, :collection => @month_year_list.map { |report| [ t('menu.search.'+report.month)+"/"+report.year.to_s, report.month+"/"+report.year.to_s] }, :prompt => false, input_html: { class: "form-control", id: "monthBox",  :onchange => "sendData('formSelectBox', 0, 0)", style: "width: 166px"}
+      = f.input :year, label: false, :collection => init_month_year_list.map { |report| [ t('menu.search.'+report.month)+"/"+report.year.to_s, report.month+"/"+report.year.to_s] }, :prompt => false, input_html: { class: "form-control", id: "monthBox",  :onchange => "sendData('formSelectBox', 0, 0)", style: "width: 166px"}
   - else
     input type="text" style="visibility: hidden;"
 
@@ -25,14 +25,14 @@
         - if current_page?(controller: '/sales_representative/dashboard', action: 'overview_months_SDR')
           button.btn.btn-primary.btn-addon.btn-lg.btn-info.disabled.margin style="#{style}" = t('menu.button.overview.month')
         - else
-          = simple_form_for @report, method: :get, url: overview_months_SDR_path, html: { class: "form-group" } do |f|
+          = simple_form_for Report.new, method: :get, url: overview_months_SDR_path, html: { class: "form-group" } do |f|
             - unless params[:report].nil? || params[:report][:month].blank? || params[:report][:month].include?("/")
             = f.button :submit, t('menu.button.overview.month'), class: "btn btn-primary btn-addon btn-lg margin", style: style
       li.dropdown-li role="presentation"
         - if current_page?(controller: '/sales_representative/dashboard', action: 'overview_reports_SDR')
           button.btn.btn-primary.btn-addon.btn-lg.btn-info.disabled.margin style="#{style}" = t('menu.button.overview.report_h')
         - else
-          = simple_form_for @report, method: :get, url: overview_reports_SDR_path, html: { class: "form-group" } do |f|
+          = simple_form_for Report.new, method: :get, url: overview_reports_SDR_path, html: { class: "form-group" } do |f|
             - unless params[:report].nil? || params[:report][:month].blank? || params[:report][:month].include?("/")
             = f.button :submit, t('menu.button.overview.report_h'), class: "btn btn-primary btn-addon btn-lg margin", style: style
 
@@ -53,7 +53,7 @@
         - if current_page?(controller: '/sales_representative/dashboard', action: 'monthly_schedules')
           button.btn.btn-primary.btn-addon.btn-lg.btn-info.disabled.margin style="#{style}" = t('menu.button.monthly.sales')
         - else
-          = simple_form_for @report, method: :get, url: monthly_schedules_path, html: { class: "form-group" } do |f|
+          = simple_form_for Report.new, method: :get, url: monthly_schedules_path, html: { class: "form-group" } do |f|
             - unless params[:report].nil? || params[:report][:month].blank? || params[:report][:month].include?("/")
               = f.input :month, as: :hidden, input_html: { value: params[:report][:month] }
               = f.input :year, as: :hidden, input_html: { value: params[:report][:year] }
@@ -62,7 +62,7 @@
         - if current_page?(controller: '/sales_representative/dashboard', action: 'report_SDR')
           button.btn.btn-primary.btn-addon.btn-lg.btn-info.disabled.margin style="#{style}" = t('menu.button.monthly.report_h')
         - else
-          = simple_form_for @report, method: :get, url: report_SDR_path, html: { class: "form-group"} do |f|
+          = simple_form_for Report.new, method: :get, url: report_sales_representative_path, html: { class: "form-group"} do |f|
             - unless params[:report].nil? || params[:report][:month].blank? || params[:report][:month].include?("/")
               = f.input :month, as: :hidden, input_html: { value: params[:report][:month] }
               = f.input :year, as: :hidden, input_html: { value: params[:report][:year] }

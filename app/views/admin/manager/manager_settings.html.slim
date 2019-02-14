@@ -7,7 +7,7 @@ body
       .panel.panel-default
         div.panel-default.panel-heading.form-inline
           h2.h2.font-thin.form-group = t('manager.table_spreadsheet.title.main') + t('menu.' + report_list[0] + '_side')
-          = simple_form_for @report, method: :get, url: manager_path, html: { class: "form-group m-l-xl", id: "formSelectBoxYear" } do |f|
+          = simple_form_for Report.new, method: :get, url: manager_path, html: { class: "form-group m-l-xl", id: "formSelectBoxYear" } do |f|
             = f.input :side, as: :hidden, input_html: { value: @page_title[2] }
             = f.input :type, as: :hidden, input_html: { value: report_list[0] }
             = f.input :years, as: :hidden, input_html: { value: "" }
@@ -28,7 +28,7 @@ body
                   button.close.form-group aria-label="Close" data-dismiss="modal" type="button" onclick="cleanDataSpreadsheet('#{fetch_last_year}')"
                     span aria-hidden="true"
                     | &times;
-                = simple_form_for @report, method: :post, url: reports_path, default: { input_html: { class: "form-control" } } do |f|
+                = simple_form_for Report.new, method: :post, url: reports_path, default: { input_html: { class: "form-control" } } do |f|
                   .modal-body
                     - if report_list[0] == @notice[-1][0]
                       .form-inline.m-b
@@ -43,7 +43,7 @@ body
                       - @users.each_with_index do |user, k|
                         .form-group
                           h4.h4 = user.full_name
-                          = f.input user.id.to_s, as: :string, label: false, input_html: { value: report_list[0] == 'AM' ? "4500" : "3", id: 'goal'+k.to_s, style: "width: 130px", class: "m-r"}
+                          = f.input user.id.to_s, as: :string, label: false, input_html: { value: report_list[0] == 'AM' ? "4500" : "3", id: 'goal' + k.to_s, style: "width: 130px", class: "m-r"}
                     .form-inline.m-b
                       .form-group
                         h4.h4 = t('manager.new_spreadsheet.title.month')
@@ -90,7 +90,7 @@ body
                   label id="#{report.id}l_obs" = obs
                 td
                   div.form-inline id="#{report.id}divR1"
-                    = simple_form_for @report, method: :get, url: (report_list[0] == 'SDR' ? monthly_schedules_path : monthly_sales_path), html: { class: "form-group" } do |f|
+                    = simple_form_for Report.new, method: :get, url: (report_list[0] == 'SDR' ? monthly_schedules_path : monthly_sales_path), html: { class: "form-group" } do |f|
                       = f.input :month, as: :hidden, input_html: { value: "#{report.month}" }
                       = f.input :year, as: :hidden, input_html: { value: "#{report.year}" }
                       = f.input :report_name, as: :hidden, input_html: { value: "g" }
@@ -106,7 +106,7 @@ body
                             button.close.form-group aria-label="Close" data-dismiss="modal" type="button"
                               span aria-hidden="true"
                               | &times;
-                          = simple_form_for @report, method: :put, url: reports_path+"/"+report.id.to_s, default: { input_html: { class: "form-control" } } do |f|
+                          = simple_form_for Report.new, method: :put, url: reports_path+"/"+report.id.to_s, default: { input_html: { class: "form-control" } } do |f|
                             .modal-body
                               table.table.table-bordered.table-hover.table-condensed.bg-white-only
                                 tbody
@@ -142,6 +142,6 @@ body
                             .modal-footer
                               button.btn.btn-info data-dismiss="modal" type="button" = t('spreadsheets.edit.button.back')
 
-                    = simple_form_for @report, method: :delete, url: reports_path+"/"+report.id.to_s, html: { class: "form-group", :onsubmit => "if(!validateMyForm()){event.preventDefault();}" } do |f|
+                    = simple_form_for Report.new, method: :delete, url: reports_path+"/"+report.id.to_s, html: { class: "form-group", :onsubmit => "if(!validateMyForm()){event.preventDefault();}" } do |f|
                       = f.input :side, as: :hidden, input_html: { value: @page_title[2] }
                       = f.button :submit, t('manager.table_spreadsheet.button.delete'), class: "btn btn-danger m-l"

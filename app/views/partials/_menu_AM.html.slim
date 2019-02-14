@@ -3,12 +3,12 @@
   - if current_page?(controller: '/account_manager/dashboard', action: 'monthly_sales')
     - path = monthly_sales_path
   - elsif current_page?(controller: '/account_manager/dashboard', action: 'report_AM')
-    - path = report_AM_path
+    - path = report_account_manager_path
 
   - unless current_page?(controller: '/account_manager/dashboard', action: 'overview_months_AM') || current_page?(controller: '/account_manager/dashboard', action: 'overview_reports_AM') || current_page?(controller: '/admin/manager', action: 'manager_settings')
-    = simple_form_for @report, method: :get, url: path, html: { class: "form-group", id: "formSelectBox" } do |f|
+    = simple_form_for Report.new, method: :get, url: path, html: { class: "form-group", id: "formSelectBox" } do |f|
       = f.input :month, as: :hidden, input_html: { value: "p", id: "monthSelected" }
-      = f.input :year, label: false, :collection => @month_year_list.map { |report| [ t('menu.search.'+report.month)+"/"+report.year.to_s, report.month+"/"+report.year.to_s] }, :prompt => false, input_html: { class: "form-control", id: "monthBox",  :onchange => "sendData('formSelectBox', 0, 0)", style: "width: 166px"}
+      = f.input :year, label: false, :collection => init_month_year_list.map { |report| [ t('menu.search.'+report.month)+"/"+report.year.to_s, report.month+"/"+report.year.to_s] }, :prompt => false, input_html: { class: "form-control", id: "monthBox",  :onchange => "sendData('formSelectBox', 0, 0)", style: "width: 166px"}
   - else
     input type="text" style="visibility: hidden;"
 
@@ -27,14 +27,14 @@
         - if current_page?(controller: '/account_manager/dashboard', action: 'overview_months_AM')
           button.btn.btn-primary.btn-addon.btn-lg.btn-info.disabled.margin style="#{style}" = t('menu.button.overview.month')
         - else
-          = simple_form_for @report, method: :get, url: overview_months_AM_path, html: { class: "form-group" } do |f|
+          = simple_form_for Report.new, method: :get, url: overview_months_AM_path, html: { class: "form-group" } do |f|
             - unless params[:report].nil? || params[:report][:month].blank? || params[:report][:month].include?("/")
             = f.button :submit, t('menu.button.overview.month'), class: "btn btn-primary btn-addon btn-lg margin", style: style
       li.dropdown-li role="presentation"
         - if current_page?(controller: '/account_manager/dashboard', action: 'overview_reports_AM')
           button.btn.btn-primary.btn-addon.btn-lg.btn-info.disabled.margin style="#{style}" = t('menu.button.overview.report_c')
         - else
-          = simple_form_for @report, method: :get, url: overview_reports_AM_path, html: { class: "form-group" } do |f|
+          = simple_form_for Report.new, method: :get, url: overview_reports_AM_path, html: { class: "form-group" } do |f|
             - unless params[:report].nil? || params[:report][:month].blank? || params[:report][:month].include?("/")
             = f.button :submit, t('menu.button.overview.report_c'), class: "btn btn-primary btn-addon btn-lg margin", style: style
 
@@ -55,7 +55,7 @@
         - if current_page?(controller: '/account_manager/dashboard', action: 'monthly_sales')
           button.btn.btn-primary.btn-addon.btn-lg.btn-info.disabled.margin style="#{style}" = t('menu.button.monthly.sales')
         - else
-          = simple_form_for @report, method: :get, url: monthly_sales_path, html: { class: "form-group" } do |f|
+          = simple_form_for Report.new, method: :get, url: monthly_sales_path, html: { class: "form-group" } do |f|
             - unless params[:report].nil? || params[:report][:month].blank? || params[:report][:month].include?("/")
               = f.input :month, as: :hidden, input_html: { value: params[:report][:month] }
               = f.input :year, as: :hidden, input_html: { value: params[:report][:year] }
@@ -64,7 +64,7 @@
         - if current_page?(controller: '/account_manager/dashboard', action: 'report_AM')
           button.btn.btn-primary.btn-addon.btn-lg.btn-info.disabled.margin style="#{style}" = t('menu.button.monthly.report_c')
         - else
-          = simple_form_for @report, method: :get, url: report_AM_path, html: { class: "form-group"} do |f|
+          = simple_form_for Report.new, method: :get, url: report_account_manager_path, html: { class: "form-group"} do |f|
             - unless params[:report].nil? || params[:report][:month].blank? || params[:report][:month].include?("/")
               = f.input :month, as: :hidden, input_html: { value: params[:report][:month] }
               = f.input :year, as: :hidden, input_html: { value: params[:report][:year] }

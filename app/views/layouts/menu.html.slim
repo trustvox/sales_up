@@ -3,7 +3,6 @@ html
     meta charset="utf-8" /
     = stylesheet_link_tag "application", media: 'all'
     = javascript_include_tag "application", media: 'all'
-
   body
     .app onmousemove="verifyMousePosition(event)"
       #content role="main"
@@ -23,7 +22,7 @@ html
                     li ui-sref-active="active" style="left: 30px"
                       a style="width: 200px; height: 50px" onclick="redirectPage('#{("form-" + i.to_s)}')"
                         i.glyphicon.glyphicon-calendar.icon.text-info-dker#icons
-                        = simple_form_for @report, method: :get, url: links[i-1], html: { id: ("form-" + i.to_s) } do |f|
+                        = simple_form_for Report.new, method: :get, url: links[i-1], html: { id: ("form-" + i.to_s) } do |f|
                           span.font-bold.icons-text = data
 
           .form-inline.row.menu.panel.panel-default
@@ -41,10 +40,10 @@ html
                 - if current_page?(controller: '/admin/manager', action: 'manager_settings')
                   button.btn.btn-primary.btn-addon.btn-info.btn-lg.disabled.margin = t('menu.button.settings')
                 - else
-                  = simple_form_for @report, method: :get, url: manager_path, html: { class: "form-group" } do |f|
+                  = simple_form_for Report.new, method: :get, url: manager_path, html: { class: "form-group" } do |f|
                     = f.input :side, as: :hidden, input_html: { value: @page_title[2] }
                     = f.button :submit, t('menu.button.settings'), class: "btn btn-primary btn-addon btn-lg margin"
 
-              = simple_form_for @report, method: :get, url: logout_path, html: { class: "form-group m-l-xxl" } do |f|
+              = simple_form_for Report.new, method: :get, url: logout_path, html: { class: "form-group m-l-xxl" } do |f|
                 = f.button :submit, t('menu.button.logout'), class: "btn btn-primary btn-addon btn-lg btn-dark btn-size"
           = yield

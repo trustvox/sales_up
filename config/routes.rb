@@ -24,7 +24,8 @@ Rails.application.routes.draw do
       resources :contracts, :report_observations
 
       get '/monthly_sales', to: 'dashboard#monthly_sales'
-      get '/report_AM', to: 'dashboard#report_AM'
+      get '/report_AM', to: 'dashboard#report_AM', 
+                              as: :report_account_manager
       get '/overview_months_AM', to: 'dashboard#overview_months_AM',
                               as: :overview_months_AM
       get '/overview_reports_AM', to: 'dashboard#overview_reports_AM',
@@ -36,11 +37,12 @@ Rails.application.routes.draw do
       resources :meetings
 
       get '/monthly_schedules', to: 'dashboard#monthly_schedules'
-      get '/overview_months_SDR',   to: 'dashboard#overview_months_SDR',
+      get '/overview_months_SDR', to: 'dashboard#overview_months_SDR',
                                 as: :overview_months_SDR
       get '/overview_reports_SDR',  to: 'dashboard#overview_reports_SDR',
                                 as: :overview_reports_SDR
-      get '/report_SDR',     to: 'dashboard#report_SDR'
+      get '/report_SDR', to: 'dashboard#report_SDR',
+                                as: :report_sales_representative
     end
   end
 end
