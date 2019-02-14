@@ -1,43 +1,37 @@
 module SalesRepresentative
-  class DashboardController < SalesRepresentative::MonthlyController
-    before_action :init_view_data, only: %i[monthly_schedules overview_months_SDR
-                                            overview_reports_SDR report_SDR]
+  class DashboardController < SalesRepresentative::MeetingDataController
+    before_action do
+      init_view_data
+      @page_title = init_page_title('SDR')
+    end
 
-    include GraphicHelper
+    before_action only: %i[monthly_schedules report_SDR] do
+      init_current_report('SDR')
+    end
 
     def monthly_schedules
-      search_schedules
+      data = fetch_meeting_by_report_id(@current_report.id)
+      data.empty? ? data = default_meeting : fetch_meeting_data_points(data)
 
-      @day_text = day_text_generator
-      @wday_text = wday_text_generator
       @users = fetch_username_by_types('SDR', 'AM')
 
       render_menu('SDR')
     end
 
     def report_SDR
-      search_SDR_recods('SDR')
-
-      @graphic_text = day_text_generator
-      @wday_text = wday_text_generator
-
+      fetch_record_data_points
+      
       render_menu('SDR')
     end
 
     def overview_months_SDR
       search_overview_months('SDR')
 
-      @month_text = month_text_generator('SDR')
-
       render_menu('SDR')
     end
 
     def overview_reports_SDR
       search_overview_reports('SDR')
-
-      init_overview_options_list('SDR')
-      verify_options unless params[:report].nil?
-      @month_text = month_text_generator('SDR')
 
       render_menu('SDR')
     end
@@ -47,12 +41,6 @@ module SalesRepresentative
     def init_view_data
       verify_authorization(action_name.parameterize.underscore.to_sym,
                            SalesRepresentative::DashboardController)
-
-      @page_title = [t('menu.' + action_name), t('menu.sales_side') + '-' +
-        t('menu.SDR_side'), 'SDR']
-      @report = Report.new
-      @meeting = Meeting.new
-      @observation = ReportObservation.new
     end
   end
 end

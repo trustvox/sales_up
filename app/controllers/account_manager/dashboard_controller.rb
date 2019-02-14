@@ -1,29 +1,28 @@
 module AccountManager
-  class DashboardController < AccountManager::MonthlyController
-    before_action :init_view_data,
-                  only: %i[monthly_sales overview_reports_AM
-                           overview_months_AM report_AM]
+  class DashboardController < AccountManager::ContractDataController
+    before_action except: [:logout] do
+      verify_action
+      @page_title = init_page_title('AM')
+    end
+
+    before_action only: %i[monthly_sales report_AM] do
+      init_current_report('AM')
+    end
 
     before_action :authenticate_user!
     skip_before_action :verify_authenticity_token
 
-    include GraphicHelper
-
     def monthly_sales
-      search_AM
+      data = fetch_contract_by_report_id(@current_report.id)
+      data.empty? ? default_contract : fetch_contract_data_points(data)
 
-      @day_text = day_text_generator
-      @wday_text = wday_text_generator
-      @users = fetch_username_by_types('AM', 'GG')
+      @user = fetch_username_by_types('AM', 'GG')
 
       render_menu('AM')
     end
 
     def report_AM
-      search_recods('AM')
-
-      @graphic_text = day_text_generator
-      @wday_text = wday_text_generator
+      fetch_record_data_points
 
       render_menu('AM')
     end
@@ -31,17 +30,11 @@ module AccountManager
     def overview_months_AM
       search_overview_months('AM')
 
-      @month_text = month_text_generator('AM')
-
       render_menu('AM')
     end
 
     def overview_reports_AM
       search_overview_reports('AM')
-
-      init_overview_options_list('AM')
-      verify_options unless params[:report].nil?
-      @month_text = month_text_generator('AM')
 
       render_menu('AM')
     end
@@ -52,20 +45,9 @@ module AccountManager
 
     private
 
-    def init_view_data
+    def verify_action
       verify_authorization(action_name.parameterize.underscore.to_sym,
-                           AccountManager::DashboardController)
-      @page_title = [t('menu.' + action_name), t('menu.sales_side') + '-' +
-        t('menu.AM_side'), 'AM']
-        
-      fetch_view_form_variables
-    end
-
-    def fetch_view_form_variables
-      @observation = ReportObservation.new
-      @contract = Contract.new
-      @report = Report.new
-      @user = User.new
+                         AccountManager::DashboardController)
     end
   end
 end

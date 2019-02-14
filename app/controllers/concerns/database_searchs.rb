@@ -20,18 +20,18 @@ module DatabaseSearchs
 
     list = fetch_all_years.collect { |year| search_reports_in_year(year, type) }
     list.each { |rep| report += rep }
-
+    
     report
   end
 
-  def find_business_days(first = 1, last = month_days)
+  def find_business_days(last = month_days, first = 1)
     prepare_fetch_gap_without_weekend(first, last)
 
     business_days = 0
     (@first_date..@last_date).each do |date|
       business_days += 1 unless date.saturday? || date.sunday?
     end
-
+    
     business_days
   end
 
