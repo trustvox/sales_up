@@ -2,116 +2,111 @@ module OverviewPoints
   include DatabaseSearchs
   include OverviewHelper
 
-  def initialize
-    @goal_points = []
-    @sum_points = []
-    @AM_points = []
-
-    @first_report = nil
-    @last_report = nil
-  end
-
-  def init_overview_data(type, first = nil, last = nil)
-    if first.blank? || last.blank?
-      @last_report = fetch_last_report(type)
+  def init_report_data(which, type, data)
+    if data.blank?
+      last = fetch_last_report(type)
+      return last if which == 'last'
+      
       reports_count = fetch_report_count_by_type(type)
       range = reports_count < 12 ? reports_count : 12
 
-      @first_report = fetch_reports_by_month_range(@last_report, type, range)
+      return fetch_reports_by_month_range(last, type, range)
+    end
+    fetch_report(data[0], data[1], type)
+  end
+
+  def overview_data(which, type, month = nil, year = nil)
+    first = init_report_data('first', type, month)
+    last = init_report_data('last', type, year)
+    
+    first, last = last, first if valid_report_data?(first, last)
+
+    if which == 'm' 
+      overview_month_data(first, last, type) 
     else
-      @last_report = fetch_report(last[0], last[1], type)
-      @first_report = fetch_report(first[0], first[1], type)
-      verify_dates
+      overview_report_data(first, last, type) 
     end
   end
 
-  def acceptable?
-    !@first.nil? && (@first.month_numb != @last_report.month_numb ||
-      @first.year != @last_report.year)
-  end
+  def overview_month_data(first, last, type)
+    i = 1
 
-  def prepare_overview_data(type = nil)
-    @i = 1
-    @first = @first_report
-    @type = type unless type.nil?
-  end
-
-  def overview_data(which, type)
-    prepare_overview_data(type)
-    which == 'm' ? overview_month_data : overview_report_data
-  end
-
-  def overview_month_data
-    while acceptable?
-      add_goal_sum
-      verify_next_month
+    while acceptable?(first, last)
+      add_goal_sum(i, first, type)
+      first = verify_next_month(first, type)
+      i += 1
     end
 
-    add_goal_sum
+    add_goal_sum(i, first, type)
   end
 
-  def add_goal_sum
-    @goal_points << [@i, @first.goal.to_f]
-    @sum_points << [@i, fetch_sum(@first.id)]
+  def acceptable?(first, last)
+    !first.nil? && (first.month_numb != last.month_numb || first.year != last.year)
   end
 
-  def verify_next_month
-    @i += 1
-    report = fetch_report_by_next_month(@first, @type)
-    @first = report
+  def add_goal_sum(index, first, type)
+    @goal_points << [index, first.goal.to_f]
+    @AM_points << [index, fetch_sum(first.id, type)]
   end
 
-  def fetch_sum(id)
-    sum = 0
-
-    if @type == 'AM'
-      fetch_contract_by_report_id(id).each do |cont| {sum += cont.value.to_f }
-    else
-      fetch_meeting_by_report_id(id).each { |_meeting| sum += 1 }
-    end
-
-    sum.to_s
+  def verify_next_month(first, type)
+    fetch_report_by_next_month(first, type)
   end
 
-  def overview_report_data
-    @users.collect do |user|
+  def init_user_data(type)
+    return fetch_user_by_sub_area(type) if valid_report_data_for_overview?
+
+    fetch_user_by_username(params[:report][:report_name])
+  end
+
+  def overview_report_data(first, last, type)
+    i = 1
+    report = first
+
+    init_user_data(type).collect do |user|
       list = []
       
-      while acceptable?
-        list << verify_filter_option(user.id)
-        verify_next_month
+      while acceptable?(first, last)
+        list << verify_filter_option(user.id, i, first, type)
+        first = verify_next_month(first, type)
+        i += 1
       end
 
-      list << verify_filter_option(user.id)
-      prepare_overview_data
+      list << verify_filter_option(user.id, i, first, type)
+      first = report
+      i = 1
 
       list
     end
   end
 
-  def verify_filter_option(user_id)
-    @type == 'AM' ? AM_filter(user_id) : SDR_filter(user_id)
-  end
-
-  def AM_filter(user_id)
-    case @filter
-    when 'CS'
-      [@i, fetch_contract_sum(user_id, @first.id)]
-    when 'CP'
-      sum = fetch_contract_sum(user_id, @first.id)
-      [@i, ((sum / fetch_goal_by_id(@first.id)) * 100).round(1)]
-    when 'CC'
-      [@i, fetch_contracts_by_user_report_id(user_id, @first.id)]
+  def verify_filter_option(id, index, first, type)
+    if type == 'AM' 
+      AM_filter(id, index, first, type) 
+    else
+      SDR_filter(id, index, first, type)
     end
   end
 
-  def SDR_filter(user_id)
-    case @filter
+  def AM_filter(user_id, index, first, type)
+    case init_filter(type)
+    when 'CS'
+      [index, fetch_contract_sum(user_id, first.id)]
+    when 'CP'
+      sum = fetch_contract_sum(user_id, first.id)
+      [index, ((sum / fetch_goal_by_id(first.id)) * 100).round(1)]
+    when 'CC'
+      [index, fetch_contracts_by_user_report_id(user_id, first.id)]
+    end
+  end
+
+  def SDR_filter(user_id, index, first, type)
+    case init_filter(type)
     when 'MS'
-      [@i, fetch_meeting_sum(user_id, @first.id)]
+      [index, fetch_meeting_sum(user_id, first.id)]
     when 'MP'
-      sum = fetch_meeting_sum(user_id, @first.id)
-      [@i, ((sum / fetch_goal_by_id(@first.id)) * 100).round(1)]
+      sum = fetch_meeting_sum(user_id, first.id)
+      [index, ((sum / fetch_goal_by_id(first.id)) * 100).round(1)]
     end
   end
 end
