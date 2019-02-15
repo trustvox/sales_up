@@ -30,7 +30,7 @@ module Admin
     def redirect_to_manager
       message = @reports.errors.messages.map { |msg| msg[1] }
       result = message + [[@reports.goal_type]] unless message.empty?
-      
+
       redirect_to controller: 'manager', action: 'manager_settings',
                   'report[year]' => @reports.year,
                   'report[side]' => params[:report][:side],
@@ -61,7 +61,7 @@ module Admin
 
       init_users_data_for_report.each do |user|
         param = params[:report][user.id.to_s]
-        user_goal = param.nil? ? '0' : param.tr(",", ".")
+        user_goal = param.nil? ? '0' : param.tr(',', '.')
 
         change_goal_param(user_goal.to_f, is_sdr)
         change_individual_goal_param(user_goal.to_f, user.id.to_s)

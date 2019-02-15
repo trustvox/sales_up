@@ -6,6 +6,7 @@ module RecordDataPoints
   def fetch_record_data
     fetch_user_by_individual_goal(@current_report.id).collect do |user|
       next fetch_empty_data_array(user) if verify_fetched_data(user.id)
+
       fetch_record_days(user.id)
 
       create_data_array(user, fetch_gap, fetch_record_sum(user.id))
@@ -29,8 +30,8 @@ module RecordDataPoints
   end
 
   def fetch_record_days(user_id)
-    @unique_days = if type_am? 
-                     fetch_unique_days_contract(user_id, @current_report.id) 
+    @unique_days = if type_am?
+                     fetch_unique_days_contract(user_id, @current_report.id)
                    else
                      fetch_unique_days_meeting(user_id, @current_report.id)
                    end
@@ -60,6 +61,7 @@ module RecordDataPoints
 
     @unique_days.each_with_index do |day, i|
       next if i + 1 == @unique_days.length
+
       gap = (day - @unique_days[i + 1]).abs - 1
 
       if gap > @result
@@ -74,11 +76,11 @@ module RecordDataPoints
   def create_data_array(user, gap, sum)
     if type_am?
       count = fetch_closed_contracts(user.id, @current_report.id).count
-      return [user.full_name, count, sum, 
+      return [user.full_name, count, sum,
               (count.to_f / find_business_days(fetch_last_day).to_f).round(1),
-        ((sum / @current_report.goal) * 100).round(1), gap]
+              ((sum / @current_report.goal) * 100).round(1), gap]
     end
-    
+
     [user.full_name, sum, (sum.to_f / find_business_days(fetch_last_day).to_f)
       .round(1), ((sum / @current_report.goal) * 100).round(1), gap]
   end
@@ -138,7 +140,7 @@ module RecordDataPoints
 
   def search_record_points(day, u_id, r_id)
     return @sum += fetch_meeting_sum(u_id, r_id, day) unless type_am?
-    
+
     fetch_contracts(day, r_id, u_id).map { |con| @sum += con.value.to_f }
   end
 

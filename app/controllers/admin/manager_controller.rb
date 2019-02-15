@@ -1,7 +1,7 @@
 module Admin
   class ManagerController < ApplicationController
     before_action :init_manager_data, only: [:manager_settings]
-    
+
     before_action :authenticate_user!
 
     def manager_settings

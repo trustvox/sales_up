@@ -17,7 +17,7 @@ module AccountManager
     def destroy
       @observation = ReportObservation.find_by(id: params[:id])
       @observation.destroy
-      
+
       redirect_to_report
     end
 

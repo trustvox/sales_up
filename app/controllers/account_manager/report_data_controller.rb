@@ -12,7 +12,7 @@ module AccountManager
     def fetch_report_data_points(data)
       init_report_data_points
       start_data
-      
+
       @report_data = fetch_report_data(data)
       fetch_report_points
     end

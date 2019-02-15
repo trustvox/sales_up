@@ -19,7 +19,7 @@ module SalesRepresentative
 
     def report_sdr
       fetch_record_data_points
-      
+
       render_menu(SIDES[1])
     end
 

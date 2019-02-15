@@ -6,7 +6,7 @@ module OverviewPoints
     if data.blank?
       last = fetch_last_report(type)
       return last if which == 'last'
-      
+
       reports_count = fetch_report_count_by_type(type)
       range = reports_count < 12 ? reports_count : 12
 
@@ -18,13 +18,13 @@ module OverviewPoints
   def overview_data(which, type, month = nil, year = nil)
     first = init_report_data('first', type, month)
     last = init_report_data('last', type, year)
-    
+
     first, last = last, first if valid_report_data?(first, last)
 
-    if which == 'm' 
-      overview_month_data(first, last, type) 
+    if which == 'm'
+      overview_month_data(first, last, type)
     else
-      overview_report_data(first, last, type) 
+      overview_report_data(first, last, type)
     end
   end
 
@@ -65,7 +65,7 @@ module OverviewPoints
 
     init_user_data(type).collect do |user|
       list = []
-      
+
       while acceptable?(first, last)
         list << verify_filter_option(user.id, i, first, type)
         first = verify_next_month(first, type)
@@ -81,8 +81,8 @@ module OverviewPoints
   end
 
   def verify_filter_option(id, index, first, type)
-    if type == 'am' 
-      am_filter(id, index, first, type) 
+    if type == 'am'
+      am_filter(id, index, first, type)
     else
       sdr_filter(id, index, first, type)
     end

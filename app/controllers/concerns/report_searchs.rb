@@ -110,7 +110,7 @@ module ReportSearchs
   def fetch_user_by_individual_goal_with_id(id)
     goals = []
     list = fetch_report_by_id(id).individual_goal.split('-')
-    
+
     list.each_with_index { |goal, i| goals << goal.to_i unless i.odd? }
 
     goals

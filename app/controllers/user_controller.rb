@@ -45,7 +45,7 @@ class UserController < ApplicationController
 
   def verify_user_status
     redirect_to overview_months_am_path(locale: :pt) if user_signed_in?
-    
+
     @user = User.new
   end
 end

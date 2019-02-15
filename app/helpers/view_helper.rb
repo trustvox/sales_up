@@ -13,9 +13,9 @@ module ViewHelper
 
   def init_current_report(type)
     @current_report = if params[:report].nil?
-                        fetch_last_report(type) 
+                        fetch_last_report(type)
                       else
-                        fetch_report(params[:report][:month], 
+                        fetch_report(params[:report][:month],
                                      params[:report][:year], type)
                       end
   end

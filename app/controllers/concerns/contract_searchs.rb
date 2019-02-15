@@ -23,7 +23,7 @@ module ContractSearchs
     values = 0
     contracts = fetch_closed_contracts(user_id, report_id)
     contracts.each { |contract| values += contract.value.to_f }
-    
+
     values
   end
 

@@ -39,7 +39,7 @@ module SalesRepresentative
 
     def valid_params(action)
       @meetings = Meeting.new(meeting_params)
-      
+
       redirect_to_monthly_schedules(action) unless @meetings.valid?
     end
 

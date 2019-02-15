@@ -19,7 +19,7 @@ module AccountManager
       return overview_data(which, type) if params[:report].nil?
 
       overview_data(which, type, params[:report][:month].split('/'),
-                                 params[:report][:year].split('/'))
+                    params[:report][:year].split('/'))
     end
   end
 end

@@ -23,7 +23,7 @@ module GraphicHelper
     end
 
     month_text << add_month_text(i, first)
-    
+
     month_text
   end
 
@@ -37,7 +37,7 @@ module GraphicHelper
 
   def init_user_options(type)
     user_options = [[t('overview.' + type + '.all'), 'All']] +
-      fetch_username_by_sub_area(type).collect { |user| [user, user] }
+                   fetch_username_by_sub_area(type).collect { |user| [user, user] }
 
     return user_options if valid_report_data_for_overview?
 
@@ -53,7 +53,7 @@ module GraphicHelper
                        [[t('overview.sdr.ms'), 'MS'],
                         [t('overview.sdr.mp'), 'MP']]
                      end
-                     
+
     return filter_options if valid_report_data_for_overview?
 
     verify_options_data(filter_options, params[:report][:goal])
@@ -80,7 +80,7 @@ module GraphicHelper
     return 'Wednesday' if date.wednesday?
     return 'Thursday' if date.thursday?
     return 'Friday' if date.friday?
-    
+
     verify_weekend(date)
   end
 

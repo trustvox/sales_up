@@ -44,11 +44,11 @@ module AccountManager
     end
 
     def set_contracts_params
-      @contracts.value *= (params[:contract][:value_1].to_f/100)
+      @contracts.value *= (params[:contract][:value_1].to_f / 100)
       @contracts.save!
 
       @contracts = Contract.new(contract_params)
-      @contracts.value *= (params[:contract][:value_2].to_f/100)
+      @contracts.value *= (params[:contract][:value_2].to_f / 100)
       @contracts.user_id = params[:contract][:user].to_i
     end
 

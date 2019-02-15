@@ -89,18 +89,18 @@ module ReportDataPoints
 
   def day_value_by_index
     return 0 if @index.zero?
-    
+
     @overall_data[@index - 1][1]
   end
 
   def fetch_report_points
     last_data = nil
-    
+
     @report_data.map do |data|
       !@wait_to_sunday ? add_sun_to_fri(data) : add_fri_to_sun(data)
       last_data = data
     end
-    
+
     add_data(last_data) if @report_points[-1][0] != last_data[0]
   end
 

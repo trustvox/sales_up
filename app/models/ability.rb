@@ -13,13 +13,13 @@ class Ability
     authorize_spector(user)
   end
 
-  def authorize_am(user)
+  def authorize_am(_user)
     can :manage, AccountManager::ReportObservationsController
     can :manage, AccountManager::ContractsController
     can :manage, SalesRepresentative::MeetingsController
   end
 
-  def authorize_sdr(user)
+  def authorize_sdr(_user)
     can :manage, SalesRepresentative::MeetingsController
   end
 

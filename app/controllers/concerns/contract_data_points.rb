@@ -64,7 +64,7 @@ module ContractDataPoints
 
     list = [info.day, @data[:contract_sum], '1-' + info.store_name + '; ',
             info.value, '1-' + fetch_username_by_id(info.user_id) + '; ']
-            
+
     @contract_data << list
   end
 

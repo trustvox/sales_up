@@ -5,7 +5,7 @@ module OverviewHelper
     list = all_date_list(type)
     remove_previous_month(list, type) if type == 'am'
 
-    list = if params[:report].nil? 
+    list = if params[:report].nil?
              remove_first_value(list)
            else
              remove_current_value(list, which, type)
@@ -25,7 +25,7 @@ module OverviewHelper
   end
 
   def prepare_lists(which)
-    return params[:report][:month].split('/') if which == 'first' 
+    return params[:report][:month].split('/') if which == 'first'
 
     params[:report][:year].split('/')
   end
@@ -38,7 +38,7 @@ module OverviewHelper
   end
 
   def wrong_month_year?(first, last)
-    first.year == last.year && !(first.month_number < last.month_number)
+    first.year == last.year && first.month_number >= last.month_number
   end
 
   def valid_report_data?(first, last)
@@ -58,7 +58,7 @@ module OverviewHelper
   end
 
   def init_filter(type)
-    if params[:report].nil? 
+    if params[:report].nil?
       type == 'am' ? (return 'CS') : (return 'MS')
     end
 
@@ -68,13 +68,13 @@ module OverviewHelper
   def init_symbol_with_filter(type)
     case init_filter(type)
     when 'CS'
-      return t('graphic.currency') + ' %y.2'
+      t('graphic.currency') + ' %y.2'
     when 'CC'
-      return '%y ' + t('graphic.contract')
+      '%y ' + t('graphic.contract')
     when 'MS'
-      return '%y ' + t('graphic.meeting')
+      '%y ' + t('graphic.meeting')
     else
-      return '%y.2%'
+      '%y.2%'
     end
   end
 
