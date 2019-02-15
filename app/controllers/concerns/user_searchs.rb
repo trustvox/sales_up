@@ -16,7 +16,7 @@ module UserSearchs
   end
 
   def fetch_username_by_types(sub1, sub2)
-    User.where('sub_area = ? OR sub_area = ?', sub1, sub2).order('full_name')
+    User.where(sub_area: sub1).or(User.where(sub_area: sub2))
   end
 
   def fetch_user_by_area(type)

@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  SIDES = ['am', 'sdr', 'gg'].freeze
+
   include DatabaseSearchs
   include ViewHelper
   
@@ -17,14 +19,15 @@ class ApplicationController < ActionController::Base
 
   protected
 
-  def verify_authorization(simbol, class_name)
-    authorize! simbol, class_name
+  def verify_authorization(class_name)
+    authorize! action_name.to_sym, class_name
   rescue CanCan::AccessDenied
-    redirect_to overview_months_AM_path
+    redirect_to (resource.sdr? ? monthly_schedules_path : monthly_sales_path)
   end
 
   def render_menu(type)
     @partial_path = '/partials/menu_' + type
+    @page_title = init_page_title(type)
     render layout: 'menu'
   end
 

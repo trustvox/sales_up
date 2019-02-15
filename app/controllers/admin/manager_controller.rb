@@ -5,8 +5,7 @@ module Admin
     before_action :authenticate_user!
 
     def manager_settings
-      @page_title = init_page_title(params[:report][:side])
-      render_menu(@page_title[2])
+      render_menu(params[:report][:side])
     end
 
     def manage_new_user
@@ -18,8 +17,7 @@ module Admin
     private
 
     def init_manager_data
-      verify_authorization(action_name.parameterize.underscore.to_sym,
-                           Admin::ManagerController)
+      verify_authorization(Admin::ManagerController)
 
       @spreadsheets = []
       @unique_years = []
