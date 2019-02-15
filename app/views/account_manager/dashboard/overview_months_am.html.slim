@@ -1,15 +1,15 @@
 head
   title Sales Up - Overview Month
-  - first_list = fetch_overview_search_bar_list('first', 'AM')
-  - last_list = fetch_overview_search_bar_list('last', 'AM')
+  - first_list = fetch_overview_search_bar_list('first', 'am')
+  - last_list = fetch_overview_search_bar_list('last', 'am')
   - last_list.shift if last_list[0] == first_list[0]
-body onload="generateOverviewPlot(#{@goal_points}, #{@AM_points}, #{month_text_generator(first_list[0], last_list[0], 'AM')}, 'sales')"
+body onload="generateOverviewPlot(#{@goal_points}, #{@am_points}, #{month_text_generator(first_list[0], last_list[0], 'am')}, 'sales')"
   div style="margin-top: -30px;"
     .row.wrapper-md
       .panel.panel-default
         .panel-heading
           .form-inline
-            = simple_form_for Report.new, method: :get, url: overview_months_AM_path, html: { class: "form-group" } do |f|
+            = simple_form_for Report.new, method: :get, url: overview_months_am_path, html: { class: "form-group" } do |f|
               h3.h3.form-group.m-r
                 = t('overview.between')
                 = f.input :month, label: false, :collection => first_list.map { |report| [ t('menu.search.'+report.month)+"/"+report.year.to_s, report.month+"/"+report.year.to_s] }, :prompt => false, input_html: { class: "form-control", id: "monthBox", align: "central"}

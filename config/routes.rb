@@ -24,12 +24,12 @@ Rails.application.routes.draw do
       resources :contracts, :report_observations
 
       get '/monthly_sales', to: 'dashboard#monthly_sales'
-      get '/report_AM', to: 'dashboard#report_AM', 
+      get '/report_am', to: 'dashboard#report_am', 
                               as: :report_account_manager
-      get '/overview_months_AM', to: 'dashboard#overview_months_AM',
-                              as: :overview_months_AM
-      get '/overview_reports_AM', to: 'dashboard#overview_reports_AM',
-                                as: :overview_reports_AM
+      get '/overview_months_am', to: 'dashboard#overview_months_am',
+                              as: :overview_months_am
+      get '/overview_reports_am', to: 'dashboard#overview_reports_am',
+                                as: :overview_reports_am
       get '/logout', to: 'dashboard#logout'
     end
 
@@ -37,11 +37,11 @@ Rails.application.routes.draw do
       resources :meetings
 
       get '/monthly_schedules', to: 'dashboard#monthly_schedules'
-      get '/overview_months_SDR', to: 'dashboard#overview_months_SDR',
-                                as: :overview_months_SDR
-      get '/overview_reports_SDR',  to: 'dashboard#overview_reports_SDR',
-                                as: :overview_reports_SDR
-      get '/report_SDR', to: 'dashboard#report_SDR',
+      get '/overview_months_sdr', to: 'dashboard#overview_months_sdr',
+                                as: :overview_months_sdr
+      get '/overview_reports_sdr',  to: 'dashboard#overview_reports_sdr',
+                                as: :overview_reports_sdr
+      get '/report_sdr', to: 'dashboard#report_sdr',
                                 as: :report_sales_representative
     end
   end

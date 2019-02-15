@@ -36,12 +36,12 @@ pt:
     compare: "Compare: "
     with: "Com: "
     button: "Procurar"
-    AM:
-      all: "Todos os AMs"
+    am:
+      all: "Todos os ams"
       cs: "Soma dos contratos"
       cc: "Contratos Fechados"
       cp: "Percentual sobre a meta"
-    SDR:
+    sdr:
       all: "Todos os SDRs"
       ms: "Soma das reuniões"
       mp: "Percentual sobre a meta"
@@ -73,8 +73,8 @@ pt:
         scheduled_for: "Data da reunião"
         day: "Dia"
         month_year_range: "Mês/Ano"
-        SDR_name: "Nome do SDR"
-        AM: "Agendado para"
+        sdr_name: "Nome do SDR"
+        am: "Agendado para"
         placeholder: "Novo nome do cliente"
       button:
         meeting: "Reunião"
@@ -82,16 +82,16 @@ pt:
         close: "Fechar"
     spreadsheet:
       title:
-        AM:
+        am:
           day: "Dia"
           weekday: "Dia de semana"
           daily_goal: "Meta Diária"
           contract_sum: "Soma dos Contratos"
           store_name: "Nome do cliente fechado"
           contract_value: "Valor dos Contratos"
-          AM: "Nome do AM"
+          am: "Nome do AM"
           observation: "Observação: "
-        SDR:
+        sdr:
           day: "Dia"
           weekday: "Dia de semana"
           daily_goal: "Meta Diária"
@@ -99,28 +99,28 @@ pt:
           client_name: "Nome do cliente"
           meeting_qtd: "Reuniões marcadas"
           scheduled_for: "Data da reunião"
-          AM: "Agendado para"
-          SDR_name: "Nome do SDR"
+          am: "Agendado para"
+          sdr_name: "Nome do SDR"
           meeting: " reunião"
           meetings: " reuniões"
         option: "Opções"
         observation: "Observação: "
     edit:
       title:
-        AM:
+        am:
           main: "Editar Contrato"
           day: "Dia"
           store: "Nome da loja"
           value: "Valor"
-          AM: "Nome do AM"
+          am: "Nome do AM"
           option: "Opções"
-        SDR:
+        sdr:
           main: "Editar Reunião"
           day: "Dia"
           store: "Nome do cliente"
           scheduled: "Data da reunião"
           meeting: "Agendado para"
-          SDR: "Nome do SDR"
+          sdr: "Nome do SDR"
           option: "Opções"
       button:
         enter: "Editar"
@@ -132,8 +132,8 @@ pt:
     report_name: "Nome: "
     report_goal: "Meta: "
     title:
-      AM: "Nome do AM"
-      SDR: "Nome do SDR"
+      am: "Nome do AM"
+      sdr: "Nome do SDR"
       closed_contracts: "Contratos Fechados"
       contract_sum: "Soma dos Contratos"
       scheduled_sum: "Reuniões Agendadas"
@@ -200,8 +200,8 @@ pt:
         spector: "Espectador"
         normal: "Normal"
         manager: "Gerente"
-        AM: "AM"
-        SDR: "SDR"
+        am: "AM"
+        sdr: "SDR"
         all: "Todas"
       button:
         allow: "Permitir"
@@ -209,18 +209,18 @@ pt:
 
   menu:
     currency: "R"
-    report_AM: "Desempenho dos AMs"
-    report_SDR: "Desempenho dos SDRs"
+    report_am: "Desempenho dos AMs"
+    report_sdr: "Desempenho dos SDRs"
     monthly_sales: "Desempenho mensal"
     monthly_schedules: "Desempenho mensal"
-    overview_reports_AM: "Gráfico geral dos AMs"
-    overview_reports_SDR: "Gráfico geral dos SDRs"
-    overview_months_AM: "Gráfico geral das metas de AM"
-    overview_months_SDR: "Gráfico geral das metas de SDR"
+    overview_reports_am: "Gráfico geral dos AMs"
+    overview_reports_sdr: "Gráfico geral dos SDRs"
+    overview_months_am: "Gráfico geral das metas de AM"
+    overview_months_sdr: "Gráfico geral das metas de SDR"
     manager_settings: "Configuração"
     sales_side: "Comercial"
-    AM_side: "AM"
-    SDR_side: "SDR"
+    am_side: "AM"
+    sdr_side: "SDR"
     spreadsheet:
       Sunday: "Domingo"
       Monday: "Segunda"
@@ -247,12 +247,12 @@ pt:
         title: "Gráficos"
         month: "Metas"
         report_c: "AMs"
-        report_h: "SDR"
+        report_h: "SDRs"
       monthly:
         title: "Desempenho"
         sales: "Mensal"
         report_c: "AMs"
-        report_h: "SDR"
+        report_h: "SDRs"
       commission: "Comissão"
       settings: "Opções"
       logout: "Sair"

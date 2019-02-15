@@ -2,7 +2,7 @@ module SalesRepresentative
   class MeetingDataController < AccountManager::ReportDataController
     include MeetingDataPoints
 
-    layout 'menu_SDR'
+    layout 'menu_sdr'
     before_action :authenticate_user!
 
     def init_meeting_data_points

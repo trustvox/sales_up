@@ -5,7 +5,7 @@ module SalesRepresentative
     end
 
     def create
-      @meetings.user_id = fetch_id_by_username(params[:SDRname])
+      @meetings.user_id = fetch_id_by_username(params[:sdrname])
       @meetings.meeting_for = params[:meeting_for]
       @meetings.save!
 

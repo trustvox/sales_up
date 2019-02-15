@@ -39,11 +39,11 @@ body
                       h4.h4 = t('manager.new_spreadsheet.title.name')
                       = f.input :report_name, label: false, input_html: { style: "width:420px;", placeholder: t('manager.new_spreadsheet.title.placeholder.name'), id: "report_name_n" }
                     .form-inline.m-b
-                      - @users += fetch_user_by_sub_area('AM') if report_list[0] == 'SDR'
+                      - @users += fetch_user_by_sub_area('am') if report_list[0] == 'sdr'
                       - @users.each_with_index do |user, k|
                         .form-group
                           h4.h4 = user.full_name
-                          = f.input user.id.to_s, as: :string, label: false, input_html: { value: report_list[0] == 'AM' ? "4500" : "3", id: 'goal' + k.to_s, style: "width: 130px", class: "m-r"}
+                          = f.input user.id.to_s, as: :string, label: false, input_html: { value: report_list[0] == 'am' ? "4500" : "3", id: 'goal' + k.to_s, style: "width: 130px", class: "m-r"}
                     .form-inline.m-b
                       .form-group
                         h4.h4 = t('manager.new_spreadsheet.title.month')
@@ -66,7 +66,7 @@ body
             tr style=("font-weight: bold;")
               td style="width:20%" = t('manager.table_spreadsheet.title.name')
               td style="width:10%" = t('manager.table_spreadsheet.title.goal')
-              - if report_list[0] == 'SDR'
+              - if report_list[0] == 'sdr'
                 td style="width:13%" = "Reunioes por dia"
               td style="width:20%" = t('manager.table_spreadsheet.title.month_year_range')
               td style="width:15%" = t('manager.table_spreadsheet.title.observation')
@@ -77,10 +77,10 @@ body
                 td.v-middle
                   label id="#{report.id}l_report_name" = report['report_name']
                 td.v-middle
-                  label id="#{report.id}l_goal" = (report_list[0] == 'SDR' ? report['goal'].to_i.to_s + t('spreadsheets.spreadsheet.title.SDR.meetings') : t('menu.currency') + number_to_currency(report['goal']).to_s)
-                - if report_list[0] == 'SDR'
+                  label id="#{report.id}l_goal" = (report_list[0] == 'sdr' ? report['goal'].to_i.to_s + t('spreadsheets.spreadsheet.title.sdr.meetings') : t('menu.currency') + number_to_currency(report['goal']).to_s)
+                - if report_list[0] == 'sdr'
                   td.v-middle
-                    label id="#{report.id}l_scheduled_raise" = report['scheduled_raise'].to_s + t('spreadsheets.spreadsheet.title.SDR.meetings')
+                    label id="#{report.id}l_scheduled_raise" = report['scheduled_raise'].to_s + t('spreadsheets.spreadsheet.title.sdr.meetings')
                 td.v-middle
                   label id="#{report.id}l_month_year" = t('menu.search.' + report['month']) + "/" + report['year'].to_s
                 td.v-middle
@@ -90,7 +90,7 @@ body
                   label id="#{report.id}l_obs" = obs
                 td
                   div.form-inline id="#{report.id}divR1"
-                    = simple_form_for Report.new, method: :get, url: (report_list[0] == 'SDR' ? monthly_schedules_path : monthly_sales_path), html: { class: "form-group" } do |f|
+                    = simple_form_for Report.new, method: :get, url: (report_list[0] == 'sdr' ? monthly_schedules_path : monthly_sales_path), html: { class: "form-group" } do |f|
                       = f.input :month, as: :hidden, input_html: { value: "#{report.month}" }
                       = f.input :year, as: :hidden, input_html: { value: "#{report.year}" }
                       = f.input :report_name, as: :hidden, input_html: { value: "g" }

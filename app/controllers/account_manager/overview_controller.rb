@@ -4,13 +4,13 @@ module AccountManager
 
     def search_overview_months(type)
       @goal_points = []
-      @AM_points = []
+      @am_points = []
 
       start_overview_search('m', type)
     end
 
     def search_overview_reports(type)
-      @AM_points = start_overview_search('r', type)
+      @am_points = start_overview_search('r', type)
     end
 
     private

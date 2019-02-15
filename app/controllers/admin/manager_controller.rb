@@ -1,11 +1,7 @@
 module Admin
   class ManagerController < ApplicationController
     before_action :init_manager_data, only: [:manager_settings]
-    before_action only: [:manage_new_user] do
-      verify_priority_and_type(params[:user][:id],
-                               params[:user][:priority].to_i,
-                               params[:user][:priority_type])
-    end
+    
     before_action :authenticate_user!
 
     def manager_settings
@@ -20,24 +16,6 @@ module Admin
     end
 
     private
-
-    def verify_priority_and_type(user_id, new_priority, new_priority_type)
-      user = fetch_user_by_id(user_id)
-      return user.destroy if new_priority.negative?
-
-      user.priority = new_priority
-      user.priority_type = new_priority.zero? ? 'spec' : new_priority_type
-      user.save
-
-      send_out_message(user.email)
-    end
-
-    def send_out_message(email)
-      zapper = ZapierRuby::Zapper.new(:email_zap)
-      zapper.zap(json_maker(email, 'Account permission allowed',
-                            'Your account have been aproved: ' +
-                            ENV['link_to_root']))
-    end
 
     def init_manager_data
       verify_authorization(action_name.parameterize.underscore.to_sym,
@@ -55,7 +33,7 @@ module Admin
       report_year = params[:report][:years]
       year = report_year[0...-1].split('/') unless report_year.nil?
 
-      %w[AM SDR].each_with_index do |data, i|
+      %w[am sdr].each_with_index do |data, i|
         add_manager_data(
           data, report_year.nil? ? fetch_last_year_with_type(data) : year[i]
         )

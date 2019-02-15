@@ -1,6 +1,6 @@
 head
-  title Sales Up - Closer Report
-body onload="generateRecordPlot(#{@record_point}, #{fetch_line_name}, #{day_text_generator}, #{wday_text_generator}, true)"
+  title Sales Up - SDR Report
+body onload="generateRecordPlot(#{@record_point}, #{fetch_line_name}, #{day_text_generator}, #{wday_text_generator}, false)"
   .row.wrapper-md
     .panel.panel-default style="margin-top: -30px;"
       .panel-heading
@@ -11,7 +11,7 @@ body onload="generateRecordPlot(#{@record_point}, #{fetch_line_name}, #{day_text
         .form-inline
           h3.h3.form-group
             = t('report.report_goal')
-          h3.h3.font-thin.form-group.m-l = t('menu.currency') + number_to_currency(@current_report.goal).to_s
+          h3.h3.font-thin.form-group.m-l-xs = @current_report.goal.to_i.to_s + t('spreadsheets.report_meeting')
 
           - unless @current_report.observation == ""
             h3.h3.form-group.m-l
@@ -26,10 +26,9 @@ body onload="generateRecordPlot(#{@record_point}, #{fetch_line_name}, #{day_text
         table.table ui-jq="footable"
           thead
             tr
-              th = t('report.title.AM')
-              th = t('report.title.closed_contracts')
-              th = t('report.title.contract_sum')
-              th = t('report.title.closed_per_day')
+              th = t('report.title.sdr')
+              th = t('report.title.scheduled_sum')
+              th = t('report.title.scheduled_per_day')
               th = t('report.title.goal_percentage')
               th = t('report.title.inactive_days')
               th = t('report.title.observation')
@@ -41,18 +40,17 @@ body onload="generateRecordPlot(#{@record_point}, #{fetch_line_name}, #{day_text
               - id = fetch_id_by_username(data[0])
               tr
                 td = data[0]
-                td = data[1].to_s + " " + t('report.placeholder.closed')
-                td = t('menu.currency') + number_to_currency(data[2]).to_s
+                td = data[1].to_s + " " + t('report.placeholder.scheduled')
                 - if data[1] == 0
                   td = t('report.title.none')
                 - else
-                  td = data[3]
-                td = data[4].to_s + "%"
-                - if data[5] == 0
+                  td = data[2]
+                td = data[3].to_s + "%"
+                - if data[4] == 0
                   - day = fetch_last_day
                   td = day == month_days ? t('report.title.whole') : day.to_s + " " + t('report.placeholder.days')
                 - else
-                  td = data[5].to_s + " " + t('report.placeholder.days')
+                  td = data[4].to_s + " " + t('report.placeholder.days')
                 td
                   label id="#{id}l_observation" style="width: 168px;"
                     - unless obs.nil?
@@ -71,7 +69,7 @@ body onload="generateRecordPlot(#{@record_point}, #{fetch_line_name}, #{day_text
                           = f.input :observation, as: :hidden, input_html: { value: "p", id: id.to_s+"c_observation" }
                           = f.input :user_id, as: :hidden, input_html: { value: id }
                           = f.input :report_id, as: :hidden, input_html: { value: @current_report.id }
-                          = f.input :side, as: :hidden, input_html: { value: 'account_manager/AM' }
+                          = f.input :side, as: :hidden, input_html: { value: 'sdr' }
                           = f.button :submit, t('report.button.save'), class: "btn btn-success form-group", :onclick => "fillObsData(#{id}, 'c_observation')"
                         button.btn.btn-danger.m-l-xs.form-group onclick="obsVisibility(#{id}, false, 'create');" = t('report.button.close')
                   - else
@@ -84,6 +82,6 @@ body onload="generateRecordPlot(#{@record_point}, #{fetch_line_name}, #{day_text
                           = f.input :observation, as: :hidden, input_html: { value: "p", id: id.to_s+"e_observation" }
                           = f.input :user_id, as: :hidden, input_html: { value: id }
                           = f.input :report_id, as: :hidden, input_html: { value: @current_report.id }
-                          = f.input :side, as: :hidden, input_html: { value: 'account_manager/AM' }
+                          = f.input :side, as: :hidden, input_html: { value: 'sdr' }
                           = f.button :submit, t('report.button.save'), class: "btn btn-success form-group", :onclick => "fillObsData(#{id}, 'e_observation')"
                         button.btn.btn-danger.m-l-xs.form-group onclick="obsVisibility(#{id}, false, 'edit');" = t('report.button.close')

@@ -2,7 +2,7 @@ module MeetingDataPoints
   def start_meeting(searched_contract)
     @search = searched_contract
 
-    @data = { meeting_sum: 0, partial_sum: 0, SDR_names: '',
+    @data = { meeting_sum: 0, partial_sum: 0, sdr_names: '',
               client_names: '', value: 1, wait: false, scheduled_for: '',
               meeting_for: '' }
     @wait = false
@@ -47,11 +47,11 @@ module MeetingDataPoints
 
     list = [info.day, @data[:meeting_sum], @data[:client_names],
             @data[:partial_sum], @data[:scheduled_for], @data[:meeting_for],
-            @data[:SDR_names]]
+            @data[:sdr_names]]
     @meeting_data << list
 
     @data = { meeting_sum: @data[:meeting_sum], partial_sum: 0,
-              SDR_names: '', client_names: '', value: 1, scheduled_for: '',
+              sdr_names: '', client_names: '', value: 1, scheduled_for: '',
               meeting_for: '' }
     @wait = false
   end
@@ -60,19 +60,19 @@ module MeetingDataPoints
     @data[:meeting_sum] += 1
     @data[:partial_sum] += 1
 
-    add_SDR_scheduled_data(info)
+    add_sdr_scheduled_data(info)
 
     @data[:value] += 1
     @wait = true
   end
 
-  def add_SDR_scheduled_data(info)
-    @data[:SDR_names] +=
-      create_string_for_SDR(fetch_username_by_id(@user_id))
-    @data[:client_names] += create_string_for_SDR(info.client_name)
+  def add_sdr_scheduled_data(info)
+    @data[:sdr_names] +=
+      create_string_for_sdr(fetch_username_by_id(@user_id))
+    @data[:client_names] += create_string_for_sdr(info.client_name)
     @data[:scheduled_for] +=
-      create_string_for_SDR(date_to_string(info.scheduled_for))
-    @data[:meeting_for] += create_string_for_SDR(info.meeting_for)
+      create_string_for_sdr(date_to_string(info.scheduled_for))
+    @data[:meeting_for] += create_string_for_sdr(info.meeting_for)
   end
 
   def add_full_meeting_data(info)
@@ -88,7 +88,7 @@ module MeetingDataPoints
      '1-' + fetch_username_by_id(@user_id) + '; ']
   end
 
-  def create_string_for_SDR(text)
+  def create_string_for_sdr(text)
     @data[:value].to_s + '-' + text + '; '
   end
 

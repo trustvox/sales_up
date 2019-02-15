@@ -45,13 +45,13 @@ module GraphicHelper
   end
 
   def init_filter_options(type)
-    filter_options = if type == 'AM'
-                       [[t('overview.AM.cs'), 'CS'],
-                        [t('overview.AM.cc'), 'CC'],
-                        [t('overview.AM.cp'), 'CP']]
+    filter_options = if type == 'am'
+                       [[t('overview.am.cs'), 'CS'],
+                        [t('overview.am.cc'), 'CC'],
+                        [t('overview.am.cp'), 'CP']]
                      else
-                       [[t('overview.SDR.ms'), 'MS'],
-                        [t('overview.SDR.mp'), 'MP']]
+                       [[t('overview.sdr.ms'), 'MS'],
+                        [t('overview.sdr.mp'), 'MP']]
                      end
                      
     return filter_options if valid_report_data_for_overview?

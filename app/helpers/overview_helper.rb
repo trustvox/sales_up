@@ -1,7 +1,9 @@
 module OverviewHelper
+  DATE = ['July', 2017].freeze
+
   def fetch_overview_search_bar_list(which, type)
     list = all_date_list(type)
-    remove_previous_month(list, type) if type == 'AM'
+    remove_previous_month(list, type) if type == 'am'
 
     list = if params[:report].nil? 
              remove_first_value(list)
@@ -11,7 +13,7 @@ module OverviewHelper
   end
 
   def remove_previous_month(list, type)
-    index = list.find_index(fetch_report('July', 2017, type))
+    index = list.find_index(fetch_report(DATE[0], DATE[1], type))
     list = list[0..index]
     list.pop
   end
@@ -46,7 +48,7 @@ module OverviewHelper
   def fetch_sum(id, type)
     sum = 0
 
-    if type == 'AM'
+    if type == 'am'
       fetch_contract_by_report_id(id).each { |cont| sum += cont.value.to_f }
     else
       fetch_meeting_by_report_id(id).each { |_meet| sum += 1 }
@@ -57,13 +59,13 @@ module OverviewHelper
 
   def init_filter(type)
     if params[:report].nil? 
-      type == 'AM' ? (return 'CS') : (return 'MS')
+      type == 'am' ? (return 'CS') : (return 'MS')
     end
 
     params[:report][:goal]
   end
 
-  def init_simbol_with_filter(type)
+  def init_symbol_with_filter(type)
     case init_filter(type)
     when 'CS'
       return t('graphic.currency') + ' %y.2'

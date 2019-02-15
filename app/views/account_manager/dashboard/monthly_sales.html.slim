@@ -86,13 +86,13 @@ body onload="generateGraphicPlot(#{@report_points}, #{@contract_point}, #{day_te
         table.table ui-jq="footable"
           thead
             tr
-              th = t('spreadsheets.spreadsheet.title.AM.day')
-              th = t('spreadsheets.spreadsheet.title.AM.weekday')
-              th = t('spreadsheets.spreadsheet.title.AM.daily_goal')
-              th = t('spreadsheets.spreadsheet.title.AM.contract_sum')
-              th = t('spreadsheets.spreadsheet.title.AM.store_name')
-              th = t('spreadsheets.spreadsheet.title.AM.contract_value')
-              th = t('spreadsheets.spreadsheet.title.AM.AM')
+              th = t('spreadsheets.spreadsheet.title.am.day')
+              th = t('spreadsheets.spreadsheet.title.am.weekday')
+              th = t('spreadsheets.spreadsheet.title.am.daily_goal')
+              th = t('spreadsheets.spreadsheet.title.am.contract_sum')
+              th = t('spreadsheets.spreadsheet.title.am.store_name')
+              th = t('spreadsheets.spreadsheet.title.am.contract_value')
+              th = t('spreadsheets.spreadsheet.title.am.am')
               - if can? :manage, AccountManager::ContractsController
                 th = t('spreadsheets.spreadsheet.title.option')
           tbody
@@ -104,8 +104,8 @@ body onload="generateGraphicPlot(#{@report_points}, #{@contract_point}, #{day_te
                 td = t('menu.currency') + number_to_currency(data[3]).to_s
                 td id="tdStore#{i}" = data[4]
                 td = t('menu.currency') + number_to_currency(data[5]).to_s
-                td id="tdAM#{i}" = data[6]
-                script type="text/javascript" highLightContract("#{data[4]}", "#{data[6]}", "tdStore#{i}", "tdAM#{i}");
+                td id="tdam#{i}" = data[6]
+                script type="text/javascript" highLightContract("#{data[4]}", "#{data[6]}", "tdStore#{i}", "tdam#{i}");
                 td
                   - if can?(:update, AccountManager::ContractsController) && data[4] != '-'
                     button.btn.btn-info data-target="#editModal#{data[0]}" data-toggle="modal" type="button" id="#{data[0]}edit" = t('spreadsheets.edit.button.enter')
@@ -114,7 +114,7 @@ body onload="generateGraphicPlot(#{@report_points}, #{@contract_point}, #{day_te
                       .modal-dialog role="document" style="width: 65%;"
                         .modal-content
                           .modal-header.form-inline
-                            h3.h3.modal-title.form-group = t('spreadsheets.edit.title.AM.main')
+                            h3.h3.modal-title.form-group = t('spreadsheets.edit.title.am.main')
                             button.close.form-group aria-label="Close" data-dismiss="modal" type="button"
                               span aria-hidden="true"
                               | &times;
@@ -122,11 +122,11 @@ body onload="generateGraphicPlot(#{@report_points}, #{@contract_point}, #{day_te
                             table.table.table-bordered.table-hover.table-condensed.bg-white-only style="width: 800px;"
                               thead
                                 tr style=("font-weight: bold;")
-                                  td style="width:5%" = t('spreadsheets.edit.title.AM.day')
-                                  td style="width:10%" = t('spreadsheets.edit.title.AM.store')
-                                  td style="width:10%" = t('spreadsheets.edit.title.AM.value')
-                                  td style="width:25%" = t('spreadsheets.edit.title.AM.AM')
-                                  td style="width:25%" = t('spreadsheets.edit.title.AM.option')
+                                  td style="width:5%" = t('spreadsheets.edit.title.am.day')
+                                  td style="width:10%" = t('spreadsheets.edit.title.am.store')
+                                  td style="width:10%" = t('spreadsheets.edit.title.am.value')
+                                  td style="width:25%" = t('spreadsheets.edit.title.am.am')
+                                  td style="width:25%" = t('spreadsheets.edit.title.am.option')
                               tbody
                                 - fetch_contracts_by_day_report_id(data[0], @current_report).each do |contract|
                                   tr

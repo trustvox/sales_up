@@ -2,11 +2,11 @@ module AccountManager
   class DashboardController < AccountManager::ContractDataController
     before_action except: [:logout] do
       verify_action
-      @page_title = init_page_title('AM')
+      @page_title = init_page_title('am')
     end
 
-    before_action only: %i[monthly_sales report_AM] do
-      init_current_report('AM')
+    before_action only: %i[monthly_sales report_am] do
+      init_current_report('am')
     end
 
     before_action :authenticate_user!
@@ -16,27 +16,27 @@ module AccountManager
       data = fetch_contract_by_report_id(@current_report.id)
       data.empty? ? default_contract : fetch_contract_data_points(data)
 
-      @user = fetch_username_by_types('AM', 'GG')
+      @user = fetch_username_by_types('am', 'gg')
 
-      render_menu('AM')
+      render_menu('am')
     end
 
-    def report_AM
+    def report_am
       fetch_record_data_points
 
-      render_menu('AM')
+      render_menu('am')
     end
 
-    def overview_months_AM
-      search_overview_months('AM')
+    def overview_months_am
+      search_overview_months('am')
 
-      render_menu('AM')
+      render_menu('am')
     end
 
-    def overview_reports_AM
-      search_overview_reports('AM')
+    def overview_reports_am
+      search_overview_reports('am')
 
-      render_menu('AM')
+      render_menu('am')
     end
 
     def logout

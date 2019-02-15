@@ -1,6 +1,6 @@
 module RecordDataPoints
-  def type_AM?
-    @current_report.goal_type == 'AM'
+  def type_am?
+    @current_report.goal_type == 'am'
   end
 
   def fetch_record_data
@@ -13,23 +13,23 @@ module RecordDataPoints
   end
 
   def verify_fetched_data(user_id)
-    return fetch_closed_contracts(user_id, @current_report.id).empty? if type_AM?
+    return fetch_closed_contracts(user_id, @current_report.id).empty? if type_am?
 
     fetch_scheduled_meeting(user_id, @current_report.id).empty?
   end
 
   def fetch_empty_data_array(user)
-    type_AM? ? [user.full_name, 0, 0, 0, 0, 0] : [user.full_name, 0, 0, 0, 0]
+    type_am? ? [user.full_name, 0, 0, 0, 0, 0] : [user.full_name, 0, 0, 0, 0]
   end
 
   def fetch_record_sum(user_id)
-    return fetch_contract_sum(user_id, @current_report.id) if type_AM?
+    return fetch_contract_sum(user_id, @current_report.id) if type_am?
 
     fetch_meeting_sum(user_id, @current_report.id)
   end
 
   def fetch_record_days(user_id)
-    @unique_days = if type_AM? 
+    @unique_days = if type_am? 
                      fetch_unique_days_contract(user_id, @current_report.id) 
                    else
                      fetch_unique_days_meeting(user_id, @current_report.id)
@@ -72,7 +72,7 @@ module RecordDataPoints
   end
 
   def create_data_array(user, gap, sum)
-    if type_AM?
+    if type_am?
       count = fetch_closed_contracts(user.id, @current_report.id).count
       return [user.full_name, count, sum, 
               (count.to_f / find_business_days(fetch_last_day).to_f).round(1),
@@ -137,7 +137,7 @@ module RecordDataPoints
   end
 
   def search_record_points(day, u_id, r_id)
-    return @sum += fetch_meeting_sum(u_id, r_id, day) unless type_AM?
+    return @sum += fetch_meeting_sum(u_id, r_id, day) unless type_am?
     
     fetch_contracts(day, r_id, u_id).map { |con| @sum += con.value.to_f }
   end

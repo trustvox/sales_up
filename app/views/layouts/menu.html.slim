@@ -7,7 +7,7 @@ html
     .app onmousemove="verifyMousePosition(event)"
       #content role="main"
         .app-content-body
-          - types = [[t('menu.sales_side'), t('menu.AM_side'), t('menu.SDR_side')]]
+          - types = [[t('menu.sales_side'), t('menu.am_side'), t('menu.sdr_side')]]
           - links = [monthly_sales_path, monthly_schedules_path]
           .sidenav.bg-black#mySidenav
             nav.navi style="position: absolute; top: 0px;"
@@ -30,7 +30,7 @@ html
               .form-group
                 button.btn.btn-primary.btn-addon.btn-lg.btn-dark.btn-size style="font-size:22px; position: relative; left: -20px; width: 55px;" onmouseover="openNav()" &#9776;
               .form-group
-                = link_to(image_tag("trustvox-menu-logo.png"), @current_user.SDR? ? monthly_schedules_path : monthly_sales_path)
+                = link_to(image_tag("trustvox-menu-logo.png"), @current_user.sdr? ? monthly_schedules_path : monthly_sales_path)
               .form-group.margin
                 h3.h3 = @page_title[1]
                 h2.font-thin.h2 = @page_title[0]

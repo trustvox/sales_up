@@ -51,8 +51,8 @@ module ContractDataPoints
     @data[:partial_sum] += info.value
 
     @data[:vendor_names] +=
-      create_string_for_AM(fetch_username_by_id(info.user_id))
-    @data[:store_names] += create_string_for_AM(info.store_name)
+      create_string_for_am(fetch_username_by_id(info.user_id))
+    @data[:store_names] += create_string_for_am(info.store_name)
 
     @data[:value] += 1
 
@@ -68,7 +68,7 @@ module ContractDataPoints
     @contract_data << list
   end
 
-  def create_string_for_AM(text)
+  def create_string_for_am(text)
     @data[:value].to_s + '-' + text + '; '
   end
 end

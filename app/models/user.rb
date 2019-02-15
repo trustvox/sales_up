@@ -11,11 +11,11 @@ class User < ApplicationRecord
   end
 
   def manager?
-    sub_area == 'GG'
+    sub_area == 'gg'
   end
 
   def overall_manager?
-    area == 'GG'
+    area == 'gg'
   end
 
   def regular?
@@ -26,23 +26,23 @@ class User < ApplicationRecord
     area == 'sales'
   end
 
-  def AM?
-    sub_area == 'AM'
+  def am?
+    sub_area == 'am'
   end
 
-  def SDR?
-    sub_area == 'SDR'
+  def sdr?
+    sub_area == 'sdr'
   end
 
   def spectator?
     sub_area == 'spec'
   end
 
-  def FN?
-    sub_area == 'FN'
+  def fn?
+    sub_area == 'fn'
   end
 
-  def RA?
-    sub_area == 'RA'
+  def ra?
+    sub_area == 'ra'
   end
 end

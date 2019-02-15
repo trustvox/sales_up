@@ -7,19 +7,19 @@ class Ability
   end
 
   def authorize(user)
-    authorize_AM(user) if user.AM?
-    authorize_SDR(user) if user.SDR?
+    authorize_am(user) if user.am?
+    authorize_sdr(user) if user.sdr?
 
     authorize_spector(user)
   end
 
-  def authorize_AM(user)
+  def authorize_am(user)
     can :manage, AccountManager::ReportObservationsController
     can :manage, AccountManager::ContractsController
     can :manage, SalesRepresentative::MeetingsController
   end
 
-  def authorize_SDR(user)
+  def authorize_sdr(user)
     can :manage, SalesRepresentative::MeetingsController
   end
 

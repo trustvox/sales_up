@@ -56,27 +56,27 @@ module Admin
     end
 
     def prepare_goal_param
-      is_SDR = params[:report][:goal_type] == 'SDR'
+      is_sdr = params[:report][:goal_type] == 'sdr'
       @reports.scheduled_raise = 0
 
       init_users_data_for_report.each do |user|
         param = params[:report][user.id.to_s]
         user_goal = param.nil? ? '0' : param.tr(",", ".")
 
-        change_goal_param(user_goal.to_f, is_SDR)
+        change_goal_param(user_goal.to_f, is_sdr)
         change_individual_goal_param(user_goal.to_f, user.id.to_s)
       end
     end
 
     def init_users_data_for_report
-      users = fetch_user_by_sub_area('AM')
-      users += fetch_user_by_sub_area('SDR') if params[:report][:goal_type] == 'SDR'
+      users = fetch_user_by_sub_area('am')
+      users += fetch_user_by_sub_area('sdr') if params[:report][:goal_type] == 'sdr'
 
       users
     end
 
-    def change_goal_param(goal, is_SDR)
-      is_SDR ? @reports.scheduled_raise += goal : @reports.goal += goal
+    def change_goal_param(goal, is_sdr)
+      is_sdr ? @reports.scheduled_raise += goal : @reports.goal += goal
     end
 
     def change_individual_goal_param(goal, id)

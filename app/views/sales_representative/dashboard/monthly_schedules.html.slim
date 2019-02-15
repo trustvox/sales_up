@@ -65,22 +65,22 @@ body onload="generateGraphicPlot(#{@report_points}, #{@meeting_points}, #{day_te
                 .form-inline.m-b
                   = f.input :user_id, as: :hidden, label: false, id: "user_id", input_html: { value: @users[0].id }
                   .checkbox
-                    h4.h4 = t('spreadsheets.meeting.title.SDR_name')
+                    h4.h4 = t('spreadsheets.meeting.title.sdr_name')
                     .radio.form-inline
                       label.h4.i-checks.m-r-md.form-group
-                        input type="radio" id="username#{@users[0].id}" name="SDRname" required="" value="#{@users[0].full_name}" checked=""
+                        input type="radio" id="username#{@users[0].id}" name="sdrname" required="" value="#{@users[0].full_name}" checked=""
                         i
                         | #{@users[0].full_name}
                       -for i in 1..@users.length-1
                         -next if @users[i].admin?
                         label.h4.i-checks.m-r-md.form-group
-                          input type="radio" name="SDRname" value="#{@users[i].full_name}" id="username#{@users[i].id}"
+                          input type="radio" name="sdrname" value="#{@users[i].full_name}" id="username#{@users[i].id}"
                           i
                           | #{@users[i].full_name}
                 .form-inline
                   = f.input :meeting_for, as: :hidden, label: false, id: "meeting_for", input_html: { value: @users[0].full_name }
                   .checkbox
-                    h4.h4 = t('spreadsheets.meeting.title.AM')
+                    h4.h4 = t('spreadsheets.meeting.title.am')
                     .radio.form-inline
                       label.h4.i-checks.m-r-md.form-group
                         input type="radio" id="#{@users[0].id}username#{@users[0].id}" name="meeting_for" required="" value="#{@users[0].full_name}" checked=""
@@ -103,15 +103,15 @@ body onload="generateGraphicPlot(#{@report_points}, #{@meeting_points}, #{day_te
         table.table ui-jq="footable"
           thead
             tr
-              th = t('spreadsheets.spreadsheet.title.SDR.day')
-              th = t('spreadsheets.spreadsheet.title.SDR.weekday')
-              th style="width: 10%" = t('spreadsheets.spreadsheet.title.SDR.daily_goal')
-              th = t('spreadsheets.spreadsheet.title.SDR.meeting_sum')
-              th style="width: 13%" = t('spreadsheets.spreadsheet.title.SDR.client_name')
-              th = t('spreadsheets.spreadsheet.title.SDR.meeting_qtd')
-              th = t('spreadsheets.spreadsheet.title.SDR.scheduled_for')
-              th = t('spreadsheets.spreadsheet.title.SDR.AM')
-              th = t('spreadsheets.spreadsheet.title.SDR.SDR_name')
+              th = t('spreadsheets.spreadsheet.title.sdr.day')
+              th = t('spreadsheets.spreadsheet.title.sdr.weekday')
+              th style="width: 10%" = t('spreadsheets.spreadsheet.title.sdr.daily_goal')
+              th = t('spreadsheets.spreadsheet.title.sdr.meeting_sum')
+              th style="width: 13%" = t('spreadsheets.spreadsheet.title.sdr.client_name')
+              th = t('spreadsheets.spreadsheet.title.sdr.meeting_qtd')
+              th = t('spreadsheets.spreadsheet.title.sdr.scheduled_for')
+              th = t('spreadsheets.spreadsheet.title.sdr.am')
+              th = t('spreadsheets.spreadsheet.title.sdr.sdr_name')
               - if can? :manage, SalesRepresentative::MeetingsController
                 th = t('spreadsheets.spreadsheet.title.option')
           tbody
@@ -119,16 +119,16 @@ body onload="generateGraphicPlot(#{@report_points}, #{@meeting_points}, #{day_te
               tr
                 td = data[0]
                 td = t('menu.spreadsheet.' + data[1])
-                td = data[2].to_f.round(2).to_s + t('spreadsheets.spreadsheet.title.SDR.meetings')
+                td = data[2].to_f.round(2).to_s + t('spreadsheets.spreadsheet.title.sdr.meetings')
                 td
-                  = data[3].to_s + (data[3] == 1 ? t('spreadsheets.spreadsheet.title.SDR.meeting') : t('spreadsheets.spreadsheet.title.SDR.meetings'))
+                  = data[3].to_s + (data[3] == 1 ? t('spreadsheets.spreadsheet.title.sdr.meeting') : t('spreadsheets.spreadsheet.title.sdr.meetings'))
                 td id="tdStore#{i}" = data[4]
                 td
-                  = data[5].to_s + (data[5] == 1 ? t('spreadsheets.spreadsheet.title.SDR.meeting') : t('spreadsheets.spreadsheet.title.SDR.meetings'))
+                  = data[5].to_s + (data[5] == 1 ? t('spreadsheets.spreadsheet.title.sdr.meeting') : t('spreadsheets.spreadsheet.title.sdr.meetings'))
                 td id="tdScheduled#{i}" = data[6].to_s
                 td id="tdSalesman#{i}" = data[7].to_s
-                td id="tdSDR#{i}" = data[8].to_s
-                script type="text/javascript" highLightMeeting("#{data[4]}", "#{data[6]}", "#{data[7]}", "#{data[8]}", "tdStore#{i}", "tdScheduled#{i}", "tdSalesman#{i}", "tdSDR#{i}");
+                td id="tdsdr#{i}" = data[8].to_s
+                script type="text/javascript" highLightMeeting("#{data[4]}", "#{data[6]}", "#{data[7]}", "#{data[8]}", "tdStore#{i}", "tdScheduled#{i}", "tdSalesman#{i}", "tdsdr#{i}");
                 td
                   - if can?(:update, SalesRepresentative::MeetingsController) && data[4] != '-'
                     button.btn.btn-info data-target="#editModal#{data[0]}" data-toggle="modal" type="button" id="#{data[0]}edit" = t('spreadsheets.edit.button.enter')
@@ -137,7 +137,7 @@ body onload="generateGraphicPlot(#{@report_points}, #{@meeting_points}, #{day_te
                       .modal-dialog role="document" style="width: 83%;"
                         .modal-content
                           .modal-header.form-inline
-                            h3.h3.modal-title.form-group = t('spreadsheets.edit.title.SDR.main')
+                            h3.h3.modal-title.form-group = t('spreadsheets.edit.title.sdr.main')
                             button.close.form-group aria-label="Close" data-dismiss="modal" type="button"
                               span aria-hidden="true"
                               | &times;
@@ -145,12 +145,12 @@ body onload="generateGraphicPlot(#{@report_points}, #{@meeting_points}, #{day_te
                             table.table.table-bordered.table-hover.table-condensed.bg-white-only
                               thead
                                 tr style=("font-weight: bold;")
-                                  td style="width:0%" = t('spreadsheets.edit.title.SDR.day')
-                                  td style="width:20%" = t('spreadsheets.edit.title.SDR.store')
-                                  td style="width:15%" = t('spreadsheets.edit.title.SDR.scheduled')
-                                  td style="width:15%" = t('spreadsheets.edit.title.SDR.meeting')
-                                  td style="width:15%" = t('spreadsheets.edit.title.SDR.SDR')
-                                  td style="width:20%" = t('spreadsheets.edit.title.SDR.option')
+                                  td style="width:0%" = t('spreadsheets.edit.title.sdr.day')
+                                  td style="width:20%" = t('spreadsheets.edit.title.sdr.store')
+                                  td style="width:15%" = t('spreadsheets.edit.title.sdr.scheduled')
+                                  td style="width:15%" = t('spreadsheets.edit.title.sdr.meeting')
+                                  td style="width:15%" = t('spreadsheets.edit.title.sdr.sdr')
+                                  td style="width:20%" = t('spreadsheets.edit.title.sdr.option')
                               tbody
                                 - fetch_meetings_by_day_report_id(data[0], @current_report).each do |meeting|
                                   - date = meeting.scheduled_for.strftime("%Y-%m-%d")

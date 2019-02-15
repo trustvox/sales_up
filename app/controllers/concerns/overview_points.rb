@@ -46,7 +46,7 @@ module OverviewPoints
 
   def add_goal_sum(index, first, type)
     @goal_points << [index, first.goal.to_f]
-    @AM_points << [index, fetch_sum(first.id, type)]
+    @am_points << [index, fetch_sum(first.id, type)]
   end
 
   def verify_next_month(first, type)
@@ -81,14 +81,14 @@ module OverviewPoints
   end
 
   def verify_filter_option(id, index, first, type)
-    if type == 'AM' 
-      AM_filter(id, index, first, type) 
+    if type == 'am' 
+      am_filter(id, index, first, type) 
     else
-      SDR_filter(id, index, first, type)
+      sdr_filter(id, index, first, type)
     end
   end
 
-  def AM_filter(user_id, index, first, type)
+  def am_filter(user_id, index, first, type)
     case init_filter(type)
     when 'CS'
       [index, fetch_contract_sum(user_id, first.id)]
@@ -100,7 +100,7 @@ module OverviewPoints
     end
   end
 
-  def SDR_filter(user_id, index, first, type)
+  def sdr_filter(user_id, index, first, type)
     case init_filter(type)
     when 'MS'
       [index, fetch_meeting_sum(user_id, first.id)]

@@ -36,13 +36,13 @@ en:
     compare: "Compare: "
     with: "With: "
     button: "Search"
-    AM:
-      all: "All AMs"
+    am:
+      all: "All ams"
       cs: "Contract Sum"
       cc: "Contracts Closed"
       cp: "Goal's Percentage"
-    SDR:
-      all: "All AMs"
+    sdr:
+      all: "All ams"
       ms: "Meeting Sum"
       mp: "Goal's Percentage"
 
@@ -56,8 +56,8 @@ en:
         store_name: "Store name"
         value: "Value"
         month_year_range: "Month/Year"
-        first: "First AM's Name"
-        second: "Second AM's Name"
+        first: "First am's Name"
+        second: "Second am's Name"
         percentage: "Percentage(%)"
         none: "Nobody"
         day: "Day"
@@ -73,8 +73,8 @@ en:
         scheduled_for: "Scheduled for"
         day: "Day"
         month_year_range: "Month/Year"
-        SDR_name: "SDR name"
-        AM: "Meeting for"
+        sdr_name: "sdr name"
+        am: "Meeting for"
         placeholder: "New client name"
       button:
         meeting: "Meeting"
@@ -82,15 +82,15 @@ en:
         close: "Close"
     spreadsheet:
       title:
-        AM:
+        am:
           day: "Day"
           weekday: "Weekdays"
           daily_goal: "Daily Goal"
           contract_sum: "Contract Sum"
           store_name: "Store Name"
           contract_value: "Contract Values"
-          AM: "AM"
-        SDR:
+          am: "am"
+        sdr:
           day: "Day"
           weekday: "Weekdays"
           daily_goal: "Daily Goal"
@@ -98,28 +98,28 @@ en:
           client_name: "Client Name"
           meeting_qtd: "Scheduled Meetings"
           scheduled_for: "Scheduled for"
-          AM: "Meeting for"
-          SDR_name: "SDR Name"
+          am: "Meeting for"
+          sdr_name: "sdr Name"
           meeting: " meeting"
           meetings: " meetings"
         option: "Options"
         observation: "Observation: "
     edit:
       title:
-        AM:
+        am:
           main: "Edit Contract"
           day: "Day"
           store: "Store Name"
           value: "Value"
-          AM: "AM"
+          am: "am"
           option: "Options"
-        SDR:
+        sdr:
           main: "Edit Meeting"
           day: "Day"
           store: "Client Name"
           scheduled: "Scheduled for"
           meeting: "Meeting for"
-          SDR: "SDR name"
+          sdr: "sdr name"
           option: "Options"
       button:
         enter: "Edit"
@@ -131,7 +131,7 @@ en:
     report_name: "Name: "
     report_goal: "Goal: "
     title:
-      AM: "AM"
+      am: "am"
       closed_contracts: "Contracts Closed"
       contract_sum: "Contract Sum"
       scheduled_sum: "Scheduled Meetings"
@@ -197,8 +197,8 @@ en:
         spector: "Spector"
         normal: "Normal"
         manager: "Manager"
-        AM: "AM"
-        SDR: "SDR"
+        am: "am"
+        sdr: "sdr"
         all: "All"
       button:
         allow: "Allow"
@@ -206,17 +206,17 @@ en:
 
   menu:
     currency: ""
-    report_AM: "AM Report"
-    report_SDR: "SDR Report"
+    report_am: "am Report"
+    report_sdr: "sdr Report"
     monthly_sales: "Monthly Sales"
     monthly_schedules: "Monthly Schedules"
-    overview_reports_AM: "Overview Report from AM"
-    overview_reports_SDR: "Overview Report from SDR"
+    overview_reports_am: "Overview Report from am"
+    overview_reports_sdr: "Overview Report from sdr"
     overview_months: "Overview Month"
     manager_settings: "Manager Settings"
     sales_side: "Sales"
-    AM_side: "AM"
-    SDR_side: "SDR"
+    am_side: "am"
+    sdr_side: "sdr"
     spreadsheet:
       Sunday: "Sunday"
       Monday: "Monday"
@@ -242,13 +242,13 @@ en:
       overview:
         title: "Overview"
         month: "Months"
-        report_c: "AMs"
-        report_h: "SDR"
+        report_c: "ams"
+        report_h: "sdr"
       monthly:
         title: "Monthly"
         sales: "Sales"
-        report_c: "AMs"
-        report_h: "SDR"
+        report_c: "ams"
+        report_h: "sdr"
       commission: "Commission"
       settings: "Settings"
       logout: "Logout"

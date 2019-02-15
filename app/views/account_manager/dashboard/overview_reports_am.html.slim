@@ -1,18 +1,18 @@
 head
   title Sales Up - Overview Report
-  - first_list = fetch_overview_search_bar_list('first', 'AM')
-  - last_list = fetch_overview_search_bar_list('last', 'AM')
+  - first_list = fetch_overview_search_bar_list('first', 'am')
+  - last_list = fetch_overview_search_bar_list('last', 'am')
   - last_list.shift if last_list[0] == first_list[0]
 
-  - user_options = init_user_options('AM')
-  - filter_options = init_filter_options('AM')
-body onload="generateOverviewRecordPlot(#{@AM_points}, #{init_username_data('AM')}, #{month_text_generator(first_list[0], last_list[0], 'AM')}, '#{init_simbol_with_filter('AM')}')"
+  - user_options = init_user_options('am')
+  - filter_options = init_filter_options('am')
+body onload="generateOverviewRecordPlot(#{@am_points}, #{init_username_data('am')}, #{month_text_generator(first_list[0], last_list[0], 'am')}, '#{init_symbol_with_filter('am')}')"
   div style="margin-top: -30px;"
     .row.wrapper-md
       .panel.panel-default
         .panel-heading
           .form-inline
-            = simple_form_for Report.new, method: :get, url: overview_reports_AM_path, html: { class: "form-group" } do |f|
+            = simple_form_for Report.new, method: :get, url: overview_reports_am_path, html: { class: "form-group" } do |f|
               h3.h3.form-group.m-r
                 = t('overview.between')
                 = f.input :month, label: false, :collection => first_list.map { |report| [ t('menu.search.'+report.month)+"/"+report.year.to_s, report.month+"/"+report.year.to_s] }, :prompt => false, input_html: { class: "form-control", id: "monthBox", align: "central"}

@@ -35,7 +35,7 @@ class ApplicationController < ActionController::Base
   def after_sign_in_path_for(resource)
     if user_signed_in?
       stored_location_for(resource) ||
-      resource.SDR? ? monthly_schedules_path : monthly_sales_path
+      resource.sdr? ? monthly_schedules_path : monthly_sales_path
     else
       root_path
     end
