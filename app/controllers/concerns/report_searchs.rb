@@ -2,7 +2,7 @@ module ReportSearchs
   RANGE_MONTHS = 12
 
   def fetch_last_report(type)
-    Report.where(month_numb: fetch_last_month(type),
+    Report.where(month_number: fetch_last_month(type),
                  year: fetch_last_year_with_type(type), goal_type: type)[0]
   end
 
@@ -16,8 +16,8 @@ module ReportSearchs
 
   def fetch_last_month(type)
     Report.distinct.where(year: fetch_last_year_with_type(type),
-                          goal_type: type).order('month_numb')
-          .pluck(:month_numb)[-1]
+                          goal_type: type).order('month_number')
+          .pluck(:month_number)[-1]
   end
 
   def fetch_report(month, year, type)
@@ -28,7 +28,7 @@ module ReportSearchs
 
   def prepare_fetch_reports_by_month_range(report)
     @i = 1
-    @first_m = report.month_numb
+    @first_m = report.month_number
     @first_y = report.year
   end
 
@@ -46,14 +46,14 @@ module ReportSearchs
       @i += 1
     end
 
-    Report.where(month_numb: @first_m, year: @first_y, goal_type: type)[0]
+    Report.where(month_number: @first_m, year: @first_y, goal_type: type)[0]
   end
 
   def fetch_report_by_next_month(current_report, type)
-    if current_report.month_numb + 1 > 12
+    if current_report.month_number + 1 > 12
       fetch_report('January', (current_report.year + 1), type)
     else
-      Report.where(month_numb: current_report.month_numb + 1,
+      Report.where(month_number: current_report.month_number + 1,
                    year: current_report.year, goal_type: type)[0]
     end
   rescue StandardError
@@ -65,11 +65,11 @@ module ReportSearchs
   end
 
   def fetch_reports_by_year(year, type)
-    Report.where(year: year, goal_type: type).order('month_numb').reverse
+    Report.where(year: year, goal_type: type).order('month_number').reverse
   end
 
   def fetch_reports_by_current_year
-    Report.where(year: fetch_last_year).order('month_numb').reverse
+    Report.where(year: fetch_last_year).order('month_number').reverse
   end
 
   def fetch_report_by_unique_years(type, same_year = nil)

@@ -327,7 +327,7 @@ pt:
               not_a_number: "Meta deve ser um número"
             month:
               blank: "Mês não pode estar em branco"
-            month_numb:
+            month_number:
               inclusion: "Número do mês não existe"
         contract:
           attributes:

@@ -38,7 +38,7 @@ module OverviewHelper
   end
 
   def wrong_month_year?(first, last)
-    first.year == last.year && !(first.month_numb < last.month_numb)
+    first.year == last.year && !(first.month_number < last.month_number)
   end
 
   def valid_report_data?(first, last)

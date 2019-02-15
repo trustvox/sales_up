@@ -47,7 +47,7 @@ body
                     .form-inline.m-b
                       .form-group
                         h4.h4 = t('manager.new_spreadsheet.title.month')
-                        = f.input :month_numb, label: false, :collection => (1..12).map { |m| [ t('menu.search.' + Date::MONTHNAMES[m]), m] }, input_html: { id: "month_n" }, prompt: false
+                        = f.input :month_number, label: false, :collection => (1..12).map { |m| [ t('menu.search.' + Date::MONTHNAMES[m]), m] }, input_html: { id: "month_n" }, prompt: false
                       .form-group.m-l
                         h4.h4 = t('manager.new_spreadsheet.title.year')
                         = f.input :year, as: :integer, label: false, input_html: { min: "2010", max: @unique_years[0], id: "year_n", style: "width:120px;", value: fetch_last_year }
@@ -119,7 +119,7 @@ body
                                     td.v-middle
                                       = f.input :report_name, label: false, input_html: { style: "width:270px;font-size: 16px", value: report['report_name'] }
                                     td.v-middle
-                                      = f.input :month_numb, label: false, input_html: { style: "width:60px;font-size: 16px", class: "m-r-xs", value: report['month_numb'] }
+                                      = f.input :month_number, label: false, input_html: { style: "width:60px;font-size: 16px", class: "m-r-xs", value: report['month_number'] }
                                       = f.input :year, label: false, input_html: { style: "width:80px;font-size: 16px", value: report['year'] }
                                     td.v-middle
                                       = f.input :observation, label: false, input_html: { style: "width:200px;font-size: 16px", value: report['observation'] }

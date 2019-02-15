@@ -4,7 +4,7 @@ module GraphicHelper
   end
 
   def wday_text_generator
-    date = Date.new(@current_report.year, @current_report.month_numb, 1) - 1
+    date = Date.new(@current_report.year, @current_report.month_number, 1) - 1
 
     (1..month_days).collect do |day|
       date += 1

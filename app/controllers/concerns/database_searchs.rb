@@ -5,14 +5,14 @@ module DatabaseSearchs
   include MeetingSearchs
 
   def month_days
-    time = Time.days_in_month(@current_report.month_numb)
-    @current_report.month_numb == 12 ? time - 9 : time
+    time = Time.days_in_month(@current_report.month_number)
+    @current_report.month_number == 12 ? time - 9 : time
   end
 
   def fetch_last_day
     today = Time.current
 
-    @current_report.month_numb != today.month ? month_days : today.day
+    @current_report.month_number != today.month ? month_days : today.day
   end
 
   def all_date_list(type)
@@ -35,16 +35,16 @@ module DatabaseSearchs
     business_days
   end
 
-  def prepare_business_days(month_numb, year)
+  def prepare_business_days(month_number, year)
     year = year.to_i
-    month_numb = month_numb.to_i
+    month_number = month_number.to_i
 
-    @first_date = Date.new(year, month_numb, 1)
-    @last_date = Date.new(year, month_numb, Time.days_in_month(month_numb))
+    @first_date = Date.new(year, month_number, 1)
+    @last_date = Date.new(year, month_number, Time.days_in_month(month_number))
   end
 
-  def find_business_days_without_report(month_numb, year)
-    prepare_business_days(month_numb, year)
+  def find_business_days_without_report(month_number, year)
+    prepare_business_days(month_number, year)
 
     business_days = 0
     (@first_date..@last_date).each do |date|
@@ -61,9 +61,9 @@ module DatabaseSearchs
   def prepare_fetch_gap_without_weekend(first, last)
     if first.is_a? Integer
       @first_date =
-        Date.new(@current_report.year, @current_report.month_numb, first)
+        Date.new(@current_report.year, @current_report.month_number, first)
       @last_date =
-        Date.new(@current_report.year, @current_report.month_numb, last)
+        Date.new(@current_report.year, @current_report.month_number, last)
     else
       @first_date = first
       @last_date = last

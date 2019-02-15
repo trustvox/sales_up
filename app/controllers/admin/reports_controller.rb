@@ -50,7 +50,7 @@ module Admin
     def prepare_month_goal_param
       prepare_goal_param
 
-      @reports.month = Date::MONTHNAMES[params[:report][:month_numb].to_i]
+      @reports.month = Date::MONTHNAMES[params[:report][:month_number].to_i]
 
       verify_scheduled_raise unless @reports.scheduled_raise.zero?
     end
@@ -85,14 +85,14 @@ module Admin
 
     def verify_scheduled_raise
       days = find_business_days_without_report(
-        params[:report][:month_numb], params[:report][:year]
+        params[:report][:month_number], params[:report][:year]
       )
       @reports.goal = @reports.scheduled_raise.to_f * days
     end
 
     def report_params
       params.require(:report).permit(:report_name, :goal, :month, :goal_type,
-                                     :month_numb, :year, :observation,
+                                     :month_number, :year, :observation,
                                      :scheduled_raise)
     end
   end

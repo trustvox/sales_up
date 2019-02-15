@@ -1,7 +1,7 @@
 class Report < ApplicationRecord
   validates :report_name, presence: true
   validates :goal, presence: true, numericality: true
-  validates :month_numb, inclusion: { in: (1..12) },
+  validates :month_number, inclusion: { in: (1..12) },
                          presence: true, numericality: { only_integer: true }
   validates :year, presence: true, numericality: true
   validates :month, presence: true, inclusion: {

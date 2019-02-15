@@ -41,7 +41,7 @@ module OverviewPoints
   end
 
   def acceptable?(first, last)
-    !first.nil? && (first.month_numb != last.month_numb || first.year != last.year)
+    !first.nil? && (first.month_number != last.month_number || first.year != last.year)
   end
 
   def add_goal_sum(index, first, type)
