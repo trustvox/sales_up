@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
   def verify_authorization(class_name)
     authorize! action_name.to_sym, class_name
   rescue CanCan::AccessDenied
-    redirect_to (resource.sdr? ? monthly_schedules_path : monthly_sales_path)
+    redirect_to(resource.sdr? ? monthly_schedules_path : monthly_sales_path)
   end
 
   def render_menu(type)
@@ -37,8 +37,8 @@ class ApplicationController < ActionController::Base
 
   def after_sign_in_path_for(resource)
     if user_signed_in?
-      stored_location_for(resource) ||
-        resource.sdr? ? monthly_schedules_path : monthly_sales_path
+      path = resource.sdr? ? monthly_schedules_path : monthly_sales_path
+      stored_location_for(resource) || path
     else
       root_path
     end

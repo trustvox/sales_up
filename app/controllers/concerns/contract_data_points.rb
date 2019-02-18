@@ -8,10 +8,6 @@ module ContractDataPoints
     search_contract_data(searched_contract)
   end
 
-  def fetch_contract_points
-    list = fetch_contract_points_list
-  end
-
   def fetch_contract_points_list
     @contract_data.collect { |cont| [cont[0].to_i, cont[1].to_f] }
   end
@@ -21,7 +17,7 @@ module ContractDataPoints
   def search_contract_data(searchs, wait = false)
     searchs.each_with_index do |info, i|
       if proceed_contract_search?(i, searchs)
-        wait = set_partial_contract_data(info)
+        wait = change_partial_contract_data(info)
       elsif wait
         wait = add_partial_contract_data(info)
       else
@@ -35,7 +31,7 @@ module ContractDataPoints
   end
 
   def add_partial_contract_data(info)
-    set_partial_contract_data(info)
+    change_partial_contract_data(info)
 
     list = [info.day, @data[:contract_sum], @data[:store_names],
             @data[:partial_sum], @data[:vendor_names]]
@@ -46,7 +42,7 @@ module ContractDataPoints
     false
   end
 
-  def set_partial_contract_data(info)
+  def change_partial_contract_data(info)
     @data[:contract_sum] += info.value
     @data[:partial_sum] += info.value
 

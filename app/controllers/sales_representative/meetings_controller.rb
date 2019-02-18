@@ -33,7 +33,8 @@ module SalesRepresentative
       message = @meetings.errors.messages.map { |msg| msg[1] }
 
       redirect_to controller: 'dashboard', action: 'monthly_schedules',
-                  'report[month]' => report.month, 'report[year]' => report.year,
+                  'report[month]' => report.month,
+                  'report[year]' => report.year,
                   notice: message + [[action]]
     end
 

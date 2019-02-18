@@ -5,7 +5,14 @@ module AccountManager
     end
 
     def create
-      set_contracts_params unless params[:contract][:user].to_i.zero?
+      contract_params = params[:contract]
+
+      unless contract_params[:user].to_i.zero?
+        @contracts.value *= (contract_params[:value_1].to_f / 100)
+        @contracts.save!
+
+        set_contracts_params
+      end
 
       @contracts.save!
 
@@ -33,7 +40,8 @@ module AccountManager
       message = @contracts.errors.messages.map { |msg| msg[1] }
 
       redirect_to controller: 'dashboard', action: 'monthly_sales',
-                  'report[month]' => report.month, 'report[year]' => report.year,
+                  'report[month]' => report.month,
+                  'report[year]' => report.year,
                   notice: message + [[action]]
     end
 
@@ -44,9 +52,6 @@ module AccountManager
     end
 
     def set_contracts_params
-      @contracts.value *= (params[:contract][:value_1].to_f / 100)
-      @contracts.save!
-
       @contracts = Contract.new(contract_params)
       @contracts.value *= (params[:contract][:value_2].to_f / 100)
       @contracts.user_id = params[:contract][:user].to_i

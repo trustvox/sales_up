@@ -5,11 +5,9 @@ module OverviewHelper
     list = all_date_list(type)
     remove_previous_month(list, type) if type == 'am'
 
-    list = if params[:report].nil?
-             remove_first_value(list)
-           else
-             remove_current_value(list, which, type)
-           end
+    return remove_first_value(list) if params[:report].nil?
+
+    remove_current_value(list, which, type)
   end
 
   def remove_previous_month(list, type)

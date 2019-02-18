@@ -38,6 +38,7 @@ module Admin
     end
 
     def valid_params
+      @reports.scheduled_raise = 0
       @reports.goal = 0
       @reports.individual_goal = ''
 
@@ -56,21 +57,24 @@ module Admin
     end
 
     def prepare_goal_param
-      is_sdr = params[:report][:goal_type] == 'sdr'
-      @reports.scheduled_raise = 0
-
       init_users_data_for_report.each do |user|
         param = params[:report][user.id.to_s]
-        user_goal = param.nil? ? '0' : param.tr(',', '.')
 
-        change_goal_param(user_goal.to_f, is_sdr)
-        change_individual_goal_param(user_goal.to_f, user.id.to_s)
+        change_goals(param.nil? ? '0' : param.tr(',', '.'), user.id)
       end
+    end
+
+    def change_goals(user_goal, user_id)
+      change_goal_param(user_goal.to_f, params[:report][:goal_type] == 'sdr')
+      change_individual_goal_param(user_goal.to_f, user_id.to_s)
     end
 
     def init_users_data_for_report
       users = fetch_user_by_sub_area('am')
-      users += fetch_user_by_sub_area('sdr') if params[:report][:goal_type] == 'sdr'
+
+      if params[:report][:goal_type] == 'sdr'
+        users += fetch_user_by_sub_area('sdr')
+      end
 
       users
     end

@@ -3,18 +3,10 @@ module RecordDataPoints
     @current_report.goal_type == 'am'
   end
 
-  def fetch_record_data
-    fetch_user_by_individual_goal(@current_report.id).collect do |user|
-      next fetch_empty_data_array(user) if verify_fetched_data(user.id)
-
-      fetch_record_days(user.id)
-
-      create_data_array(user, fetch_gap, fetch_record_sum(user.id))
-    end
-  end
-
   def verify_fetched_data(user_id)
-    return fetch_closed_contracts(user_id, @current_report.id).empty? if type_am?
+    if type_am?
+      return fetch_closed_contracts(user_id, @current_report.id).empty?
+    end
 
     fetch_scheduled_meeting(user_id, @current_report.id).empty?
   end
@@ -85,20 +77,6 @@ module RecordDataPoints
       .round(1), ((sum / @current_report.goal) * 100).round(1), gap]
   end
 
-  def fetch_record_points
-    fetch_user_by_individual_goal(@current_report.id).collect do |user|
-      next if verify_fetched_points(user.id)
-
-      @list = []
-      @sum = 0
-
-      @gap = calculate_delta_gap
-      organize_data(user.id) unless @unique_days.empty?
-
-      @list
-    end
-  end
-
   def verify_fetched_points(user_id)
     fetch_record_days(user_id)
     @unique_days.empty?
@@ -123,7 +101,9 @@ module RecordDataPoints
     aux = []
     length = @unique_days.length
 
-    @unique_days.each_with_index { |day, i| add_gap(aux, day, i) if length > 1 }
+    @unique_days.each_with_index do |day, i|
+      add_gap(aux, day, i) if length > 1
+    end
 
     finish_search(aux)
   end

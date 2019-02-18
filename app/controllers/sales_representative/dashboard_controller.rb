@@ -10,7 +10,7 @@ module SalesRepresentative
 
     def monthly_schedules
       data = fetch_meeting_by_report_id(@current_report.id)
-      data.empty? ? data = default_meeting : fetch_meeting_data_points(data)
+      data.empty? ? default_meeting : fetch_meeting_data_points(data)
 
       @users = fetch_username_by_types(SIDES[1], SIDES[0])
 
