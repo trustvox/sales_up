@@ -8,7 +8,7 @@ module ContractDataPoints
     search_contract_data(searched_contract)
   end
 
-  def fetch_contract_points_list
+  def fetch_contract_points
     @contract_data.collect { |cont| [cont[0].to_i, cont[1].to_f] }
   end
 
