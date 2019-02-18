@@ -8,6 +8,7 @@ Rails.application.routes.draw do
     get '/forgot_password', to: 'user#forgot_password'
     get '/edit_password', to: 'user#edit_password'
     get '/users/:email(.:format)', to: 'user#after_forgot_password'
+    get '/create_schedule', to: 'user#create_schedule'
 
     scope :admin, module: 'admin' do
       resources :reports

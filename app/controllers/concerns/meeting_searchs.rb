@@ -26,4 +26,8 @@ module MeetingSearchs
   def fetch_meetings(day, report_id, user_id)
     Meeting.where(day: day, report_id: report_id, user_id: user_id)
   end
+
+  def fetch_meeting_by_client_name(client)
+    Meeting.find_by(client_name: client)
+  end
 end

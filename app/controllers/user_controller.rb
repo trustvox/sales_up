@@ -7,6 +7,23 @@ class UserController < ApplicationController
 
   def forgot_password; end
 
+  def create_schedule
+    meet = Meeting.new
+      
+    meet.client_name = verify_client_name
+    meet.day = Time.current.day
+    user = fetch_user_by_email(params[:sdr_name])
+
+    meet.scheduled_for = params[:schedule_date].tr(',', '')
+    meet.meeting_for = verify_meeting_for(user)
+
+    meet.user_id = user.id
+    meet.report_id = fetch_last_report('sdr').id
+    meet.save
+    
+    redirect_to root_path
+  end
+
   def edit_password
     redirect_to root_path unless fetch_token_usage(params[:token])
   end
@@ -45,5 +62,19 @@ class UserController < ApplicationController
 
   def verify_user_status
     redirect_to overview_months_am_path(locale: :pt) if user_signed_in?
+  end
+
+  def verify_client_name
+    client = params[:client_name].split('>')[-1]
+    
+    redirect_to root_path unless fetch_meeting_by_client_name(client).nil?
+
+    client
+  end
+
+  def verify_meeting_for(user)
+    return user.full_name if user.am?
+      
+    fetch_user_by_email(params[:am_name].split(',')[0]).full_name
   end
 end
