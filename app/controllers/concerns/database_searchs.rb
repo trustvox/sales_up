@@ -84,4 +84,32 @@ module DatabaseSearchs
   def fetch_token_usage(token)
     TokenPassword.find_by(token: token).used == 'no'
   end
+
+  def verify_friday_to_monday(day, index)
+    first = Date.new(@current_report.year, @current_report.month_number, day)
+    last = first + (@unique_days[index + 1] - 1)
+
+    return 0 if first.friday? && last.monday?
+
+    (day - @unique_days[index + 1]).abs - 1
+  end
+
+  def verify_current_with_last_day(gap_index)
+    last_day = month_finished?
+
+    gap = last_day - @unique_days[-1]
+
+    return [@unique_days[-1], last_day.day] if gap > @result
+
+    [@unique_days[gap_index] + 1, @unique_days[gap_index + 1]]
+  end
+
+  def month_finished?(day)
+    today = Date.current
+    last = 
+      Date.new(@current_report.year, @current_report.month_number + 1, 1) - 1
+
+    if today.month_number == last.month_number && today.year == last.year
+    end
+  end
 end
