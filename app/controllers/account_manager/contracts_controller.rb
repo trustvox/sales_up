@@ -36,13 +36,8 @@ module AccountManager
     private
 
     def redirect_to_monthly_sales(action = nil)
-      report = fetch_report_by_id(@contracts.report_id)
-      message = @contracts.errors.messages.map { |msg| msg[1] }
-
-      redirect_to controller: 'dashboard', action: 'monthly_sales',
-                  'report[month]' => report.month,
-                  'report[year]' => report.year,
-                  notice: message + [[action]]
+      redirect_to_monthly_method(@contracts.report_id, @contracts.errors, 
+                                 'sales', action)
     end
 
     def valid_params(action)

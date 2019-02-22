@@ -24,4 +24,14 @@ module ViewHelper
     [t('menu.' + action_name), t('menu.sales_side') + '-' +
       t('menu.' + type + '_side'), type]
   end
+
+  def redirect_to_monthly_method(id, errors, method_name, action = nil)
+    report = fetch_report_by_id(id)
+    message = errors.messages.map { |msg| msg[1] }
+
+    redirect_to controller: 'dashboard', action: 'monthly_' + method_name,
+                'report[month]' => report.month,
+                'report[year]' => report.year,
+                notice: message + [[action]]
+  end
 end
