@@ -21,15 +21,11 @@ function closeNav() {
   document.getElementById("mySidenav").style.width = "0";
 }
 
-function verifyButtonData(id, first, second, third, forth) {
-  var data_list = [document.getElementById(id+first).value,
-                   document.getElementById(id+second).value,
-                   document.getElementById(id+third).value];
-  if (forth != '0')
-    data_list.push(document.getElementById(id+forth).value);
+function verifyButtonData(arguments) {
+  id = arguments[0];
 
-  for (var i = 0; i < data_list.length; i++)
-    if (data_list[i].trim() == "")
+  for (var i = 1; i < arguments.length; i++)
+    if (document.getElementById(id+arguments[i]).value.trim() == "")
       return document.getElementById(id+'editContract').disabled = true;
   return document.getElementById(id+'editContract').disabled = false;
 }
@@ -51,30 +47,38 @@ function validateMyForm() {
 
 function obsVisibility(id, choice, which) {
   if (choice){
-    if (which == 'edit'){
-      document.getElementById(id+'edit').setAttribute("hidden", true);
-      document.getElementById(id+'form_edit').removeAttribute("hidden");
-    }
-    else{
-      document.getElementById(id+'create').setAttribute("hidden", true);
-      document.getElementById(id+'form_create').removeAttribute("hidden");
-    }
+    showObservation(id, which);
 
     document.getElementById(id+'l_observation').setAttribute("hidden", true);
     document.getElementById(id+'observation').removeAttribute("hidden");
   }
   else{
-    if (which == 'edit'){
-      document.getElementById(id+'edit').removeAttribute("hidden");
-      document.getElementById(id+'form_edit').setAttribute("hidden", true);
-    }
-    else{
-      document.getElementById(id+'create').removeAttribute("hidden");
-      document.getElementById(id+'form_create').setAttribute("hidden", true);
-    }
+    hideObservation(id, which);
 
     document.getElementById(id+'l_observation').removeAttribute("hidden");
     document.getElementById(id+'observation').setAttribute("hidden", true);
+  }
+}
+
+function showObservation(id, which){
+  if (which == 'edit'){
+    document.getElementById(id+'edit').setAttribute("hidden", true);
+    document.getElementById(id+'form_edit').removeAttribute("hidden");
+  }
+  else{
+    document.getElementById(id+'create').setAttribute("hidden", true);
+    document.getElementById(id+'form_create').removeAttribute("hidden");
+  }
+}
+
+function hideObservation(id, which){
+  if (which == 'edit'){
+    document.getElementById(id+'edit').removeAttribute("hidden");
+    document.getElementById(id+'form_edit').setAttribute("hidden", true);
+  }
+  else{
+    document.getElementById(id+'create').removeAttribute("hidden");
+    document.getElementById(id+'form_create').setAttribute("hidden", true);
   }
 }
 
@@ -180,18 +184,21 @@ function fillUsername(idList) {
   }
 }
 
-function setDateTimeInInput(id, first, second, third, forth) {
+function setDateTimeInInput() {
+  id = arguments[0];
+
   var dateData = document.getElementById(id+'scheduled_for_date').value;
   var timeData = document.getElementById(id+'scheduled_for_time').value;
   document.getElementById(id+'scheduled_for').value = dateData + ' ' + timeData;
 
-  verifyButtonData(id, first, second, third, forth);
+  verifyButtonData(arguments);
 }
 
-function setDateTime(dateID, timeID, dateTimeID, date, time) {
-  document.getElementById(dateID).value = date;
-  document.getElementById(timeID).value = time;
-  document.getElementById(dateTimeID).value = date + ' ' + time;
+function setDateTime() {
+  document.getElementById(arguments[0]).value = arguments[3];
+  document.getElementById(arguments[1]).value = arguments[4];
+  document.getElementById(arguments[2]).value = 
+    arguments[3] + ' ' + arguments[4];
 }
 
 function highLightContract(store_names, salesman_names, storeId, salesmanId) {
@@ -201,16 +208,12 @@ function highLightContract(store_names, salesman_names, storeId, salesmanId) {
     setTextColor(salesman_names.split('; '));
 }
 
-function highLightMeeting(store_name, scheduled_for, salesman_name, hunter_name,
-                          storeId, scheduledId, salesmanId, hunterId) {
-  document.getElementById(storeId).innerHTML =
-    setTextColor(store_name.split('; '));
-  document.getElementById(scheduledId).innerHTML =
-    setTextColor(scheduled_for.split('; '));
-  document.getElementById(salesmanId).innerHTML =
-    setTextColor(salesman_name.split('; '));
-  document.getElementById(hunterId).innerHTML =
-    setTextColor(hunter_name.split('; '));
+function highLightMeeting() {
+  // document.getElementById(Id).innerHTML = setTextColor(name.split('; '));
+
+  for (var i = 0; i < 4; i++)
+    document.getElementById(arguments[i+4]).innerHTML =
+      setTextColor(arguments[i].split('; '));
 }
 
 function setTextColor(text) {
@@ -228,188 +231,4 @@ function setTextColor(text) {
       colorIndex = 0;
   }
   return result.substring(0,result.length-3);
-}
-
-function graphicTranslation() {
-  if (englishLanguage())
-    return ["Goal", "Reached", "Day", "$", "Meeting(s)", "Month"];
-  else if(portugueseLanguage())
-    return ["Meta", "Alcançado", "Dia", "R$", "Reunião(ões)", "Mês"];
-}
-
-function graphicSide(isSales) {
-  list = graphicTranslation();
-  if (isSales)
-    return list[2]+' %x.0: ' + list[3] + '%y.2';
-  else
-    return list[2]+' %x.0: %y ' + list[4];
-}
-
-function graphicSideOverview(isSales) {
-  list = graphicTranslation();
-  if (isSales)
-    return list[3] + '%y.2';
-  else
-    return '%y ' + list[4];
-}
-
-function generateOverviewPlot(goalPoints,sumPoints,monthText,isSales) {
-  var subt = graphicSideOverview(isSales);
-
-  var data = [
-        { data: goalPoints, label: list[0], points: { show: true },
-          lines: { show: true, fill: true,
-          fillColor: { colors: [{ opacity: 0.1 }, { opacity: 0.1}] } } },
-        { data: sumPoints, label: list[1], points: { show: true, radius: 6 },
-          lines: { show: true, fill: true,
-          fillColor: { colors: [{ opacity: 0.3 }, { opacity: 0.3}] } } }
-      ];
-  var options = {
-        colors: [ '#fad733','#23b7e5' ],
-        series: { shadowSize: 2 },
-        xaxis:{ font: { color: '#ccc' }, ticks: monthText },
-        yaxis:{ font: { color: '#ccc' } },
-        grid: { hoverable: true, clickable: true, borderWidth: 0 },
-        tooltip: true,
-        tooltipOpts: { content: subt,  defaultTheme: false,
-                        shifts: { x: 0, y: 20 } }
-  };
-
-  $.plot($("#placeholderO"), data, options);
-  $("#placeholderO").bind("plotclick", function (event, pos, item) {
-    if (item != null) {
-      var data = [stringToMonth(monthText[item.dataIndex][1].substring(0,3)),
-                  "20"+monthText[item.dataIndex][1].substring(4,7)];
-      var month = document.getElementById("monthSearch");
-      var year = document.getElementById("yearSearch");
-
-      month.value = data[0];
-      year.value = data[1];
-
-      document.getElementById("formSearch").submit();
-    }
-  });
-}
-
-function generateOverviewRecordPlot(salesPoints,names,monthText,simbol) {
-  var data = [];
-  var option_color = [];
-
-  for (var i = 0; i < salesPoints.length; i++) {
-    data.push({ data: salesPoints[i], label: names[i],
-          points: { show: true, radius: 6 },
-          lines: { show: true, fill: true, fillColor: {
-                   colors: [{ opacity: 0.3 }, { opacity: 0.3}] } } });
-    option_color.push(colors[i]);
-  }
-  var options = {
-        colors: option_color,
-        series: { shadowSize: 2 },
-        xaxis:{ font: { color: '#ccc' }, ticks: monthText },
-        yaxis:{ font: { color: '#ccc' } },
-        grid: { hoverable: true, clickable: true, borderWidth: 0 },
-        tooltip: true,
-        tooltipOpts: { content: simbol,  defaultTheme: false,
-                        shifts: { x: 0, y: 20 } }
-
-  };
-  $.plot($("#placeholderOR"), data, options);
-}
-
-function generateGraphicPlot(reportPoints,contractPoints,dayText,
-                             wdayText,isSales,lastDay) {
-  var size = contractPoints.length;
-  var subt = graphicSide(isSales);
-
-  var data = [
-        { data: reportPoints, xaxis: 2, label: list[0], points: { show: true },
-          lines: { show: true, fill: true,
-          fillColor: { colors: [{ opacity: 0.1 }, { opacity: 0.1}] } } },
-        { data: contractPoints, label: list[1],
-          points: { show: true, radius: 6 },
-          lines: { show: true, fill: true, fillColor: {
-                   colors: [{ opacity: 0.3 }, { opacity: 0.3}] } } },
-        { data: [contractPoints[size-1]], color: "#23b7e5",
-          points: { show: true, radius: 6, fillColor: '#23b7e5' } },
-        { data: [[lastDay, 0]], points: { show: false } }
-      ];
-  var options = {
-        colors: [ '#fad733','#23b7e5' ],
-        series: { shadowSize: 2 },
-        xaxes:[{ font: { color: '#ccc' }, ticks: dayText },
-               { font: { color: '#ccc' }, ticks: wdayText }],
-        yaxis:{ font: { color: '#ccc' } },
-        grid: { hoverable: true, clickable: true, borderWidth: 0 },
-        tooltip: true,
-        tooltipOpts: { content: subt,
-                       defaultTheme: false, shifts: { x: 0, y: 20 } }
-  };
-  $.plot($("#placeholderG"), data, options);
-}
-
-function generateRecordPlot(salesPoints, names, dayText, wdayText, isSales) {
-  var subt = graphicSideOverview(isSales);
-  var data = [];
-  var option_color = [];
-  var i = 0;
-
-  for (i = 0; i < salesPoints.length-1; i++) {
-    data.push({ data: salesPoints[i], xaxis: 1, label: names[i],
-          points: { show: true, radius: 6 },
-          lines: { show: true, fill: true, fillColor: {
-                   colors: [{ opacity: 0.3 }, { opacity: 0.3}] } } });
-    option_color.push(colors[i]);
-  }
-
-  data.push({ data: salesPoints[i], xaxis: 2, label: names[i],
-          points: { show: true, radius: 6 },
-          lines: { show: true, fill: true, fillColor: {
-                   colors: [{ opacity: 0.3 }, { opacity: 0.3}] } } });
-  option_color.push(colors[i]);
-
-  var options = {
-          colors: option_color,
-          series: { shadowSize: 2 },
-          xaxes:[{ font: { color: '#ccc' }, ticks: dayText },
-                 { font: { color: '#ccc' }, ticks: wdayText }],
-          yaxis:{ font: { color: '#ccc' } },
-          grid: { hoverable: true, clickable: true, borderWidth: 0 },
-          tooltip: true,
-          tooltipOpts: { content: list[2]+' %x.0: ' + subt,
-                         defaultTheme: false, shifts: { x: 0, y: 20 } }
-  };
-  $.plot($("#placeholderR"), data, options);
-}
-
-function stringToMonth(text) {
-  if (portugueseLanguage()){
-    switch(text) {
-      case "Jan": return "January";
-      case "Fev": return "February";
-      case "Mar": return "March";
-      case "Abr": return "April";
-      case "Mai": return "May";
-      case "Jun": return "June";
-      case "Jul": return "July";
-      case "Ago": return "August";
-      case "Set": return "September";
-      case "Out": return "October";
-      case "Nov": return "November";
-      default: return "December";
-    }
-  }
-  switch(text) {
-    case "Jan": return "January";
-    case "Feb": return "February";
-    case "Mar": return "March";
-    case "Apr": return "April";
-    case "May": return "May";
-    case "Jun": return "June";
-    case "Jul": return "July";
-    case "Aug": return "August";
-    case "Sep": return "September";
-    case "Oct": return "October";
-    case "Nov": return "November";
-    default: return "December";
-  }
 }
