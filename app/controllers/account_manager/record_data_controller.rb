@@ -42,5 +42,22 @@ module AccountManager
         @list
       end
     end
+
+    def fetch_empty_data_array(user)
+      type_am? ? [user.full_name, 0, 0, 0, 0, 0] : [user.full_name, 0, 0, 0, 0]
+    end
+
+    def verify_fetched_data(user_id)
+      if type_am?
+        return fetch_closed_contracts(user_id, @current_report.id).empty?
+      end
+
+      fetch_scheduled_meeting(user_id, @current_report.id).empty?
+    end
+
+    def verify_fetched_points(user_id)
+      fetch_record_days(user_id)
+      @unique_days.empty?
+    end
   end
 end

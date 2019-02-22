@@ -5,14 +5,17 @@ module OverviewPoints
   def init_report_data(which, type, data)
     if data.blank?
       last = fetch_last_report(type)
-      return last if which == 'last'
-
-      reports_count = fetch_report_count_by_type(type)
-      range = reports_count < 12 ? reports_count : 12
-
-      return fetch_reports_by_month_range(last, type, range)
+      return (which == 'last' ? last : fetch_within_month_range(last, type))
     end
+
     fetch_report(data[0], data[1], type)
+  end
+
+  def fetch_within_month_range
+    reports_count = fetch_report_count_by_type(type)
+    range = reports_count < 12 ? reports_count : 12
+
+    fetch_reports_by_month_range(last, type, range)
   end
 
   def overview_data(which, type, month = nil, year = nil)

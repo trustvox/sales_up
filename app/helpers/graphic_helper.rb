@@ -76,16 +76,9 @@ module GraphicHelper
   end
 
   def verify_weekday(date)
-    return 'Monday' if date.monday?
-    return 'Tuesday' if date.tuesday?
-    return 'Wednesday' if date.wednesday?
-    return 'Thursday' if date.thursday?
-    return 'Friday' if date.friday?
-
-    verify_weekend(date)
-  end
-
-  def verify_weekend(date)
-    date.saturday? ? 'Saturday' : 'Sunday'
+    %w[Sunday Monday Tuesday Wednesday
+       Thursday Friday Saturday].each_with_index do |day, i|
+      return day if date.wday == i
+    end
   end
 end
