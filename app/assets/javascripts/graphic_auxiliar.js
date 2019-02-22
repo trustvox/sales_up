@@ -54,16 +54,12 @@ function fetch_months() {
 }
 
 function set_graphic_parameters() {
-  alert("dbbddbdb");
-  alert(args);
+  axis = {}
 
-  if (arguments[4])
-    return { data: arguments[0], xaxis: arguments[5], label: arguments[1], 
-            points: { show: true, radius: arguments[2] }, 
-            lines: { show: true, fill: true, fillColor: { colors: 
-              [{ opacity: arguments[3] }, { opacity: arguments[3]}] } } }
+  if (arguments[4] != undefined)
+    axis = { xaxis: arguments[4] }
 
-  return { data: arguments[0], label: arguments[1], 
+  return { data: arguments[0], axis, label: arguments[1], 
             points: { show: true, radius: arguments[2] }, 
             lines: { show: true, fill: true, fillColor: { colors: 
               [{ opacity: arguments[3] }, { opacity: arguments[3]}] } } } 

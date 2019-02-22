@@ -9,8 +9,7 @@ function generateOverviewPlot(goalPoints,sumPoints,monthText,isSales) {
         series: { shadowSize: 2 },
         xaxis:{ font: { color: '#ccc' }, ticks: monthText },
         yaxis:{ font: { color: '#ccc' } },
-        grid: { hoverable: true, clickable: true, borderWidth: 0 },
-        tooltip: true,
+        grid:{ hoverable: true, clickable: true, borderWidth: 0},tooltip: true,
         tooltipOpts: { content: subt,  defaultTheme: false,
                         shifts: { x: 0, y: 20 } }
   };
@@ -56,28 +55,26 @@ function generateOverviewRecordPlot(salesPoints,names,monthText,simbol) {
   $.plot($("#placeholderOR"), data, options);
 }
 
-function generateGraphicPlot(reportPoints,contractPoints,dayText,
-                             wdayText,isSales,lastDay) {
-  var size = contractPoints.length;
-  alert("eevveevev");
+function generateGraphicPlot() {
+  var size = arguments[1].length;
   var data = [
-        set_graphic_parameters(reportPoints, list[0], 0, 0.1, true, 2),
-        set_graphic_parameters(contractPoints, list[1], 6, 0.3, false),
+        set_graphic_parameters(arguments[0], "Goal", 0, 0.1, 2),
+        set_graphic_parameters(arguments[1], "Reached", 6, 0.3, 0),
 
-        { data: [contractPoints[size-1]], color: "#23b7e5",
+        { data: [arguments[1][size-1]], color: "#23b7e5",
           points: { show: true, radius: 6, fillColor: '#23b7e5' } },
 
-        { data: [[lastDay, 0]], points: { show: false } }
+        { data: [[arguments[5], 0]], points: { show: false } }
       ];
   var options = {
         colors: [ '#fad733','#23b7e5' ],
         series: { shadowSize: 2 },
-        xaxes:[{ font: { color: '#ccc' }, ticks: dayText },
-               { font: { color: '#ccc' }, ticks: wdayText }],
+        xaxes:[{ font: { color: '#ccc' }, ticks: arguments[2] },
+               { font: { color: '#ccc' }, ticks: arguments[3] }],
         yaxis:{ font: { color: '#ccc' } },
         grid: { hoverable: true, clickable: true, borderWidth: 0 },
         tooltip: true,
-        tooltipOpts: { content: graphicSide(isSales),
+        tooltipOpts: { content: graphicSide(arguments[4]),
                        defaultTheme: false, shifts: { x: 0, y: 20 } }
   };
   $.plot($("#placeholderG"), data, options);

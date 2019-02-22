@@ -21,7 +21,7 @@ function closeNav() {
   document.getElementById("mySidenav").style.width = "0";
 }
 
-function verifyButtonData(arguments) {
+function verifyButtonData() {
   id = arguments[0];
 
   for (var i = 1; i < arguments.length; i++)
@@ -46,40 +46,31 @@ function validateMyForm() {
 }
 
 function obsVisibility(id, choice, which) {
-  if (choice){
-    showObservation(id, which);
+  l_obs = document.getElementById(id+'l_observation');
+  obs = document.getElementById(id+'observation');
+  which_id = document.getElementById(id+which);
+  form_which = document.getElementById(id+'form_'+which);
 
-    document.getElementById(id+'l_observation').setAttribute("hidden", true);
-    document.getElementById(id+'observation').removeAttribute("hidden");
-  }
-  else{
-    hideObservation(id, which);
-
-    document.getElementById(id+'l_observation').removeAttribute("hidden");
-    document.getElementById(id+'observation').setAttribute("hidden", true);
-  }
+  if (choice)
+    showObservation(l_obs, obs, which_id, form_which);
+  else
+    hideObservation(l_obs, obs, which_id, form_which);
 }
 
-function showObservation(id, which){
-  if (which == 'edit'){
-    document.getElementById(id+'edit').setAttribute("hidden", true);
-    document.getElementById(id+'form_edit').removeAttribute("hidden");
-  }
-  else{
-    document.getElementById(id+'create').setAttribute("hidden", true);
-    document.getElementById(id+'form_create').removeAttribute("hidden");
-  }
+function showObservation(l_obs, obs, which, form_which){
+  which.setAttribute("hidden", true);
+  form_which.removeAttribute("hidden");
+
+  l_obs.setAttribute("hidden", true);
+  obs.removeAttribute("hidden");
 }
 
-function hideObservation(id, which){
-  if (which == 'edit'){
-    document.getElementById(id+'edit').removeAttribute("hidden");
-    document.getElementById(id+'form_edit').setAttribute("hidden", true);
-  }
-  else{
-    document.getElementById(id+'create').removeAttribute("hidden");
-    document.getElementById(id+'form_create').setAttribute("hidden", true);
-  }
+function hideObservation(l_obs, obs, which, form_which){
+  which.removeAttribute("hidden");
+  form_which.setAttribute("hidden", true);
+
+  l_obs.removeAttribute("hidden");
+  obs.setAttribute("hidden", true);
 }
 
 function fillObsData(id, which){
