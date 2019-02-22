@@ -1,21 +1,17 @@
 default: &default
   adapter: postgresql
   pool: 5
+  host: db
   timeout: 5000
 
 development:
   <<: *default
-  database: application_development_database
+  database: sales_up_development
 
 test:
   <<: *default
-  database: application_test_database
-  host: host_from_database
-  username: username_from_database_development
-  password: password_from_username_development
+  database: sales_up_test
 
 production:
   <<: *default
-  database: application_production_database
-  username: username_from_database_production
-  password: password_from_username_production
+  database: sales_up_production
