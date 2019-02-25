@@ -21,11 +21,12 @@ end
 Rails.application.routes.draw do
   scope ':locale' do
     scope :account_manager, module: 'account_manager' do
-      resources :contracts, :report_observations
+      resources :contracts, :report_observations, :deals
 
       get '/monthly_sales', to: 'dashboard#monthly_sales'
-      get '/report_am', to: 'dashboard#report_am',
-                        as: :report_account_manager
+      get '/monthly_forecast', to: 'dashboard#monthly_forecast'
+
+      get '/report_am', to: 'dashboard#report_am', as: :report_account_manager
       get '/overview_months_am', to: 'dashboard#overview_months_am',
                                  as: :overview_months_am
       get '/overview_reports_am', to: 'dashboard#overview_reports_am',
