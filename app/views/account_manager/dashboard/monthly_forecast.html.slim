@@ -1,6 +1,6 @@
 head
-  title Sales Up - Monthly Sales
-body onload="generateGraphicPlot(#{@report_points}, #{@contract_point}, #{day_text_generator}, #{wday_text_generator}, true, #{month_days})"
+  title Sales Up - Monthly Forecast
+body onload="generateForecastGraphicPlot(#{@report_points}, #{@deal_point}, #{day_text_generator}, #{wday_text_generator}, true, #{month_days})"
   .row.wrapper-md
     .panel.panel-default style="margin-top: -30px;"
       .panel-heading
@@ -24,21 +24,21 @@ body onload="generateGraphicPlot(#{@report_points}, #{@contract_point}, #{day_te
               - if @notice[0].blank? || (!@notice[0].blank? && @notice[-1][0] != 'create')
                 button.btn.btn-primary.btn-addon.btn-lg.margin data-target="#addModal" data-toggle="modal" type="button"
                   i.fa.fa-plus
-                  | #{t('spreadsheets.contract.button.contract')}
+                  | #{t('spreadsheets.deal.button.deal')}
               - else
                 button.btn.btn-primary.btn-danger.btn-addon.btn-lg.margin data-target="#addModal" data-toggle="modal" type="button"
                   i.fa.fa-plus
-                  | #{t('spreadsheets.contract.button.contract')}
+                  | #{t('spreadsheets.deal.button.deal')}
 
       #addModal.modal.fade aria-hidden="true" aria-labelledby="exampleModalLabel" role="dialog" tabindex="-1"
         .modal-dialog role="document"
           .modal-content
             .modal-header.form-inline
-              h3.h3.modal-title.form-group = t('spreadsheets.contract.title.main')
+              h3.h3.modal-title.form-group = t('spreadsheets.deal.title.main')
               button.close.form-group aria-label="Close" data-dismiss="modal" type="button" onclick="cleanDataContract('#{@user[0].id}')"
                 span aria-hidden="true"
                 | &times;
-            = simple_form_for Contract.new, method: :post, url: contracts_path do |f|
+            = simple_form_for Deal.new, method: :post, url: deals_path do |f|
               .modal-body
                 - if !@notice[0].blank? && @notice[-1][0] == 'create'
                   .form-inline.m-b
@@ -47,37 +47,26 @@ body onload="generateGraphicPlot(#{@report_points}, #{@contract_point}, #{day_te
                         h4.h4.text-danger = msg if msg != @notice[-1][0]
                 .form-inline.m-b
                   .form-group
-                    h4.h4 = t('spreadsheets.contract.title.store_name')
-                    = f.input :store_name, label: false, id: "store_name", input_html: { style: "width:337px;", value: "", placeholder: t('spreadsheets.contract.title.placeholder'), class: "form-control" }
+                    h4.h4 = t('spreadsheets.deal.title.store_name')
+                    = f.input :client_name, label: false, id: "store_name", input_html: { style: "width:337px;", value: "", placeholder: t('spreadsheets.deal.title.placeholder'), class: "form-control" }
                 .form-inline.m-b
                   .form-group
-                    h4.h4 = t('spreadsheets.contract.title.value')
+                    h4.h4 = t('spreadsheets.deal.title.value')
                     = f.input :value, as: :float, label: false, id: "value", input_html: { style: "width:100px;", value: "", placeholder: "699", class: "form-control" }
                   .form-group.m-l
-                    h4.h4 = t('spreadsheets.contract.title.month_year_range')
+                    h4.h4 = t('spreadsheets.deal.title.month_year_range')
                     = f.input :report_id, label: false, id: "report", prompt: false, collection: init_month_year_list.map { |report| [t('menu.search.'+report.month)+"/"+report.year.to_s, report.id] } , input_html: { class: "form-control" }
                   .form-group.m-l
-                    h4.h4 = t('spreadsheets.contract.title.day')
+                    h4.h4 = t('spreadsheets.deal.title.day')
                     = f.input :day, as: :integer, label: false, id: "day", input_html: { style: "width:65px;", value: Time.current.day, placeholder: "26", class: "form-control", min: "1", max: "31" }
                   - users_list = @user.map { |user| [user.full_name, user.id] }
                 .form-inline.m-b
                   .form-group.m-r
-                    h4.h4 = t('spreadsheets.contract.title.first')
-                    = f.input :user_id, label: false, id: "user1", prompt: false, collection: users_list, input_html: { class: "form-control" }
-                  .form-group
-                    h4.h4 = t('spreadsheets.contract.title.percentage')
-                    = f.input :value_1, as: :float, label: false, id: "value1", input_html: { style: "width:100px;", value: "100", placeholder: "100", class: "form-control" }
-                .form-inline
-                  .form-group.m-r
-                    h4.h4 = t('spreadsheets.contract.title.second')
-                    - users_list.unshift([t('spreadsheets.contract.title.none'), 0])
-                    = f.input :user, label: false, id: "user2", prompt: false, collection: users_list, input_html: { class: "form-control" }
-                  .form-group
-                    h4.h4 = t('spreadsheets.contract.title.percentage')
-                    = f.input :value_2, as: :float, label: false, id: "value2", input_html: { style: "width:100px;", value: "", placeholder: "40", class: "form-control" }
+                    h4.h4 = t('spreadsheets.deal.title.first')
+                    = f.input :user_id, label: false, id: "user", prompt: false, collection: users_list, input_html: { class: "form-control" }
               .modal-footer
-                = f.button :submit, t('spreadsheets.contract.button.save'), class: "btn btn-primary", :onclick => "redirectToPipefy();"
-                = f.button :button, t('spreadsheets.contract.button.close'), class: "btn btn-danger", :'data-dismiss' => "modal", :onclick => "cleanDataContract('#{@user[0].id}')"
+                = f.button :submit, t('spreadsheets.deal.button.save'), class: "btn btn-primary"
+                = f.button :button, t('spreadsheets.deal.button.close'), class: "btn btn-danger", :'data-dismiss' => "modal", :onclick => "cleanDataContract('#{@user[0].id}')"
 
       .panel-body style="font-size: 25px; font-weight: bold;"
         div id="placeholderG" style="height:450px;width:1250px;"
@@ -86,13 +75,13 @@ body onload="generateGraphicPlot(#{@report_points}, #{@contract_point}, #{day_te
         table.table ui-jq="footable"
           thead
             tr
-              th = t('spreadsheets.spreadsheet.title.am.day')
-              th = t('spreadsheets.spreadsheet.title.am.weekday')
-              th = t('spreadsheets.spreadsheet.title.am.daily_goal')
-              th = t('spreadsheets.spreadsheet.title.am.contract_sum')
-              th = t('spreadsheets.spreadsheet.title.am.store_name')
-              th = t('spreadsheets.spreadsheet.title.am.contract_value')
-              th = t('spreadsheets.spreadsheet.title.am.am')
+              th = t('spreadsheets.spreadsheet.title.deal.day')
+              th = t('spreadsheets.spreadsheet.title.deal.weekday')
+              th = t('spreadsheets.spreadsheet.title.deal.daily_goal')
+              th style="width:13%" = t('spreadsheets.spreadsheet.title.deal.contract_sum')
+              th style="width:18%" = t('spreadsheets.spreadsheet.title.deal.store_name')
+              th = t('spreadsheets.spreadsheet.title.deal.contract_value')
+              th = t('spreadsheets.spreadsheet.title.deal.am')
               - if can? :manage, AccountManager::ContractsController
                 th = t('spreadsheets.spreadsheet.title.option')
           tbody
@@ -105,53 +94,61 @@ body onload="generateGraphicPlot(#{@report_points}, #{@contract_point}, #{day_te
                 td id="tdStore#{i}" = data[4]
                 td = t('menu.currency') + number_to_currency(data[5]).to_s
                 td id="tdam#{i}" = data[6]
-                script type="text/javascript" highLightContract("#{data[4]}", "#{data[6]}", "tdStore#{i}", "tdam#{i}");
+                script type="text/javascript" highLightContract('#{data[4]}', '#{data[6]}', 'tdStore#{i}', 'tdam#{i}');
                 td
                   - if can?(:update, AccountManager::ContractsController) && data[4] != '-'
                     button.btn.btn-info data-target="#editModal#{data[0]}" data-toggle="modal" type="button" id="#{data[0]}edit" = t('spreadsheets.edit.button.enter')
 
                     .modal.fade id="editModal#{data[0]}" aria-hidden="true" aria-labelledby="exampleModalLabel" role="dialog" tabindex="-1"
-                      .modal-dialog role="document" style="width: 65%;"
+                      .modal-dialog role="document" style="width: 85%;"
                         .modal-content
                           .modal-header.form-inline
-                            h3.h3.modal-title.form-group = t('spreadsheets.edit.title.am.main')
+                            h3.h3.modal-title.form-group = t('spreadsheets.edit.title.deal.main')
                             button.close.form-group aria-label="Close" data-dismiss="modal" type="button"
                               span aria-hidden="true"
                               | &times;
                           .modal-body
-                            table.table.table-bordered.table-hover.table-condensed.bg-white-only style="width: 800px;"
+                            table.table.table-bordered.table-hover.table-condensed.bg-white-only style="width: 1000px;"
                               thead
                                 tr style=("font-weight: bold;")
-                                  td style="width:5%" = t('spreadsheets.edit.title.am.day')
-                                  td style="width:10%" = t('spreadsheets.edit.title.am.store')
-                                  td style="width:10%" = t('spreadsheets.edit.title.am.value')
-                                  td style="width:25%" = t('spreadsheets.edit.title.am.am')
-                                  td style="width:25%" = t('spreadsheets.edit.title.am.option')
+                                  td style="width:5%" = t('spreadsheets.edit.title.deal.day')
+                                  td style="width:10%" = t('spreadsheets.edit.title.deal.store')
+                                  td style="width:10%" = t('spreadsheets.edit.title.deal.value')
+                                  td style="width:10%" = t('spreadsheets.edit.title.deal.month_year')
+                                  td style="width:15%" = t('spreadsheets.edit.title.deal.am')
+                                  td style="width:25%" = t('spreadsheets.edit.title.deal.option')
                               tbody
-                                - fetch_contracts_by_day_report_id(data[0], @current_report).each do |contract|
+                                - fetch_deals_by_day_report_id(data[0], @current_report).each do |deal|
                                   tr
                                     td.v-middle
-                                      input style='width: 55px;' type='number' value="#{contract.day}" id="#{contract.id}day" onkeyup="verifyButtonData('#{contract.id}', 'day', 'store_name', 'value', '0')"
+                                      input style='width: 55px;' type='number' value="#{deal.day}" id="#{deal.id}day" onkeyup="verifyButtonData('#{deal.id}', 'day', 'store_name', 'value', '0')"
                                     td.v-middle
-                                      input style='width: 190px;' type='text' value="#{contract.store_name}" id="#{contract.id}store_name" onkeyup="verifyButtonData('#{contract.id}', 'day', 'store_name', 'value', '0')"
+                                      input style='width: 190px;' type='text' value="#{deal.client_name}" id="#{deal.id}store_name" onkeyup="verifyButtonData('#{deal.id}', 'day', 'store_name', 'value', '0')"
                                     td.v-middle
-                                      input style='width: 80px;' type='decimal' value="#{contract.value}" id="#{contract.id}value" onkeyup="verifyButtonData('#{contract.id}', 'day', 'store_name', 'value', '0')"
+                                      input style='width: 80px;' type='decimal' value="#{number_to_currency(deal.value)[2..-1]}" id="#{deal.id}value" onkeyup="verifyButtonData('#{deal.id}', 'day', 'store_name', 'value', '0')"
                                     td.v-middle
-                                      select id="#{contract.id}user_id"
-                                        option value="#{contract.user_id}" = fetch_username_by_id(contract.user_id)
+                                      select id="#{deal.id}report_id"
+                                        - last_report = fetch_report_by_id(deal.report_id)
+                                        option value="#{deal.report_id}"  = t('menu.search.'+last_report.month)+"/"+last_report.year.to_s
+                                        - init_month_year_list.map do |report|
+                                          - next if report.id == deal.report_id
+                                          option value="#{report.id}" = t('menu.search.'+report.month)+"/"+report.year.to_s
+                                    td.v-middle
+                                      select id="#{deal.id}user_id"
+                                        option value="#{deal.user_id}" = fetch_username_by_id(deal.user_id)
                                         - @user.each do |user|
-                                          - next if user.id == contract.user_id
+                                          - next if user.id == deal.user_id
                                           option value="#{user.id}" = user.full_name
                                     td.v-middle.form-inline
-                                      = simple_form_for Contract.new, method: :put, url: contracts_path+"/"+contract.id.to_s, html: { class: "form-group" }, onsubmit: "if(!validateMyForm()){event.preventDefault();}" do |f|
-                                        = f.input :day, as: :hidden, input_html: { value: "m", id: contract.id.to_s+"day"+contract.id.to_s }
-                                        = f.input :store_name, as: :hidden, input_html: { value: "m", id: contract.id.to_s+"store_name"+contract.id.to_s }
-                                        = f.input :value, as: :hidden, input_html: { value: "m", id: contract.id.to_s+"value"+contract.id.to_s }
-                                        = f.input :user_id, as: :hidden, input_html: { value: "m", id: contract.id.to_s+"user_id"+contract.id.to_s }
-                                        = f.input :report_id, as: :hidden, input_html: { value: @current_report.id }
-                                        = f.button :submit, t('spreadsheets.edit.button.save'), id: contract.id.to_s+'editContract', class: "btn btn-success form-group", :onclick => "fillData(#{contract.id}, 'day', 'store_name', 'value', 'user_id', 'none', 'none')"
+                                      = simple_form_for Deal.new, method: :put, url: deals_path+"/"+deal.id.to_s, html: { class: "form-group" }, onsubmit: "if(!validateMyForm()){event.preventDefault();}" do |f|
+                                        = f.input :day, as: :hidden, input_html: { value: "m", id: deal.id.to_s+"day"+deal.id.to_s }
+                                        = f.input :store_name, as: :hidden, input_html: { value: "m", id: deal.id.to_s+"store_name"+deal.id.to_s }
+                                        = f.input :value, as: :hidden, input_html: { value: "m", id: deal.id.to_s+"value"+deal.id.to_s }
+                                        = f.input :user_id, as: :hidden, input_html: { value: "m", id: deal.id.to_s+"user_id"+deal.id.to_s }
+                                        = f.input :report_id, as: :hidden, input_html: { value: "m", id: deal.id.to_s+"report_id"+deal.id.to_s }
+                                        = f.button :submit, t('spreadsheets.edit.button.save'), id: deal.id.to_s+'editContract', class: "btn btn-success form-group", :onclick => "fillData(#{deal.id}, 'day', 'client_name', 'value', 'user_id', 'report_id', 'none')"
                                       - if can?(:destroy, AccountManager::ContractsController)
-                                        = simple_form_for Contract.new, method: :delete, url: contracts_path+"/"+contract.id.to_s, html: { class: "form-group", :onsubmit => "if(!validateMyForm()){event.preventDefault();}" } do |f|
+                                        = simple_form_for Deal.new, method: :delete, url: deals_path+"/"+deal.id.to_s, html: { class: "form-group", :onsubmit => "if(!validateMyForm()){event.preventDefault();}" } do |f|
                                           = f.button :submit, t('spreadsheets.edit.button.delete'), class: "btn btn-danger m-l-xs form-group"
 
                           .modal-footer
