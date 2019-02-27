@@ -17,7 +17,6 @@ module AccountManager
       @deal_point = fetch_deal_points
 
       @deal_point.unshift([1, 0]) unless @deal_point[0][0] == 1
-      @deal_point << [fetch_last_day, @deal_point[-1][1]]
 
       fetch_report_data_points(@deal_data)
     end

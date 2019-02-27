@@ -4,7 +4,7 @@ module AccountManager
       verify_authorization(AccountManager::DashboardController)
     end
 
-    before_action only: %i[monthly_sales report_am] do
+    before_action only: %i[monthly_sales monthly_forecast report_am] do
       init_current_report(SIDES[0])
     end
 

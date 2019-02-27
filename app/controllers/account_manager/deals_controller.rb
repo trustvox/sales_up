@@ -38,8 +38,8 @@ module AccountManager
     end
 
     def deal_params
-      params.require(:deal).permit(:day, :client_name, :value, :release_date,
-                                   :expire_date, :report_id, :user_id)
+      params.require(:deal).permit(:day, :client_name, :value,
+                                   :report_id, :user_id)
     end
   end
 end
