@@ -28,6 +28,6 @@
 //= require ui-client
 //= require functions
 //= require graphics
-//= require graphic_auxiliar
+//= require graphic-auxiliar
 //
 //= require_tree .
