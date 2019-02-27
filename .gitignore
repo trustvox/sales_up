@@ -14,7 +14,7 @@ pickle-email-*.html
 latest.dump
 
 # Database issues
-db/migrate/20190226155015_create_deal.rb
+db/migrate/20190225173422_create_deal.rb
 
 # Application configuration
 config/initializers/secret_token.rb
