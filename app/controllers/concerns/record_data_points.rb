@@ -4,7 +4,7 @@ module RecordDataPoints
   end
 
   def fetch_record_sum(user_id)
-    return fetch_contract_sum(user_id, @current_report.id) if type_am?
+    return fetch_contract_sum_with_ids(user_id, @current_report.id) if type_am?
 
     fetch_meeting_sum(user_id, @current_report.id)
   end
@@ -56,7 +56,7 @@ module RecordDataPoints
   def create_data_array(user, gap, sum)
     return data_array_for_sdr(user, gap, sum) unless type_am?
 
-    count = fetch_closed_contracts(user.id, @current_report.id).count
+    count = fetch_closed_contracts_report_user(user.id, @current_report.id).count
 
     data_array_for_am(user, gap, sum, count)
   end

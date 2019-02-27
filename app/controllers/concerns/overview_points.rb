@@ -11,7 +11,7 @@ module OverviewPoints
     fetch_report(data[0], data[1], type)
   end
 
-  def fetch_within_month_range
+  def fetch_within_month_range(last, type)
     reports_count = fetch_report_count_by_type(type)
     range = reports_count < 12 ? reports_count : 12
 
@@ -59,7 +59,7 @@ module OverviewPoints
   end
 
   def init_user_data(type)
-    return fetch_user_by_sub_area(type) if valid_report_data_for_overview?
+    return fetch_user_by_sub_area(type) if valid_report_data_for_user?
 
     fetch_user_by_username(params[:report][:report_name])
   end
@@ -96,12 +96,14 @@ module OverviewPoints
   def am_filter(user_id, index, first, type)
     case init_filter(type)
     when 'CS'
-      [index, fetch_contract_sum(user_id, first.id)]
+      [index, fetch_contract_sum_with_ids(user_id, first.id)]
     when 'CP'
-      sum = fetch_contract_sum(user_id, first.id)
+      sum = fetch_contract_sum_with_ids(user_id, first.id)
       [index, ((sum / fetch_goal_by_id(first.id)) * 100).round(1)]
     when 'CC'
       [index, fetch_contracts_by_user_report_id(user_id, first.id)]
+    when 'FC'
+      [index, fetch_deal_sum_with_ids(user_id, first.id)]
     end
   end
 

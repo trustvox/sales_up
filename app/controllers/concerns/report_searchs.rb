@@ -26,6 +26,10 @@ module ReportSearchs
     nil
   end
 
+  def fetch_report_with_month_number(number, year, type)
+    Report.where(month_number: number.to_i, year: year.to_i, goal_type: type)[0]
+  end
+
   def prepare_fetch_reports_by_month_range(report)
     @i = 1
     @first_m = report.month_number
@@ -45,7 +49,7 @@ module ReportSearchs
 
       @i += 1
     end
-
+    
     Report.where(month_number: @first_m, year: @first_y, goal_type: type)[0]
   end
 
