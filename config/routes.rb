@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     get '/edit_password', to: 'user#edit_password'
     get '/users/:email(.:format)', to: 'user#after_forgot_password'
     get '/create_deal', to: 'user#create_deal'
+    get '/destroy_deal', to: 'user#destroy_deal'
 
     scope :admin, module: 'admin' do
       resources :reports

@@ -47,8 +47,8 @@ module DealSearchs
     Deal.where(report_id: report_id).order('day')
   end
 
-  def fetch_deal_by_store_name(store_name)
-    Deal.find_by(store_name: store_name)
+  def fetch_deal_by_client(client_name)
+    Deal.find_by(client_name: client_name)
   rescue StandardError
     nil
   end

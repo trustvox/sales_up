@@ -8,18 +8,15 @@ class UserController < ApplicationController
   def forgot_password; end
 
   def create_deal
-    deal = Deal.new
-    deal.user_id = fetch_user_by_email(params[:am_email]).id
+    search_deal = fetch_deal_by_client(params[:client_name])
+    
+    change_deal(search_deal.nil? ? Deal.new : search_deal)
 
-    date = params[:date].split('/')
-    deal.day = date[0]
-    deal.report_id = 
-      fetch_report_with_month_number(date[1][-1], date[2], SIDES[0]).id
+    redirect_to root_path
+  end
 
-    deal.value = params[:value][0..-4].gsub('.', '')
-    deal.client_name = params[:client_name].squish
-
-    deal.save
+  def destroy_deal
+    fetch_deal_by_client(params[:client_name]).destroy
 
     redirect_to root_path
   end
@@ -62,5 +59,19 @@ class UserController < ApplicationController
 
   def verify_user_status
     redirect_to overview_months_am_path(locale: :pt) if user_signed_in?
+  end
+
+  def change_deal(deal)
+    deal.user_id = fetch_user_by_email(params[:am_email]).id
+
+    date = params[:date].split('/')
+    deal.day = date[0]
+    deal.report_id = 
+      fetch_report_with_month_number(date[1][-1], date[2], SIDES[0]).id
+
+    deal.value = params[:value][0..-4].gsub('.', '')
+    deal.client_name = params[:client_name]
+
+    deal.save
   end
 end
