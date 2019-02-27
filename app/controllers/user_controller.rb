@@ -7,6 +7,23 @@ class UserController < ApplicationController
 
   def forgot_password; end
 
+  def create_deal
+    deal = Deal.new
+    deal.user_id = fetch_user_by_email(params[:am_email]).id
+
+    date = params[:date].split('/')
+    deal.day = date[0]
+    deal.report_id = 
+      fetch_report_with_month_number(date[1][-1], date[2], SIDES[0]).id
+
+    deal.value = params[:value][0..-4].gsub('.', '')
+    deal.client_name = params[:client_name].squish
+
+    deal.save
+
+    redirect_to root_path
+  end
+
   def edit_password
     redirect_to root_path unless fetch_token_usage(params[:token])
   end
