@@ -72,19 +72,18 @@ module ReportDataPoints
 
     value = @overall_data[@index]
 
-    if !value.nil? && value[0] == date.mday
-      increase_index
-      list = []
-      value.each_with_index { |data, i| i.zero? ? next : list << data }
-
-      return list
-    end
+    return fetch_value_list(value) if !value.nil? && value[0] == date.mday
 
     [day_value_by_index, '-', 0, '-']
   end
 
-  def increase_index
+  def fetch_value_list(value)
     @index += 1 if @index < @overall_data.size
+
+    list = []
+    value.each_with_index { |data, i| i.zero? ? next : list << data }
+
+    list
   end
 
   def day_value_by_index

@@ -27,5 +27,7 @@
 //= require ui-toggle
 //= require ui-client
 //= require functions
+//= require graphics
+//= require graphic-auxiliar
 //
 //= require_tree .

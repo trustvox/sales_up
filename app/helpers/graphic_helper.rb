@@ -40,7 +40,7 @@ module GraphicHelper
                    fetch_username_by_sub_area(type)
                    .collect { |user| [user, user] }
 
-    return user_options if valid_report_data_for_overview?
+    return user_options if valid_report_data_for_user?
 
     verify_options_data(user_options, params[:report][:report_name])
   end
@@ -49,13 +49,14 @@ module GraphicHelper
     filter_options = if type == 'am'
                        [[t('overview.am.cs'), 'CS'],
                         [t('overview.am.cc'), 'CC'],
-                        [t('overview.am.cp'), 'CP']]
+                        [t('overview.am.cp'), 'CP'],
+                        [t('overview.am.fc'), 'FC']]
                      else
                        [[t('overview.sdr.ms'), 'MS'],
                         [t('overview.sdr.mp'), 'MP']]
                      end
 
-    return filter_options if valid_report_data_for_overview?
+    return filter_options if valid_report_data_for_filter?
 
     verify_options_data(filter_options, params[:report][:goal])
   end
@@ -76,16 +77,9 @@ module GraphicHelper
   end
 
   def verify_weekday(date)
-    return 'Monday' if date.monday?
-    return 'Tuesday' if date.tuesday?
-    return 'Wednesday' if date.wednesday?
-    return 'Thursday' if date.thursday?
-    return 'Friday' if date.friday?
-
-    verify_weekend(date)
-  end
-
-  def verify_weekend(date)
-    date.saturday? ? 'Saturday' : 'Sunday'
+    %w[Sunday Monday Tuesday Wednesday
+       Thursday Friday Saturday].each_with_index do |day, i|
+      return day if date.wday == i
+    end
   end
 end

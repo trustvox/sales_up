@@ -11,6 +11,13 @@ capybara-*.html
 *.orig
 rerun.txt
 pickle-email-*.html
+latest.dump
+
+# Database issues
+db/migrate/20190225173422_create_deal.rb
+
+# Mac cache files
+.DS_Store
 
 # Application configuration
 config/initializers/secret_token.rb

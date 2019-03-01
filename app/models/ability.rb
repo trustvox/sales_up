@@ -16,6 +16,7 @@ class Ability
   def authorize_am(_user)
     can :manage, AccountManager::ReportObservationsController
     can :manage, AccountManager::ContractsController
+    can :manage, AccountManager::DealsController
     can :manage, SalesRepresentative::MeetingsController
   end
 
@@ -24,7 +25,8 @@ class Ability
   end
 
   def authorize_spector(_user)
-    can %i[monthly_sales report_am overview_months_am overview_reports_am],
+    can %i[monthly_sales monthly_forecast report_am 
+           overview_months_am overview_reports_am],
         AccountManager::DashboardController
     can %i[monthly_schedules overview_months_sdr
            overview_reports_sdr report_sdr],
