@@ -14,4 +14,5 @@ Rails.application.routes.draw do
   get '/overview_months', to: 'dashboard#overview_months'
   get '/overview_reports', to: 'dashboard#overview_reports'
   get '/logout', to: 'dashboard#logout'
+  post '/manage_new_user', to: 'dashboard#manage_new_user'
 end

@@ -33,6 +33,7 @@ class UserController < ApplicationController
   def generate_token
     @token = SecureRandom.base58(24)
     @user_email = params[:user][:email]
+
     save_token(fetch_user_by_email(@user_email).id)
     @link = ENV['link_to_root'] + edit_password_path +
             '?token=' + @token + '&email=' + @user_email
