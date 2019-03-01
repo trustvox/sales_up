@@ -42,13 +42,15 @@ module RecordDataPoints
     @unique_days.each_with_index do |day, i|
       next if i + 1 == @unique_days.length
 
-      gap = (day - @unique_days[i + 1]).abs - 1
+      gap = verify_friday_to_monday(day, i)
 
       if gap > @result
         gap_index = i
         @result = gap
       end
     end
+
+    # verify_current_with_last_day(gap_index)
 
     [@unique_days[gap_index] + 1, @unique_days[gap_index + 1]]
   end
