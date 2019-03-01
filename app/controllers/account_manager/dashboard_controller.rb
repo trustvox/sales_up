@@ -1,10 +1,10 @@
 module AccountManager
-  class DashboardController < AccountManager::ContractDataController
+  class DashboardController < AccountManager::DealDataController
     before_action except: [:logout] do
       verify_authorization(AccountManager::DashboardController)
     end
 
-    before_action only: %i[monthly_sales report_am] do
+    before_action only: %i[monthly_sales monthly_forecast report_am] do
       init_current_report(SIDES[0])
     end
 
@@ -14,6 +14,15 @@ module AccountManager
     def monthly_sales
       data = fetch_contract_by_report_id(@current_report.id)
       data.empty? ? default_contract : fetch_contract_data_points(data)
+
+      @user = fetch_username_by_types(SIDES[0], SIDES[2])
+
+      render_menu(SIDES[0])
+    end
+
+    def monthly_forecast
+      data = fetch_deal_by_report_id(@current_report.id)
+      data.empty? ? default_deal : fetch_deal_data_points(data)
 
       @user = fetch_username_by_types(SIDES[0], SIDES[2])
 

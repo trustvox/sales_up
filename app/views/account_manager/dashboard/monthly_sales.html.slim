@@ -1,6 +1,6 @@
 head
   title Sales Up - Monthly Sales
-body onload="generateGraphicPlot(#{@report_points}, #{@contract_point}, #{day_text_generator}, #{wday_text_generator}, true, #{month_days})"
+body onload="generateGraphicPlot(#{@report_points}, #{@contract_point}, #{day_text_generator}, #{wday_text_generator}, true, #{month_days}, #{fecth_contract_forecast}, '#{@current_report.month}', #{@current_report.year})"
   .row.wrapper-md
     .panel.panel-default style="margin-top: -30px;"
       .panel-heading
@@ -30,6 +30,10 @@ body onload="generateGraphicPlot(#{@report_points}, #{@contract_point}, #{day_te
                   i.fa.fa-plus
                   | #{t('spreadsheets.contract.button.contract')}
 
+      = simple_form_for Report.new, method: :get, url: monthly_forecast_path, html: { class: "form-group", id: "formSearch" } do |f|
+        = f.input :month, as: :hidden, input_html: { id: "monthSearch"}
+        = f.input :year, as: :hidden, input_html: { id: "yearSearch"}
+      
       #addModal.modal.fade aria-hidden="true" aria-labelledby="exampleModalLabel" role="dialog" tabindex="-1"
         .modal-dialog role="document"
           .modal-content
@@ -135,7 +139,7 @@ body onload="generateGraphicPlot(#{@report_points}, #{@contract_point}, #{day_te
                                     td.v-middle
                                       input style='width: 190px;' type='text' value="#{contract.store_name}" id="#{contract.id}store_name" onkeyup="verifyButtonData('#{contract.id}', 'day', 'store_name', 'value', '0')"
                                     td.v-middle
-                                      input style='width: 80px;' type='decimal' value="#{contract.value}" id="#{contract.id}value" onkeyup="verifyButtonData('#{contract.id}', 'day', 'store_name', 'value', '0')"
+                                      input style='width: 80px;' type='decimal' value="#{number_to_currency(contract.value)[2..-1]}" id="#{contract.id}value" onkeyup="verifyButtonData('#{contract.id}', 'day', 'store_name', 'value', '0')"
                                     td.v-middle
                                       select id="#{contract.id}user_id"
                                         option value="#{contract.user_id}" = fetch_username_by_id(contract.user_id)
@@ -146,7 +150,7 @@ body onload="generateGraphicPlot(#{@report_points}, #{@contract_point}, #{day_te
                                       = simple_form_for Contract.new, method: :put, url: contracts_path+"/"+contract.id.to_s, html: { class: "form-group" }, onsubmit: "if(!validateMyForm()){event.preventDefault();}" do |f|
                                         = f.input :day, as: :hidden, input_html: { value: "m", id: contract.id.to_s+"day"+contract.id.to_s }
                                         = f.input :store_name, as: :hidden, input_html: { value: "m", id: contract.id.to_s+"store_name"+contract.id.to_s }
-                                        = f.input :value, as: :hidden, input_html: { value: "m", id: contract.id.to_s+"value"+contract.id.to_s }
+                                        = f.input :value, as: :hidden, input_html: { value: 0, id: contract.id.to_s+"value"+contract.id.to_s }
                                         = f.input :user_id, as: :hidden, input_html: { value: "m", id: contract.id.to_s+"user_id"+contract.id.to_s }
                                         = f.input :report_id, as: :hidden, input_html: { value: @current_report.id }
                                         = f.button :submit, t('spreadsheets.edit.button.save'), id: contract.id.to_s+'editContract', class: "btn btn-success form-group", :onclick => "fillData(#{contract.id}, 'day', 'store_name', 'value', 'user_id', 'none', 'none')"

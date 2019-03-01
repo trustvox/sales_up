@@ -77,12 +77,16 @@ module OverviewHelper
   end
 
   def init_username_data(type)
-    return fetch_username_by_sub_area(type) if valid_report_data_for_overview?
+    return fetch_username_by_sub_area(type) if valid_report_data_for_user?
 
     [params[:report][:report_name]]
   end
 
-  def valid_report_data_for_overview?
-    params[:report].nil? || params[:report][:report_name] == 'All'
+  def valid_report_data_for_user?
+    valid_report_data_for_filter? || params[:report][:report_name] == 'All'
+  end
+
+  def valid_report_data_for_filter?
+    params[:report].nil?
   end
 end

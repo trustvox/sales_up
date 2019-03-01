@@ -23,6 +23,20 @@ class UserController < ApplicationController
     
     redirect_to root_path
   end
+    
+  def create_deal
+    search_deal = fetch_deal_by_client(params[:client_name])
+    
+    change_deal(search_deal.nil? ? Deal.new : search_deal)
+
+    redirect_to root_path
+  end
+
+  def destroy_deal
+    fetch_deal_by_client(params[:client_name]).destroy
+    
+    redirect_to root_path
+  end
 
   def edit_password
     redirect_to root_path unless fetch_token_usage(params[:token])
@@ -76,5 +90,19 @@ class UserController < ApplicationController
     return user.full_name if user.am?
       
     fetch_user_by_email(params[:am_name].split(',')[0]).full_name
+  end
+
+  def change_deal(deal)
+    deal.user_id = fetch_user_by_email(params[:am_email]).id
+
+    date = params[:date].split('/')
+    deal.day = date[0]
+    deal.report_id = 
+      fetch_report_with_month_number(date[1][-1], date[2], SIDES[0]).id
+
+    deal.value = params[:value][0..-4].gsub('.', '')
+    deal.client_name = params[:client_name]
+
+    deal.save
   end
 end

@@ -29,13 +29,8 @@ module SalesRepresentative
     private
 
     def redirect_to_monthly_schedules(action = nil)
-      report = fetch_report_by_id(@meetings.report_id)
-      message = @meetings.errors.messages.map { |msg| msg[1] }
-
-      redirect_to controller: 'dashboard', action: 'monthly_schedules',
-                  'report[month]' => report.month,
-                  'report[year]' => report.year,
-                  notice: message + [[action]]
+      redirect_to_monthly_method(@meetings.report_id, @meetings.errors, 
+                                 'schedules', action)
     end
 
     def valid_params(action)

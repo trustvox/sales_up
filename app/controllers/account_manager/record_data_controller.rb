@@ -33,14 +33,35 @@ module AccountManager
       fetch_user_by_individual_goal(@current_report.id).collect do |user|
         next if verify_fetched_points(user.id)
 
-        @list = []
-        @sum = 0
-
-        @gap = calculate_delta_gap
-        organize_data(user.id) unless @unique_days.empty?
+        fetch_organize_data(user.id)
 
         @list
       end
+    end
+
+    def fetch_organize_data(user_id)
+      @list = []
+      @sum = 0
+
+      @gap = calculate_delta_gap
+      organize_data(user_id) unless @unique_days.empty?
+    end
+
+    def fetch_empty_data_array(user)
+      type_am? ? [user.full_name, 0, 0, 0, 0, 0] : [user.full_name, 0, 0, 0, 0]
+    end
+
+    def verify_fetched_data(user_id)
+      if type_am?
+        return fetch_closed_contracts_report_user(user_id, @current_report.id).empty?
+      end
+
+      fetch_scheduled_meeting(user_id, @current_report.id).empty?
+    end
+
+    def verify_fetched_points(user_id)
+      fetch_record_days(user_id)
+      @unique_days.empty?
     end
   end
 end

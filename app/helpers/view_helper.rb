@@ -24,4 +24,23 @@ module ViewHelper
     [t('menu.' + action_name), t('menu.sales_side') + '-' +
       t('menu.' + type + '_side'), type]
   end
+
+  def redirect_to_monthly_method(id, errors, method_name, action = nil)
+    report = fetch_report_by_id(id)
+    message = errors.messages.map { |msg| msg[1] }
+
+    redirect_to controller: 'dashboard', action: 'monthly_' + method_name,
+                'report[month]' => report.month,
+                'report[year]' => report.year,
+                notice: message + [[action]]
+  end
+
+  def fecth_contract_forecast
+    sum = fetch_contract_sum(@current_report.id)
+    last = Date.current.day
+
+    return [last, sum] unless @current_report.id == fetch_last_report('am').id
+
+    [[last, sum], [month_days, sum + fetch_deal_sum(@current_report.id)]]
+  end
 end
