@@ -26,7 +26,7 @@ module AccountManager
       init_contract_data_points
 
       @contract_point << [1, 0]
-      @contract_point << [month_days, 0]
+      @contract_point << [Date.current.day, 0]
 
       fetch_report_data_points(@contract_data)
     end

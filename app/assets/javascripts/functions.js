@@ -200,8 +200,6 @@ function highLightContract(store_names, salesman_names, storeId, salesmanId) {
 }
 
 function highLightMeeting() {
-  // document.getElementById(Id).innerHTML = setTextColor(name.split('; '));
-
   for (var i = 0; i < 4; i++)
     document.getElementById(arguments[i+4]).innerHTML =
       setTextColor(arguments[i].split('; '));

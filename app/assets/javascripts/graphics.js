@@ -56,10 +56,14 @@ function generateOverviewRecordPlot(salesPoints,names,monthText,simbol) {
 }
 
 function generateGraphicPlot() {
+  var monthData = arguments[7];
+  var yearData = arguments[8];
+  
   var size = arguments[1].length;
   var data = [
         set_graphic_parameters(arguments[0], "Goal", 0, 0.1, 2),
         set_graphic_parameters(arguments[1], "Reached", 6, 0.3, 0),
+        set_graphic_parameters(arguments[6], "Forecast", 6, 0.3, 0),
 
         { data: [arguments[1][size-1]], color: "#23b7e5",
           points: { show: true, radius: 6, fillColor: '#23b7e5' } },
@@ -67,7 +71,40 @@ function generateGraphicPlot() {
         { data: [[arguments[5], 0]], points: { show: false } }
       ];
   var options = {
-        colors: [ '#fad733','#23b7e5' ],
+        colors: [ '#fad733','#23b7e5','#6254b2' ],
+        series: { shadowSize: 2 },
+        xaxes:[{ font: { color: '#ccc' }, ticks: arguments[2] },
+               { font: { color: '#ccc' }, ticks: arguments[3] }],
+        yaxis:{ font: { color: '#ccc' } },
+        grid: { hoverable: true, clickable: true, borderWidth: 0 },
+        tooltip: true,
+        tooltipOpts: { content: graphicSide(arguments[4]),
+                       defaultTheme: false, shifts: { x: 0, y: 20 } }
+  };
+  $.plot($("#placeholderG"), data, options);
+  $("#placeholderG").bind("plotclick", function (event, pos, item) {
+    if (item != null && item.dataIndex == 1) {
+      var month = document.getElementById("monthSearch");
+      var year = document.getElementById("yearSearch");
+
+      month.value = monthData;
+      year.value = yearData;
+
+      document.getElementById("formSearch").submit();
+    }
+  });
+}
+
+function generateForecastGraphicPlot() {
+  var size = arguments[1].length;
+  var data = [
+        set_graphic_parameters(arguments[0], "Goal", 0, 0.1, 2),
+        set_graphic_parameters(arguments[1], "Reached", 6, 0.3, 0),
+
+        { data: [[arguments[5], 0]], points: { show: false } }
+      ];
+  var options = {
+        colors: [ '#fad733','#6254b2' ],
         series: { shadowSize: 2 },
         xaxes:[{ font: { color: '#ccc' }, ticks: arguments[2] },
                { font: { color: '#ccc' }, ticks: arguments[3] }],

@@ -3,6 +3,7 @@ module DatabaseSearchs
   include ContractSearchs
   include UserSearchs
   include MeetingSearchs
+  include DealSearchs
 
   def month_days
     time = Time.days_in_month(@current_report.month_number)

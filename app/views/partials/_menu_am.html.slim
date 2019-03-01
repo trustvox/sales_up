@@ -39,7 +39,7 @@
             = f.button :submit, t('menu.button.overview.report_c'), class: "btn btn-primary btn-addon btn-lg margin", style: style
 
   .dropdown.form-group
-    - if current_page?(controller: '/account_manager/dashboard', action: 'monthly_sales') || current_page?(controller: '/account_manager/dashboard', action: 'report_am')
+    - if current_page?(controller: '/account_manager/dashboard', action: 'monthly_sales') || current_page?(controller: '/account_manager/dashboard', action: 'report_am') || current_page?(controller: '/account_manager/dashboard', action: 'monthly_forecast')
       button.btn.btn-primary.btn-addon.btn-lg.margin.dropdown-toggle.btn-info data-toggle="dropdown" id="menu1" = t('menu.button.monthly.title')
     - else
       button.btn.btn-primary.btn-addon.btn-lg.margin.dropdown-toggle data-toggle="dropdown" id="menu1" = t('menu.button.monthly.title')
@@ -60,6 +60,22 @@
               = f.input :month, as: :hidden, input_html: { value: params[:report][:month] }
               = f.input :year, as: :hidden, input_html: { value: params[:report][:year] }
             = f.button :submit, t('menu.button.monthly.sales'), class: "btn btn-primary btn-addon btn-lg margin", style: style
+      li.dropdown-li role="presentation"
+        - if I18n.locale == :pt
+          - style = "margin-bottom: 8px; margin-left: 5px; width: 116px;"
+          - last = "margin-left: 5px; width: 116px;"
+        - else
+          - style = "margin-bottom: 8px; margin-left: 6px; width: 120px;"
+          - last = "margin-left: 6px; width: 120px;"
+
+        - if current_page?(controller: '/account_manager/dashboard', action: 'monthly_forecast')
+          button.btn.btn-primary.btn-addon.btn-lg.btn-info.disabled.margin style="#{style}" = t('menu.button.monthly.forecast')
+        - else
+          = simple_form_for Report.new, method: :get, url: monthly_forecast_path, html: { class: "form-group" } do |f|
+            - unless params[:report].nil? || params[:report][:month].blank? || params[:report][:month].include?("/")
+              = f.input :month, as: :hidden, input_html: { value: params[:report][:month] }
+              = f.input :year, as: :hidden, input_html: { value: params[:report][:year] }
+            = f.button :submit, t('menu.button.monthly.forecast'), class: "btn btn-primary btn-addon btn-lg margin", style: style
       li.dropdown-li role="presentation"
         - if current_page?(controller: '/account_manager/dashboard', action: 'report_am')
           button.btn.btn-primary.btn-addon.btn-lg.btn-info.disabled.margin style="#{style}" = t('menu.button.monthly.report_c')
