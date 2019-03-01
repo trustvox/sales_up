@@ -7,6 +7,21 @@ class UserController < ApplicationController
 
   def forgot_password; end
 
+  def create_contract
+    contract = Contract.new
+
+    contract.day = Time.current.day
+    contract.report_id = fetch_last_report('am').id
+
+    contract.value = params[:value]
+    contract.store_name = params[:store_name]
+    contract.user_id = fetch_user_by_username(params[:am_name])[0].id
+    
+    contract.save
+    
+    redirect_to root_path
+  end
+  
   def create_deal
     search_deal = fetch_deal_by_client(params[:client_name])
     
