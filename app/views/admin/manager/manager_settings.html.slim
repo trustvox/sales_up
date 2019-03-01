@@ -43,7 +43,7 @@ body
                       - @users.each_with_index do |user, k|
                         .form-group
                           h4.h4 = user.full_name
-                          = f.input user.id.to_s, as: :string, label: false, input_html: { value: report_list[0] == 'am' ? "4500" : "3", id: 'goal' + k.to_s, style: "width: 130px", class: "m-r"}
+                          = f.input user.id.to_s, as: :string, label: false, input_html: { value: report_list[0] == 'am' ? 4500 : 3, id: 'goal' + k.to_s, style: "width: 130px", class: "m-r"}
                     .form-inline.m-b
                       .form-group
                         h4.h4 = t('manager.new_spreadsheet.title.month')

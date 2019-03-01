@@ -42,7 +42,7 @@ module AccountManager
 
     def valid_params(action)
       @contracts = Contract.new(contract_params)
-
+      
       redirect_to_monthly_sales(action) unless @contracts.valid?
     end
 
