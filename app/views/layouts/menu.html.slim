@@ -35,6 +35,7 @@ html
                 h3.h3 = @page_title[1]
                 h2.font-thin.h2 = @page_title[0]
             = render partial: @partial_path
+
             .form-group#menu-options
               - if can? :manager, Admin::ManagerController
                 - if current_page?(controller: '/admin/manager', action: 'manager_settings')
