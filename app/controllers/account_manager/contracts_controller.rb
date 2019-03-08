@@ -36,13 +36,13 @@ module AccountManager
     private
 
     def redirect_to_monthly_sales(action = nil)
-      redirect_to_monthly_method(@contracts.report_id, @contracts.errors, 
+      redirect_to_monthly_method(@contracts.report_id, @contracts.errors,
                                  'sales', action)
     end
 
     def valid_params(action)
       @contracts = Contract.new(contract_params)
-      
+
       redirect_to_monthly_sales(action) unless @contracts.valid?
     end
 

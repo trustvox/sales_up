@@ -58,9 +58,10 @@ module RecordDataPoints
   def create_data_array(user, gap, sum)
     return data_array_for_sdr(user, gap, sum) unless type_am?
 
-    count = fetch_closed_contracts_report_user(user.id, @current_report.id).count
-
-    data_array_for_am(user, gap, sum, count)
+    data_array_for_am(user, gap, sum,
+                      fetch_closed_contracts_report_user(
+                        user.id, @current_report.id
+                      ).count)
   end
 
   def data_array_for_am(user, gap, sum, count)

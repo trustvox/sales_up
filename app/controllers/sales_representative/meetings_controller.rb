@@ -29,7 +29,7 @@ module SalesRepresentative
     private
 
     def redirect_to_monthly_schedules(action = nil)
-      redirect_to_monthly_method(@meetings.report_id, @meetings.errors, 
+      redirect_to_monthly_method(@meetings.report_id, @meetings.errors,
                                  'schedules', action)
     end
 

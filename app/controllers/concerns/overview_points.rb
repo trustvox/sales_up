@@ -65,24 +65,23 @@ module OverviewPoints
   end
 
   def overview_report_data(first, last, type)
-    i = 1
-    report = first
-
     init_user_data(type).collect do |user|
-      list = []
-
-      while acceptable?(first, last)
-        list << verify_filter_option(user.id, i, first, type)
-        first = verify_next_month(first, type)
-        i += 1
-      end
-
-      list << verify_filter_option(user.id, i, first, type)
-      first = report
-      i = 1
-
-      list
+      add_filter_elements(first, last, user.id, type)
     end
+  end
+
+  def add_filter_elements(first, last, user_id, type)
+    index = 1
+
+    while acceptable?(first, last)
+      list << verify_filter_option(user_id, index, first, type)
+      first = verify_next_month(first, type)
+      index += 1
+    end
+
+    list << verify_filter_option(user.id, index, first, type)
+
+    list
   end
 
   def verify_filter_option(id, index, first, type)
@@ -98,8 +97,7 @@ module OverviewPoints
     when 'CS'
       [index, fetch_contract_sum_with_ids(user_id, first.id)]
     when 'CP'
-      sum = fetch_contract_sum_with_ids(user_id, first.id)
-      [index, ((sum / fetch_goal_by_id(first.id)) * 100).round(1)]
+      [index, (calculate_contract_percentage * 100).round(1)]
     when 'CC'
       [index, fetch_contracts_by_user_report_id(user_id, first.id)]
     when 'FC'
@@ -115,5 +113,9 @@ module OverviewPoints
       sum = fetch_meeting_sum(user_id, first.id)
       [index, ((sum / fetch_goal_by_id(first.id)) * 100).round(1)]
     end
+  end
+
+  def calculate_contract_percentage
+    fetch_contract_sum_with_ids(user_id, first.id) / fetch_goal_by_id(first.id)
   end
 end

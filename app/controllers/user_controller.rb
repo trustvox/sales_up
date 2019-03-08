@@ -8,48 +8,26 @@ class UserController < ApplicationController
   def forgot_password; end
 
   def create_schedule
-    meet = Meeting.new
-      
-    meet.client_name = verify_client_name
-    meet.day = Time.current.day
-    user = fetch_user_by_email(params[:sdr_name])
+    create_schedule_helper
 
-    meet.scheduled_for = params[:schedule_date].tr(',', '')
-    meet.meeting_for = verify_meeting_for(user)
-
-    meet.user_id = user.id
-    meet.report_id = fetch_last_report('sdr').id
-    meet.save
-    
     redirect_to root_path
   end
-    
+
   def create_contract
-    contract = Contract.new
+    create_contract_helper
 
-    contract.day = Time.current.day
-    contract.report_id = fetch_last_report('am').id
-
-    contract.value = params[:value]
-    contract.store_name = params[:store_name]
-    contract.user_id = fetch_user_by_username(params[:am_name])[0].id
-    
-    contract.save
-    
     redirect_to root_path
   end
-  
+
   def create_deal
-    search_deal = fetch_deal_by_client(params[:client_name])
-    
-    change_deal(search_deal.nil? ? Deal.new : search_deal)
+    create_deal_helper
 
     redirect_to root_path
   end
 
   def destroy_deal
     fetch_deal_by_client(params[:client_name]).destroy
-    
+
     redirect_to root_path
   end
 
@@ -91,33 +69,5 @@ class UserController < ApplicationController
 
   def verify_user_status
     redirect_to overview_months_am_path(locale: :pt) if user_signed_in?
-  end
-
-  def verify_client_name
-    client = params[:client_name].split('>')[-1]
-    
-    redirect_to root_path unless fetch_meeting_by_client_name(client).nil?
-
-    client
-  end
-
-  def verify_meeting_for(user)
-    return user.full_name if user.am?
-      
-    fetch_user_by_email(params[:am_name].split(',')[0]).full_name
-  end
-
-  def change_deal(deal)
-    deal.user_id = fetch_user_by_email(params[:am_email]).id
-
-    date = params[:date].split('/')
-    deal.day = date[0]
-    deal.report_id = 
-      fetch_report_with_month_number(date[1][-1], date[2], SIDES[0]).id
-
-    deal.value = params[:value][0..-4].gsub('.', '')
-    deal.client_name = params[:client_name]
-
-    deal.save
   end
 end

@@ -47,6 +47,7 @@ module GraphicHelper
   def verify_filter
     @filter_options.each do |op|
       next unless op[1] == params[:report][:goal]
+
       @filter_options.delete(op)
       @filter_options.unshift(op)
     end
@@ -55,6 +56,7 @@ module GraphicHelper
   def verify_user
     @user_options.each do |op|
       next unless op[1] == params[:report][:report_name]
+
       @user_options.delete(op)
       @user_options.unshift(op)
     end
@@ -64,6 +66,7 @@ module GraphicHelper
     verify_filter
 
     return if params[:report][:report_name] == 'All'
+
     verify_user
   end
 end

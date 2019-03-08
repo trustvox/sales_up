@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   include DatabaseSearchs
   include ViewHelper
 
+  helper IntegrationHelper
   helper DatabaseSearchs
   helper OverviewHelper
   helper GraphicHelper

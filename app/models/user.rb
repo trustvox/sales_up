@@ -6,24 +6,20 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
+  def overall_manager?
+    area == 'gg'
+  end
+
+  def sales?
+    area == 'sales'
+  end
+
   def admin?
     sub_area == 'admin'
   end
 
   def manager?
     sub_area == 'gg'
-  end
-
-  def overall_manager?
-    area == 'gg'
-  end
-
-  def regular?
-    priority == 1
-  end
-
-  def sales?
-    area == 'sales'
   end
 
   def am?

@@ -52,11 +52,11 @@ module AccountManager
     end
 
     def verify_fetched_data(user_id)
-      if type_am?
-        return fetch_closed_contracts_report_user(user_id, @current_report.id).empty?
+      unless type_am?
+        return fetch_scheduled_meeting(user_id, @current_report.id).empty?
       end
 
-      fetch_scheduled_meeting(user_id, @current_report.id).empty?
+      fetch_closed_contracts_report_user(user_id, @current_report.id).empty?
     end
 
     def verify_fetched_points(user_id)
