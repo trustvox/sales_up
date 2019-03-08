@@ -66,11 +66,13 @@ module OverviewPoints
 
   def overview_report_data(first, last, type)
     init_user_data(type).collect do |user|
-      add_filter_elements(first, last, user.id, 1, type)
+      add_filter_elements(first, last, user.id, type)
     end
   end
 
-  def add_filter_elements(first, last, user_id, index, type)
+  def add_filter_elements(first, last, user_id, type)
+    index = 1
+
     while acceptable?(first, last)
       list << verify_filter_option(user_id, index, first, type)
       first = verify_next_month(first, type)
