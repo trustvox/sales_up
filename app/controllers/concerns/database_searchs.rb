@@ -105,9 +105,9 @@ module DatabaseSearchs
     [@unique_days[gap_index] + 1, @unique_days[gap_index + 1]]
   end
 
-  def month_finished?(day)
+  def month_finished?(_day)
     today = Date.current
-    last = 
+    last =
       Date.new(@current_report.year, @current_report.month_number + 1, 1) - 1
 
     if today.month_number == last.month_number && today.year == last.year

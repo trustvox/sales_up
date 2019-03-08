@@ -27,7 +27,7 @@ module AccountManager
     private
 
     def redirect_to_monthly_sales(action = nil)
-      redirect_to_monthly_method(@deals.report_id, @deals.errors, 
+      redirect_to_monthly_method(@deals.report_id, @deals.errors,
                                  'forecast', action)
     end
 

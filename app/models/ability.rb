@@ -25,7 +25,7 @@ class Ability
   end
 
   def authorize_spector(_user)
-    can %i[monthly_sales monthly_forecast report_am 
+    can %i[monthly_sales monthly_forecast report_am
            overview_months_am overview_reports_am],
         AccountManager::DashboardController
     can %i[monthly_schedules overview_months_sdr

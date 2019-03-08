@@ -49,7 +49,7 @@ module ReportSearchs
 
       @i += 1
     end
-    
+
     Report.where(month_number: @first_m, year: @first_y, goal_type: type)[0]
   end
 

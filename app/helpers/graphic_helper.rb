@@ -45,20 +45,21 @@ module GraphicHelper
     verify_options_data(user_options, params[:report][:report_name])
   end
 
-  def init_filter_options(type)
-    filter_options = if type == 'am'
-                       [[t('overview.am.cs'), 'CS'],
-                        [t('overview.am.cc'), 'CC'],
-                        [t('overview.am.cp'), 'CP'],
-                        [t('overview.am.fc'), 'FC']]
-                     else
-                       [[t('overview.sdr.ms'), 'MS'],
-                        [t('overview.sdr.mp'), 'MP']]
-                     end
+  def init_filter_options(_type)
+    filter_options = fetch_options_array
 
     return filter_options if valid_report_data_for_filter?
 
     verify_options_data(filter_options, params[:report][:goal])
+  end
+
+  def fetch_options_array
+    if type == 'am'
+      return [[t('overview.am.cs'), 'CS'], [t('overview.am.cc'), 'CC'],
+              [t('overview.am.cp'), 'CP'], [t('overview.am.fc'), 'FC']]
+    end
+
+    [[t('overview.sdr.ms'), 'MS'], [t('overview.sdr.mp'), 'MP']]
   end
 
   def verify_options_data(options, verificator)

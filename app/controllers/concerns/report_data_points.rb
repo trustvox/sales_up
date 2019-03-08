@@ -82,11 +82,13 @@ module ReportDataPoints
     return 'Tuesday' if date.tuesday?
     return 'Wednesday' if date.wednesday?
     return 'Thursday' if date.thursday?
+
     'Friday'
   end
 
   def int_to_weekend(date)
     return 'Saturday' if date.saturday?
+
     'Sunday'
   end
 end

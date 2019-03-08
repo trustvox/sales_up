@@ -61,6 +61,7 @@ class MonthlyController < OverviewController
 
   def init_current_report
     return @current_report = fetch_last_report if params[:report].nil?
+
     @current_report =
       fetch_report(params[:report][:month], params[:report][:year])
   end
