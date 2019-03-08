@@ -1,5 +1,6 @@
 FactoryBot.define do
   factory :user do
-    priority { 1 }
+    area { 'spec' }
+    sub_area { 'spec' }
   end
 end
