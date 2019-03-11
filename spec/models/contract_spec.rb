@@ -16,7 +16,7 @@ RSpec.describe Contract, type: :model do
     end
 
     describe 'store name minimun and maximun length' do
-      it { expect(:store_name.length).to be >= 2 and be <= 100 }
+      it { expect(subject.store_name.length).to(be >= 2) && (be <= 100) }
     end
   end
 
