@@ -18,10 +18,6 @@ class User < ApplicationRecord
     sub_area == 'admin'
   end
 
-  def manager?
-    sub_area == 'gg'
-  end
-
   def am?
     sub_area == 'am'
   end
