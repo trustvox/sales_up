@@ -34,6 +34,7 @@ RSpec.describe Contract, type: :model do
 
       it ':report_record' do
         expect(contract).to respond_to(:report_record)
+        expect(contract).to respond_to(:report_record)
       end
     end
   end

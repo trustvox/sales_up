@@ -13,6 +13,8 @@ class Contract < ApplicationRecord
 
   def last_day_of_month
     Time.days_in_month(report_record.month_number)
+  rescue StandardError
+    31
   end
 
   def report_record
