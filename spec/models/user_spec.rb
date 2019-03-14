@@ -41,5 +41,65 @@ RSpec.describe User, type: :model do
         expect(user).to be_admin
       end
     end
+
+    describe '#am?' do
+      let(:sub_area) { 'am' }
+
+      it 'responds to :am?' do
+        expect(user).to respond_to(:am?)
+      end
+
+      it 'checks given user is a account manager one' do
+        expect(user).to be_am
+      end
+    end
+
+    describe '#sdr?' do
+      let(:sub_area) { 'sdr' }
+
+      it 'responds to :sdr?' do
+        expect(user).to respond_to(:sdr?)
+      end
+
+      it 'checks given user is a sales representative one' do
+        expect(user).to be_sdr
+      end
+    end
+
+    describe '#spectator?' do
+      let(:sub_area) { 'spec' }
+
+      it 'responds to :admin?' do
+        expect(user).to respond_to(:spectator?)
+      end
+
+      it 'checks given user is a spectator one' do
+        expect(user).to be_spectator
+      end
+    end
+
+    describe '#fn?' do
+      let(:sub_area) { 'fn' }
+
+      it 'responds to :fn?' do
+        expect(user).to respond_to(:fn?)
+      end
+
+      it 'checks given user is a financial one' do
+        expect(user).to be_fn
+      end
+    end
+
+    describe '#ra?' do
+      let(:sub_area) { 'ra' }
+
+      it 'responds to :ra?' do
+        expect(user).to respond_to(:ra?)
+      end
+
+      it 'checks given user is a Reclame Aqui user one' do
+        expect(user).to be_ra
+      end
+    end
   end
 end
